@@ -153,6 +153,9 @@ class PostcodefilterControllerTest extends IntegrationTestCase
     public function itShouldInstantiateTheFormContainerBlockForTheEditAction()
     {
         $stubRule = $this->getMock(RuleResult::class);
+        $stubRule->expects($this->any())->method('getCustomerGroupIdValues')->willReturn([4]);
+        $stubRule->expects($this->any())->method('getCountryValue')->willReturn('QQ');
+        $stubRule->expects($this->any())->method('getPostCodeValues')->willReturn(['A', 'B']);
         $this->mockViewSingleRuleUseCase->expects($this->once())->method('fetchRule')->willReturn($stubRule);
         
         $this->dispatchAction('edit');
@@ -202,8 +205,8 @@ class PostcodefilterControllerTest extends IntegrationTestCase
     public function itShouldDeleteTheSubmittedRules()
     {
         $this->mockRequest->expects($this->any())->method('getParam')->willReturnMap([
-            ['old_country', null, 'DE'],
-            ['old_customer_group_ids', null, '0,1,3']
+            ['country', null, 'DE'],
+            ['customer_group_ids', null, '0,1,3']
         ]);
         $this->mockDeleteUseCase->expects($this->once())->method('deleteRule');
         $this->dispatchAction('delete');

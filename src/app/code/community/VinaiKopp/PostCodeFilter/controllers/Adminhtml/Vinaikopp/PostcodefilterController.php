@@ -1,11 +1,5 @@
 <?php
 
-use VinaiKopp\PostCodeFilter\Command\RuleToAdd;
-use VinaiKopp\PostCodeFilter\Command\RuleToDelete;
-use VinaiKopp\PostCodeFilter\Command\RuleToUpdate;
-use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList;
-use VinaiKopp\PostCodeFilter\RuleComponents\Country;
-use VinaiKopp\PostCodeFilter\RuleComponents\PostCodeList;
 use VinaiKopp\PostCodeFilter\UseCases\AdminAddsRule;
 use VinaiKopp\PostCodeFilter\UseCases\AdminDeletesRule;
 use VinaiKopp\PostCodeFilter\UseCases\AdminUpdatesRule;
@@ -71,7 +65,7 @@ class VinaiKopp_PostCodeFilter_Adminhtml_Vinaikopp_PostcodefilterController
     public function editAction()
     {
         try {
-            $country = $this->getRequest()->getParam('country');;
+            $country = $this->getCountryParam();
             $customerGroupIds = $this->getCustomerGroupIdsParam();
             $rule = $this->getViewSingleRuleUseCase()->fetchRule($country, $customerGroupIds);
             Mage::register('current_rule', $rule);
@@ -136,10 +130,12 @@ class VinaiKopp_PostCodeFilter_Adminhtml_Vinaikopp_PostcodefilterController
     private function getAddUseCase()
     {
         if (! $this->addRuleUseCase) {
+            // @codeCoverageIgnoreStart
             $ruleWriter = $this->getHelper()->getRuleWriter();
             $ruleReader = $this->getHelper()->getRuleWriter();
             $this->addRuleUseCase = new AdminAddsRule($ruleWriter, $ruleReader);
         }
+        // @codeCoverageIgnoreEnd
         return $this->addRuleUseCase;
     }
 
@@ -151,10 +147,12 @@ class VinaiKopp_PostCodeFilter_Adminhtml_Vinaikopp_PostcodefilterController
     private function getDeleteUseCase()
     {
         if (! $this->deleteRuleUseCase) {
+            // @codeCoverageIgnoreStart
             $ruleWriter = $this->getHelper()->getRuleWriter();
             $ruleReader = $this->getHelper()->getRuleReader();
             $this->deleteRuleUseCase = new AdminDeletesRule($ruleWriter, $ruleReader);
         }
+        // @codeCoverageIgnoreEnd
         return $this->deleteRuleUseCase;
     }
 
@@ -166,10 +164,12 @@ class VinaiKopp_PostCodeFilter_Adminhtml_Vinaikopp_PostcodefilterController
     private function getUpdateUseCase()
     {
         if (! $this->updateUseCase) {
+            // @codeCoverageIgnoreStart
             $ruleWriter = $this->getHelper()->getRuleWriter();
             $ruleReader = $this->getHelper()->getRuleReader();
             $this->updateUseCase = new AdminUpdatesRule($ruleWriter, $ruleReader);
         }
+        // @codeCoverageIgnoreEnd
         return $this->updateUseCase;
     }
 
@@ -181,8 +181,10 @@ class VinaiKopp_PostCodeFilter_Adminhtml_Vinaikopp_PostcodefilterController
     private function getViewSingleRuleUseCase()
     {
         if (! $this->viewsRuleUseCase) {
+            // @codeCoverageIgnoreStart
             $ruleReader = $this->getHelper()->getRuleReader();
             $this->viewsRuleUseCase = new AdminViewsSingleRule($ruleReader);
+            // @codeCoverageIgnoreEnd
         }
         return $this->viewsRuleUseCase;
     }

@@ -4,6 +4,8 @@ namespace VinaiKopp\PostCodeFilter;
 
 use VinaiKopp\PostCodeFilter\Command\RuleToAdd;
 use VinaiKopp\PostCodeFilter\Command\RuleToDelete;
+use VinaiKopp\PostCodeFilter\Command\RuleToUpdate;
+use VinaiKopp\PostCodeFilter\Command\RuleToUpdateTest;
 use VinaiKopp\PostCodeFilter\Query\QueryByCountryAndGroupIds;
 
 /**
@@ -32,9 +34,17 @@ class DataTest extends IntegrationTestCase
     /**
      * @test
      */
-    public function itShouldReturnARepositoryInstance()
+    public function itShouldReturnARepositoryInstanceAsWriter()
     {
         $this->assertInstanceOf(RuleRepository::class, $this->helper->getRuleWriter());
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnARepositoryInstanceAsReader()
+    {
+        $this->assertInstanceOf(RuleRepository::class, $this->helper->getRuleReader());
     }
 
     /**
@@ -43,6 +53,14 @@ class DataTest extends IntegrationTestCase
     public function itShouldReturnARuleToAdd()
     {
         $this->assertInstanceOf(RuleToAdd::class, $this->helper->createRuleToAdd([11], 'DE', ['1', '2']));
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnARuleToUpdate()
+    {
+        $this->assertInstanceOf(RuleToUpdate::class, $this->helper->createRuleToUpdate('DE', [2], 'RU', [3], ['123']));
     }
 
     /**

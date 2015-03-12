@@ -131,6 +131,33 @@ class RuleStorageTest extends IntegrationTestCase
     }
 
     /**
+     * @test
+     */
+    public function itShouldOpenATransaction()
+    {
+        $this->mockWriteConnection->expects($this->once())->method('beginTransaction');
+        $this->storage->beginTransaction();
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldCommitATransaction()
+    {
+        $this->mockWriteConnection->expects($this->once())->method('commit');
+        $this->storage->commitTransaction();
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldAbortATransaction()
+    {
+        $this->mockWriteConnection->expects($this->once())->method('rollBack');
+        $this->storage->rollbackTransaction();
+    }
+
+    /**
      * @param \PHPUnit_Framework_MockObject_MockObject $mockConnection
      */
     private function addMockSelectFactory($mockConnection)
