@@ -82,6 +82,24 @@ class RuleStorageTest extends IntegrationTestCase
     /**
      * @test
      */
+    public function itShouldReturnAnArrayForTheGivenCountryAndCustomerGroupIds()
+    {
+        $this->mockReadConnection->expects($this->once())->method('fetchAll')
+            ->willReturn([
+                ['country' => 'DE', 'customer_group_id' => 2, 'post_codes' => '1,2,3,4'],
+                ['country' => 'DE', 'customer_group_id' => 3, 'post_codes' => '1,2,3,4'],
+            ]);
+        $expected = [
+            ['country' => 'DE', 'customer_group_id' => 2, 'post_codes' => ['1', '2', '3', '4']],
+            ['country' => 'DE', 'customer_group_id' => 3, 'post_codes' => ['1', '2', '3', '4']],
+        ];
+        $result = $this->storage->findRulesByCountryAndGroupIds('DE', [2, 3]);
+        $this->assertSame($expected, $result);
+    }
+
+    /**
+     * @test
+     */
     public function itShouldCreateANewRule()
     {
         $this->mockWriteConnection->expects($this->once())->method('insert')
@@ -92,7 +110,7 @@ class RuleStorageTest extends IntegrationTestCase
                     'country' => 'NZ',
                     'post_codes' => '1234,5678'
                 ]
-        );
+            );
         $this->storage->create('NZ', 5, ['1234', '5678']);
     }
 

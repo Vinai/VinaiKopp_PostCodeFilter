@@ -13,6 +13,11 @@ class InMemoryRuleStorage implements RuleStorage
     private $rules = [];
 
     /**
+     * @var null|array[]
+     */
+    private $snapshot;
+
+    /**
      * @param string $country
      * @param int $customerGroupId
      * @return \string[]
@@ -105,5 +110,20 @@ class InMemoryRuleStorage implements RuleStorage
     private function setRule($groupId, $country, $postCodes)
     {
         $this->rules[$groupId][$country] = $postCodes;
+    }
+
+    public function beginTransaction()
+    {
+        $this->snapshot = $this->rules;
+    }
+
+    public function commitTransaction()
+    {
+        $this->snapshot = null;
+    }
+
+    public function rollbackTransaction()
+    {
+        $this->rules = $this->snapshot;
     }
 }

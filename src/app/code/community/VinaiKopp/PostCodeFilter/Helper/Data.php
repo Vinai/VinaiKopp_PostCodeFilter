@@ -3,6 +3,7 @@
 
 use VinaiKopp\PostCodeFilter\Command\RuleToAdd;
 use VinaiKopp\PostCodeFilter\Command\RuleToDelete;
+use VinaiKopp\PostCodeFilter\Command\RuleToUpdate;
 use VinaiKopp\PostCodeFilter\Query\QueryByCountryAndGroupIds;
 use VinaiKopp\PostCodeFilter\RuleComponents\Country;
 use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList;
@@ -46,6 +47,7 @@ class VinaiKopp_PostCodeFilter_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function createRuleToAdd(array $customerGroupIds, $country, array $postCodes)
     {
+        array_walk($customerGroupIds, [$this, 'convertToInteger']);
         $this->registerPostCodeFilterAutoloader();
         return new RuleToAdd(
             CustomerGroupIdList::fromArray($customerGroupIds),
@@ -62,6 +64,7 @@ class VinaiKopp_PostCodeFilter_Helper_Data extends Mage_Core_Helper_Abstract
     public function createRuleToDelete(array $customerGroupIds, $country)
     {
         array_walk($customerGroupIds, [$this, 'convertToInteger']);
+        $this->registerPostCodeFilterAutoloader();
         return new RuleToDelete(
             CustomerGroupIdList::fromArray($customerGroupIds),
             Country::fromIso2Code($country)
@@ -76,9 +79,29 @@ class VinaiKopp_PostCodeFilter_Helper_Data extends Mage_Core_Helper_Abstract
     public function createRuleQueryForGroupIdsAndCountry(array $customerGroupIds, $country)
     {
         array_walk($customerGroupIds, [$this, 'convertToInteger']);
+        $this->registerPostCodeFilterAutoloader();
         return new QueryByCountryAndGroupIds(
             Country::fromIso2Code($country),
             CustomerGroupIdList::fromArray($customerGroupIds)
+        );
+    }
+
+    public function createRuleToUpdate(
+        $oldCountry,
+        $oldCustomerGroupIds,
+        $newCountry,
+        $newCustomerGroupIds,
+        $newPostCodes
+    ) {
+        array_walk($oldCustomerGroupIds, [$this, 'convertToInteger']);
+        array_walk($newCustomerGroupIds, [$this, 'convertToInteger']);
+        $this->registerPostCodeFilterAutoloader();
+        return new RuleToUpdate(
+            Country::fromIso2Code($oldCountry),
+            CustomerGroupIdList::fromArray($oldCustomerGroupIds),
+            Country::fromIso2Code($newCountry),
+            CustomerGroupIdList::fromArray($newCustomerGroupIds),
+            PostCodeList::fromArray($newPostCodes)
         );
     }
 

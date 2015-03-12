@@ -11,6 +11,4 @@ class VinaiKopp_PostCodeFilter_Block_Adminhtml_Postcodefilter
     {
         return $this->__('Post Code Filter');
     }
-
-
 }

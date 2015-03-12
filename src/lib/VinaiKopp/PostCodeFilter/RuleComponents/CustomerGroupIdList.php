@@ -22,7 +22,8 @@ class CustomerGroupIdList
      */
     public static function fromArray(array $inputArray)
     {
-        return new self(array_map([__CLASS__, 'getCustomerGroupIdInstance'], $inputArray));
+        $customerGroups = array_map([__CLASS__, 'getCustomerGroupIdInstance'], $inputArray);
+        return new self(array_values(array_unique($customerGroups, SORT_REGULAR)));
     }
 
     public function getCustomerGroupIds()

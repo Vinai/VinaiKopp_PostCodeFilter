@@ -40,15 +40,15 @@ class VinaiKopp_PostCodeFilter_Model_Resource_RuleStorage implements RuleStorage
     }
 
     /**
-     * @param string $country
+     * @param string $iso2country
      * @param int $customerGroupId
      * @return string[]
      */
-    public function findPostCodesByCountryAndGroupId($country, $customerGroupId)
+    public function findPostCodesByCountryAndGroupId($iso2country, $customerGroupId)
     {
         $query = $this->readConnection->select()
             ->from($this->tableName, 'post_codes')
-            ->where('country=?', $country)
+            ->where('country=?', $iso2country)
             ->where('customer_group_id=?', $customerGroupId);
         $result = $this->readConnection->fetchOne($query);
         if (! $result) {
@@ -64,7 +64,11 @@ class VinaiKopp_PostCodeFilter_Model_Resource_RuleStorage implements RuleStorage
      */
     public function findRulesByCountryAndGroupIds($iso2country, array $customerGroupIds)
     {
-        // TODO: Implement findRulesByCountryAndGroupIds() method.
+        $query = $this->readConnection->select()
+            ->from($this->tableName)
+            ->where('country=?', $iso2country)
+            ->where('customer_group_id IN(?)', $customerGroupIds);
+        return array_map([$this, 'processResultRecord'], $this->readConnection->fetchAll($query));
     }
 
     /**
@@ -123,5 +127,20 @@ class VinaiKopp_PostCodeFilter_Model_Resource_RuleStorage implements RuleStorage
                 'customer_group_id=?' => $customerGroupId
             ]
         );
+    }
+
+    public function beginTransaction()
+    {
+        $this->writeConnection->beginTransaction();
+    }
+
+    public function commitTransaction()
+    {
+        $this->writeConnection->commit();
+    }
+
+    public function rollbackTransaction()
+    {
+        $this->writeConnection->rollBack();
     }
 }

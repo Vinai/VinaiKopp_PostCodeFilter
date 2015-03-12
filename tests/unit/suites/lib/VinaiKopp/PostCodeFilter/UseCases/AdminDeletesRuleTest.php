@@ -61,6 +61,32 @@ class AdminDeletesRuleTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @test
+     */
+    public function itShouldOpenAndCommitATransaction()
+    {
+        $this->mockRuleWriter->expects($this->once())->method('beginTransaction');
+        $this->useCase->deleteRule($this->createStubRuleToDelete());
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldRollBackTheTransactionIfAnExceptionIsThrown()
+    {
+        $testException = new \Exception('Test Exception');
+        $this->mockRuleReader->expects($this->once())->method('findByCountryAndGroupIds')
+            ->willThrowException($testException);
+        $this->mockRuleWriter->expects($this->once())->method('rollbackTransaction');
+
+        try {
+            $this->useCase->deleteRule($this->createStubRuleToDelete());
+        } catch (\Exception $e) {
+            $this->assertSame($testException, $e);
+        }
+    }
+
+    /**
      * @return RuleToDelete|\PHPUnit_Framework_MockObject_MockObject
      */
     private function createStubRuleToDelete()

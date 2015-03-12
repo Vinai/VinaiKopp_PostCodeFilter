@@ -39,4 +39,19 @@ interface RuleStorage
      * @return void
      */
     public function delete($iso2country, $customerGroupId);
+
+    /**
+     * @return void
+     */
+    public function beginTransaction();
+
+    /**
+     * @return void
+     */
+    public function commitTransaction();
+
+    /**
+     * @return void
+     */
+    public function rollbackTransaction();
 }

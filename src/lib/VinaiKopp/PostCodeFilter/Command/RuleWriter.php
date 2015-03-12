@@ -17,4 +17,19 @@ interface RuleWriter
      * @return void
      */
     public function deleteRule(RuleToDelete $ruleToDelete);
+
+    /**
+     * @return void
+     */
+    public function beginTransaction();
+
+    /**
+     * @return void
+     */
+    public function commitTransaction();
+
+    /**
+     * @return void
+     */
+    public function rollbackTransaction();
 }

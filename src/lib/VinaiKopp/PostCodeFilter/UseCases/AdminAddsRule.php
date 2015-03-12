@@ -31,11 +31,19 @@ class AdminAddsRule
 
     /**
      * @param RuleToAdd $ruleToAdd
+     * @throws \Exception
      */
     public function addRule(RuleToAdd $ruleToAdd)
     {
-        $this->validateNoConflictingRuleExists($ruleToAdd);
-        $this->ruleWriter->createRule($ruleToAdd);
+        try {
+            $this->ruleWriter->beginTransaction();
+            $this->validateNoConflictingRuleExists($ruleToAdd);
+            $this->ruleWriter->createRule($ruleToAdd);
+            $this->ruleWriter->commitTransaction();
+        } catch (\Exception $e) {
+            $this->ruleWriter->rollbackTransaction();
+            throw $e;
+        }
     }
 
     /**
@@ -67,8 +75,8 @@ class AdminAddsRule
     private function makeRuleExistsException(RuleFound $existingRule, RuleToAdd $ruleToAdd)
     {
         return new RuleAlreadyExistsException(sprintf(
-            'A rule for customer groups "%s" and country "%s" already exists',
-            $existingRule->getCustomerGroupIdValues(),
+            'A rule for customer group(s) "%s" and country "%s" already exists',
+            implode(', ', $existingRule->getCustomerGroupIdValues()),
             $ruleToAdd->getCountryValue()
         ));
     }

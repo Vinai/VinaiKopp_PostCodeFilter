@@ -28,11 +28,22 @@ class AdminDeletesRule
         $this->ruleWriter = $ruleWriter;
         $this->ruleReader = $ruleReader;
     }
-    
+
+    /**
+     * @param RuleToDelete $ruleToDelete
+     * @throws \Exception
+     */
     public function deleteRule(RuleToDelete $ruleToDelete)
     {
-        $this->validateRuleExists($ruleToDelete);
-        $this->ruleWriter->deleteRule($ruleToDelete);
+        try {
+            $this->ruleWriter->beginTransaction();
+            $this->validateRuleExists($ruleToDelete);
+            $this->ruleWriter->deleteRule($ruleToDelete);
+            $this->ruleWriter->commitTransaction();
+        } catch (\Exception $e) {
+            $this->ruleWriter->rollbackTransaction();
+            throw $e;
+        }
     }
 
     /**

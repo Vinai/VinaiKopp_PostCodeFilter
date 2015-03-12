@@ -5,6 +5,7 @@ namespace VinaiKopp\PostCodeFilter;
 use VinaiKopp\PostCodeFilter\Query\RuleResult;
 use VinaiKopp\PostCodeFilter\UseCases\AdminAddsRule;
 use VinaiKopp\PostCodeFilter\UseCases\AdminDeletesRule;
+use VinaiKopp\PostCodeFilter\UseCases\AdminUpdatesRule;
 use VinaiKopp\PostCodeFilter\UseCases\AdminViewsSingleRule;
 
 /**
@@ -43,6 +44,11 @@ class PostcodefilterControllerTest extends IntegrationTestCase
      * @var AdminViewsSingleRule|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockViewSingleRuleUseCase;
+
+    /**
+     * @var AdminUpdatesRule|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mockUpdateUseCase;
 
     /**
      * @return string
@@ -103,11 +109,13 @@ class PostcodefilterControllerTest extends IntegrationTestCase
         $this->mockResponse = $this->getMock(\Mage_Core_Controller_Response_Http::class);
         $this->mockAddUseCase = $this->getMock(AdminAddsRule::class, [], [], '', false);
         $this->mockDeleteUseCase = $this->getMock(AdminDeletesRule::class, [], [], '', false);
+        $this->mockUpdateUseCase = $this->getMock(AdminUpdatesRule::class, [], [], '', false);
         $this->mockViewSingleRuleUseCase = $this->getMock(AdminViewsSingleRule::class, [], [], '', false);
         
         $this->controller = $this->createInstance();
         $this->controller->setAddUseCase($this->mockAddUseCase);
         $this->controller->setDeleteUseCase($this->mockDeleteUseCase);
+        $this->controller->setUpdateRuleUseCase($this->mockUpdateUseCase);
         $this->controller->setViewSingleRuleUseCase($this->mockViewSingleRuleUseCase);
 
     }
@@ -184,8 +192,7 @@ class PostcodefilterControllerTest extends IntegrationTestCase
             ['post_codes', null, "1234\n5678,\n1313, 4444"]
         ]);
         
-        $this->mockDeleteUseCase->expects($this->once())->method('deleteRule');
-        $this->mockAddUseCase->expects($this->once())->method('addRule');
+        $this->mockUpdateUseCase->expects($this->once())->method('updateRule');
         $this->dispatchAction('update');
     }
 

@@ -61,16 +61,44 @@ class AdminAddsRuleTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldThrowIfRuleForGroupAndCountryAlreadyExist()
     {
+        $stubRuleFound = $this->getMock(RuleFound::class, [], [], '', false);
+        $stubRuleFound->expects($this->any())->method('getCustomerGroupIdValues')->willReturn([1, 2]);
         $this->mockRuleReader->expects($this->once())
             ->method('findByCountryAndGroupIds')
-            ->willReturn($this->getMock(RuleFound::class, [], [], '', false));
+            ->willReturn($stubRuleFound);
 
-        $stubRuleToAdd = $this->createStubRuleToAdd();   
+        $stubRuleToAdd = $this->createStubRuleToAdd();
         $this->mockRuleWriter->expects($this->never())
             ->method('createRule')
             ->with($stubRuleToAdd);
 
         $this->useCase->addRule($stubRuleToAdd);
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldOpenATransactionAndCommitIt()
+    {
+        $this->mockRuleWriter->expects($this->once())->method('beginTransaction');
+        $this->mockRuleWriter->expects($this->once())->method('commitTransaction');
+        $this->useCase->addRule($this->createStubRuleToAdd());
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldAbortATransactionIfAnExceptionIsThrown()
+    {
+        $testException = new \Exception('Test Exception');
+        $this->mockRuleReader->expects($this->any())->method('findByCountryAndGroupIds')
+            ->willThrowException($testException);
+        $this->mockRuleWriter->expects($this->once())->method('rollbackTransaction');
+        try {
+            $this->useCase->addRule($this->createStubRuleToAdd());
+        } catch (\Exception $e) {
+            $this->assertSame($testException, $e);
+        }
     }
 
     /**

@@ -4,6 +4,7 @@ namespace VinaiKopp\PostCodeFilter;
 
 use VinaiKopp\PostCodeFilter\Command\RuleToAdd;
 use VinaiKopp\PostCodeFilter\Command\RuleToDelete;
+use VinaiKopp\PostCodeFilter\Command\RuleToUpdate;
 use VinaiKopp\PostCodeFilter\Query\QueryByCountryAndGroupIds;
 use VinaiKopp\PostCodeFilter\Query\RuleFound;
 use VinaiKopp\PostCodeFilter\Query\RuleNotFound;
@@ -12,6 +13,7 @@ use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList;
 use VinaiKopp\PostCodeFilter\RuleComponents\PostCodeList;
 use VinaiKopp\PostCodeFilter\UseCases\AdminAddsRule;
 use VinaiKopp\PostCodeFilter\UseCases\AdminDeletesRule;
+use VinaiKopp\PostCodeFilter\UseCases\AdminUpdatesRule;
 
 class AdminUseCasesEdge2EdgeTest extends \PHPUnit_Framework_TestCase
 {
@@ -81,18 +83,47 @@ class AdminUseCasesEdge2EdgeTest extends \PHPUnit_Framework_TestCase
      * @test
      * @depends itShouldAddARule
      * @param RuleStorage $storage
+     * @return RuleStorage
+     */
+    public function itShouldUpdateARule(RuleStorage $storage)
+    {
+        $ruleRepository = new RuleRepository($storage);
+        $updateRuleUseCase = new AdminUpdatesRule($ruleRepository, $ruleRepository);
+        
+        $ruleToUpdate = new RuleToUpdate(
+            $this->country,
+            $this->customerGroupIds,
+            $this->newCountry,
+            $this->newCustomerGroupIds,
+            $this->newPostCodes
+        );
+
+        $this->assertRuleInStorage($storage, $this->customerGroupIds, $this->country);
+        
+        $updateRuleUseCase->updateRule($ruleToUpdate);
+
+        $this->assertRuleNotInStorage($storage, $this->customerGroupIds, $this->country);
+        $this->assertRuleInStorage($storage, $this->newCustomerGroupIds, $this->newCountry);
+        
+        return $storage;
+    }
+
+    /**
+     * @test
+     * @depends itShouldUpdateARule
+     * @param RuleStorage $storage
      */
     public function itShouldDeleteARule(RuleStorage $storage)
     {
-        $ruleToDelete = new RuleToDelete($this->customerGroupIds, $this->country);
         $ruleRepository = new RuleRepository($storage);
         $deleteRuleUseCase = new AdminDeletesRule($ruleRepository, $ruleRepository);
+        $ruleToDelete = new RuleToDelete($this->newCustomerGroupIds, $this->newCountry);
         
-        $this->assertRuleInStorage($storage, $this->customerGroupIds, $this->country);
+        $this->assertRuleInStorage($storage, $this->newCustomerGroupIds, $this->newCountry);
         
         $deleteRuleUseCase->deleteRule($ruleToDelete);
 
-        $this->assertRuleNotInStorage($storage, $this->customerGroupIds, $this->country);
+        $this->assertRuleNotInStorage($storage, $this->newCustomerGroupIds, $this->newCountry);
     }
 
     /**

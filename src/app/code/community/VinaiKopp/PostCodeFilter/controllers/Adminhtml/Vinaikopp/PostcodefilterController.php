@@ -2,8 +2,13 @@
 
 use VinaiKopp\PostCodeFilter\Command\RuleToAdd;
 use VinaiKopp\PostCodeFilter\Command\RuleToDelete;
+use VinaiKopp\PostCodeFilter\Command\RuleToUpdate;
+use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList;
+use VinaiKopp\PostCodeFilter\RuleComponents\Country;
+use VinaiKopp\PostCodeFilter\RuleComponents\PostCodeList;
 use VinaiKopp\PostCodeFilter\UseCases\AdminAddsRule;
 use VinaiKopp\PostCodeFilter\UseCases\AdminDeletesRule;
+use VinaiKopp\PostCodeFilter\UseCases\AdminUpdatesRule;
 use VinaiKopp\PostCodeFilter\UseCases\AdminViewsSingleRule;
 
 class VinaiKopp_PostCodeFilter_Adminhtml_Vinaikopp_PostcodefilterController
@@ -20,10 +25,16 @@ class VinaiKopp_PostCodeFilter_Adminhtml_Vinaikopp_PostcodefilterController
     private $deleteRuleUseCase;
 
     /**
+     * @var AdminUpdatesRule
+     */
+    private $updateUseCase;
+
+    /**
      * @var AdminViewsSingleRule
      */
     private $viewsRuleUseCase;
-    
+
+
     /**
      * @var VinaiKopp_PostCodeFilter_Helper_Data
      */
@@ -45,9 +56,9 @@ class VinaiKopp_PostCodeFilter_Adminhtml_Vinaikopp_PostcodefilterController
     public function createAction()
     {
         try {
-            $country = $this->getSubmittedCountry();
-            $customerGroupIds = $this->getSubmittedCustomerGroupIds();
-            $postCodes = $this->getSubmittedPostCodes();
+            $country = $this->getPostedCountry();
+            $customerGroupIds = $this->getPostedCustomerGroupIds();
+            $postCodes = $this->getPostedPostCodes();
             $this->addRule($customerGroupIds, $country, $postCodes);
             $this->_getSession()->addSuccess($this->__('Post Code Filter Rule saved'));
         } catch (Exception $e) {
@@ -61,7 +72,7 @@ class VinaiKopp_PostCodeFilter_Adminhtml_Vinaikopp_PostcodefilterController
     {
         try {
             $country = $this->getRequest()->getParam('country');;
-            $customerGroupIds = $this->getCustomerGroupIdsToEdit();
+            $customerGroupIds = $this->getCustomerGroupIdsParam();
             $rule = $this->getViewSingleRuleUseCase()->fetchRule($country, $customerGroupIds);
             Mage::register('current_rule', $rule);
             
@@ -77,12 +88,14 @@ class VinaiKopp_PostCodeFilter_Adminhtml_Vinaikopp_PostcodefilterController
     public function updateAction()
     {
         try {
-            $newCountry = $this->getSubmittedCountry();
-            $newCustomerGroupIds = $this->getSubmittedCustomerGroupIds();
-            $postCodes = $this->getSubmittedPostCodes();
-            
-            $this->deleteRule($this->getOldCustomerGroupIds(), $this->getOldCountry());
-            $this->addRule($newCustomerGroupIds, $newCountry, $postCodes);
+            $ruleToUpdate =  $this->getHelper()->createRuleToUpdate(
+                $this->getOldCountry(),
+                $this->getOldCustomerGroupIds(),
+                $this->getPostedCountry(),
+                $this->getPostedCustomerGroupIds(),
+                $this->getPostedPostCodes()
+            );
+            $this->getUpdateUseCase()->updateRule($ruleToUpdate);
             
             $this->_getSession()->addSuccess($this->__('Post Code Filter Rule updated'));
         } catch (Exception $e) {
@@ -95,7 +108,7 @@ class VinaiKopp_PostCodeFilter_Adminhtml_Vinaikopp_PostcodefilterController
     public function deleteAction()
     {
         try {
-            $this->deleteRule($this->getOldCustomerGroupIds(), $this->getOldCountry());
+            $this->deleteRule($this->getCustomerGroupIdsParam(), $this->getCountryParam());
             $this->_getSession()->addSuccess($this->__('Post Code Filter Rule deleted'));
         } catch (Exception $e) {
             Mage::logException($e);
@@ -139,10 +152,25 @@ class VinaiKopp_PostCodeFilter_Adminhtml_Vinaikopp_PostcodefilterController
     {
         if (! $this->deleteRuleUseCase) {
             $ruleWriter = $this->getHelper()->getRuleWriter();
-            $ruleReader = $this->getHelper()->getRuleWriter();
+            $ruleReader = $this->getHelper()->getRuleReader();
             $this->deleteRuleUseCase = new AdminDeletesRule($ruleWriter, $ruleReader);
         }
         return $this->deleteRuleUseCase;
+    }
+
+    public function setUpdateRuleUseCase(AdminUpdatesRule $updateUseCase)
+    {
+        $this->updateUseCase = $updateUseCase;
+    }
+    
+    private function getUpdateUseCase()
+    {
+        if (! $this->updateUseCase) {
+            $ruleWriter = $this->getHelper()->getRuleWriter();
+            $ruleReader = $this->getHelper()->getRuleReader();
+            $this->updateUseCase = new AdminUpdatesRule($ruleWriter, $ruleReader);
+        }
+        return $this->updateUseCase;
     }
 
     public function setViewSingleRuleUseCase(AdminViewsSingleRule $viewsRuleUseCase)
@@ -160,49 +188,14 @@ class VinaiKopp_PostCodeFilter_Adminhtml_Vinaikopp_PostcodefilterController
     }
 
     /**
-     * @return string[]
-     */
-    private function getSubmittedPostCodes()
-    {
-        return preg_split("/ *[\n,] */", $this->getRequest()->getPost('post_codes'), null, PREG_SPLIT_NO_EMPTY);
-    }
-
-    /**
-     * @return mixed
-     */
-    private function getSubmittedCustomerGroupIds()
-    {
-        return $this->getRequest()->getPost('customer_group_ids');
-    }
-
-    /**
-     * @return mixed
-     */
-    private function getSubmittedCountry()
-    {
-        return $this->getRequest()->getPost('country');
-    }
-
-    /**
      * @param int[] $customerGroupIds
      * @param string $country
      * @param string[]|int[] $postCodes
      */
     private function addRule(array $customerGroupIds, $country, array $postCodes)
     {
-        $ruleToAdd = $this->createRuleToAdd($customerGroupIds, $country, $postCodes);
+        $ruleToAdd = $this->getHelper()->createRuleToAdd($customerGroupIds, $country, $postCodes);
         $this->getAddUseCase()->addRule($ruleToAdd);
-    }
-
-    /**
-     * @param int[] $customerGroupIds
-     * @param string $country
-     * @param string[]|int[] $postCodes
-     * @return RuleToAdd
-     */
-    private function createRuleToAdd(array $customerGroupIds, $country, $postCodes)
-    {
-        return $this->getHelper()->createRuleToAdd($customerGroupIds, $country, $postCodes);
     }
 
     /**
@@ -211,18 +204,32 @@ class VinaiKopp_PostCodeFilter_Adminhtml_Vinaikopp_PostcodefilterController
      */
     private function deleteRule(array $customerGroupIds, $country)
     {
-        $ruleToDelete = $this->createRuleToDelete($customerGroupIds, $country);
+        $ruleToDelete = $this->getHelper()->createRuleToDelete($customerGroupIds, $country);
         $this->getDeleteUseCase()->deleteRule($ruleToDelete);
     }
 
     /**
-     * @param int[] $customerGroupIds
-     * @param string $country
-     * @return RuleToDelete
+     * @return string[]
      */
-    private function createRuleToDelete($customerGroupIds, $country)
+    private function getPostedPostCodes()
     {
-        return $this->getHelper()->createRuleToDelete($customerGroupIds, $country);
+        return $this->splitParam($this->getRequest()->getPost('post_codes'));
+    }
+
+    /**
+     * @return mixed
+     */
+    private function getPostedCustomerGroupIds()
+    {
+        return $this->getRequest()->getPost('customer_group_ids');
+    }
+
+    /**
+     * @return mixed
+     */
+    private function getPostedCountry()
+    {
+        return $this->getRequest()->getPost('country');
     }
 
     /**
@@ -238,16 +245,28 @@ class VinaiKopp_PostCodeFilter_Adminhtml_Vinaikopp_PostcodefilterController
      */
     private function getOldCustomerGroupIds()
     {
-        $groupIds = $this->getRequest()->getParam('old_customer_group_ids');
-        return preg_split('/,/', $groupIds, null, PREG_SPLIT_NO_EMPTY);
+        return $this->splitParam($this->getRequest()->getParam('old_customer_group_ids'));
     }
 
     /**
      * @return string[]
      */
-    private function getCustomerGroupIdsToEdit()
+    private function getCustomerGroupIdsParam()
     {
-        $groupIds = $this->getRequest()->getParam('customer_group_ids');
-        return preg_split('/,/', $groupIds, null, PREG_SPLIT_NO_EMPTY);
+        return $this->splitParam($this->getRequest()->getParam('customer_group_ids'));
+    }
+    
+    private function getCountryParam()
+    {
+        return $this->getRequest()->getParam('country');
+    }
+
+    /**
+     * @param $paramString
+     * @return array
+     */
+    private function splitParam($paramString)
+    {
+        return preg_split('/,/', $paramString, null, PREG_SPLIT_NO_EMPTY);
     }
 }

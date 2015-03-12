@@ -47,4 +47,13 @@ class CustomerGroupIdListTest extends \PHPUnit_Framework_TestCase
         $list = CustomerGroupIdList::fromArray([5]);
         $this->assertSame([5], $list->getValues());
     }
+
+    /**
+     * @test
+     */
+    public function itShouldFilterOutDuplicates()
+    {
+        $list = CustomerGroupIdList::fromArray([1, 2, 1, 2, 3]);
+        $this->assertSame([1, 2, 3], $list->getValues());
+    }
 }

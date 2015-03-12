@@ -197,4 +197,19 @@ class RuleRepository implements RuleWriter, RuleReader
             ));
         }
     }
+
+    public function beginTransaction()
+    {
+        $this->storage->beginTransaction();
+    }
+
+    public function commitTransaction()
+    {
+        $this->storage->commitTransaction();
+    }
+
+    public function rollbackTransaction()
+    {
+        $this->storage->rollbackTransaction();
+    }
 }

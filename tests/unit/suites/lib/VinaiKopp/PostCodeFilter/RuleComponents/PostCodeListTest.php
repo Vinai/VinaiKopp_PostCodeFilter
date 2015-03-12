@@ -84,4 +84,15 @@ class PostCodeListTest extends \PHPUnit_Framework_TestCase
         $postCodeList = PostCodeList::fromArray($postCodeArray);
         $this->assertTrue($postCodeList->contains(PostCode::fromIntOrString(123)));
     }
+
+    /**
+     * @test
+     */
+    public function itShouldFilterDuplicateValues()
+    {
+        $postCodeArray = [1, 2, 2, 1, 3];
+        $postCodeList = PostCodeList::fromArray($postCodeArray);
+        $this->assertSame([1, 2, 3], $postCodeList->getValues());
+        
+    }
 }

@@ -22,7 +22,8 @@ class PostCodeList
      */
     public static function fromArray(array $inputArray)
     {
-        return new self(array_map([__CLASS__, 'getPostCodeInstance'], $inputArray));
+        $postCodes = array_map([__CLASS__, 'getPostCodeInstance'], $inputArray);
+        return new self(array_values(array_unique($postCodes, SORT_REGULAR)));
     }
 
     /**

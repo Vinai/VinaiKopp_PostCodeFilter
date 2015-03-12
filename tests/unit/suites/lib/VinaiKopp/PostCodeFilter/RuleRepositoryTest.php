@@ -242,6 +242,33 @@ class RuleRepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @test
+     */
+    public function itShouldDelegateToTheStorageToOpenATransaction()
+    {
+        $this->mockStorage->expects($this->once())->method('beginTransaction');
+        $this->repository->beginTransaction();
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldDelegateToTheStorageToCommitATransaction()
+    {
+        $this->mockStorage->expects($this->once())->method('commitTransaction');
+        $this->repository->commitTransaction();
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldDelegateToTheStorageToAbortATransaction()
+    {
+        $this->mockStorage->expects($this->once())->method('rollbackTransaction');
+        $this->repository->rollbackTransaction();
+    }
+
+    /**
      * @param mixed $groupId
      * @param mixed $country
      * @param mixed $postCodes
