@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<config>
+    <menu>
+        <customer>
+            <children>
+                <vinaikopp_postcodefilter translate="vinaikopp_postcodefilter">
+                    <title>Post Code Filter</title>
+                    <sort_order>456</sort_order>
+                    <action>adminhtml/vinaikopp_postcodefilter/index</action>
+                </vinaikopp_postcodefilter>
+            </children>
+        </customer>
+    </menu>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <customer>
+                        <children>
+                            <vinaikopp_postcodefilter translate="vinaikopp_postcodefilter">
+                                <title>Post Code Filter</title>
+                            </vinaikopp_postcodefilter>
+                        </children>
+                    </customer>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

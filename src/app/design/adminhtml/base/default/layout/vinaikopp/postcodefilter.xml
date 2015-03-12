@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<layout>
+    <adminhtml_vinaikopp_postcodefilter_index>
+        <reference name="content">
+            <block type="vinaikopp_postcodefilter/adminhtml_postcodefilter"
+                   name="vinaikopp_postcodefilter_grid_container"/>
+        </reference>
+    </adminhtml_vinaikopp_postcodefilter_index>
+    <adminhtml_vinaikopp_postcodefilter_new>
+        <reference name="content">
+            <block type="vinaikopp_postcodefilter/adminhtml_postcodefilter_new"
+                   name="vinaikopp_postcodefilter_form_container"/>
+        </reference>
+    </adminhtml_vinaikopp_postcodefilter_new>
+    <adminhtml_vinaikopp_postcodefilter_edit>
+        <reference name="content">
+            <block type="vinaikopp_postcodefilter/adminhtml_postcodefilter_edit"
+                   name="vinaikopp_postcodefilter_form_container"/>
+        </reference>
+    </adminhtml_vinaikopp_postcodefilter_edit>
+</layout>

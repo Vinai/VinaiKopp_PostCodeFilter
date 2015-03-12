@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <VinaiKopp_PostCodeFilter>
+            <active>true</active>
+            <codePool>community</codePool>
+        </VinaiKopp_PostCodeFilter>
+    </modules>
+</config>
