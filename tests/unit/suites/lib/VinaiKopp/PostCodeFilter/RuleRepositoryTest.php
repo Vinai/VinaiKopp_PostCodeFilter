@@ -116,7 +116,7 @@ class RuleRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldReturnAllMatchesForGivenCountryAndIds()
+    public function itShouldReturnAllMatchesForGivenCountryAndGroupIds()
     {
         $queryGroupIds = [3, 4, 5, 6];
         $this->mockStorage->expects($this->once())->method('findRulesByCountryAndGroupIds')
@@ -126,13 +126,27 @@ class RuleRepositoryTest extends \PHPUnit_Framework_TestCase
                 ['customer_group_id' => 4, 'country' => 'DE', 'post_codes' => [123, 456]],
                 ['customer_group_id' => 6, 'country' => 'DE', 'post_codes' => [123, 456]],
             ]);
-        $ruleFound = $this->repository->findByCountryAndGroupIds(
+        $ruleResult = $this->repository->findByCountryAndGroupIds(
             $this->createMockRuleQueryByCountryAndGroupIdsFor('DE', $queryGroupIds)
         );
-        $this->assertInstanceOf(RuleFound::class, $ruleFound);
-        $this->assertSame([3, 4, 6], $ruleFound->getCustomerGroupIdValues());
-        $this->assertSame('DE', $ruleFound->getCountryValue());
-        $this->assertSame([123, 456], $ruleFound->getPostCodeValues());
+        $this->assertInstanceOf(RuleFound::class, $ruleResult);
+        $this->assertSame([3, 4, 6], $ruleResult->getCustomerGroupIdValues());
+        $this->assertSame('DE', $ruleResult->getCountryValue());
+        $this->assertSame([123, 456], $ruleResult->getPostCodeValues());
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnRuleNotFoundIfThereAreNoMatchesForGivenCountryAndGroupIds()
+    {
+        $this->mockStorage->expects($this->once())->method('findRulesByCountryAndGroupIds')
+            ->with($this->testCountry, [2, 3])
+            ->willReturn([]);
+        $ruleResult = $this->repository->findByCountryAndGroupIds(
+            $this->createMockRuleQueryByCountryAndGroupIdsFor('DE', [2, 3])
+        );
+        $this->assertInstanceOf(RuleNotFound::class, $ruleResult);
     }
 
     /**
@@ -173,7 +187,11 @@ class RuleRepositoryTest extends \PHPUnit_Framework_TestCase
     public function itShouldDelegateInsertsToTheStorage()
     {
         $stubRuleToAdd = $this->createMockRuleToAdd($this->testGroupId, $this->testCountry, $this->testPostCodes);
-        $this->mockStorage->expects($this->once())->method('create')->with($stubRuleToAdd);
+        $this->mockStorage->expects($this->once())->method('create')->with(
+            $this->testCountry,
+            $this->testGroupId,
+            $this->testPostCodes
+        );
 
         $this->repository->createRule($stubRuleToAdd);
     }
@@ -184,7 +202,7 @@ class RuleRepositoryTest extends \PHPUnit_Framework_TestCase
     public function itShouldDelegateDeletesToTheStorage()
     {
         $stubRuleToDelete = $this->createMockRuleToDelete();
-        $this->mockStorage->expects($this->once())->method('delete')->with($stubRuleToDelete);
+        $this->mockStorage->expects($this->once())->method('delete')->with($this->testCountry, $this->testGroupId);
         $this->repository->deleteRule($stubRuleToDelete);
     }
 
@@ -232,9 +250,9 @@ class RuleRepositoryTest extends \PHPUnit_Framework_TestCase
     private function createMockRuleToAdd($groupId, $country, $postCodes)
     {
         $stubRuleToAdd = $this->getMock(RuleToAdd::class, [], [], '', false);
-        $stubRuleToAdd->expects($this->any())->method('getCustomerGroupId')->willReturn($groupId);
-        $stubRuleToAdd->expects($this->any())->method('getCountry')->willReturn($country);
-        $stubRuleToAdd->expects($this->any())->method('getPostCodes')->willReturn($postCodes);
+        $stubRuleToAdd->expects($this->any())->method('getCustomerGroupIdValues')->willReturn([$groupId]);
+        $stubRuleToAdd->expects($this->any())->method('getCountryValue')->willReturn($country);
+        $stubRuleToAdd->expects($this->any())->method('getPostCodeValues')->willReturn($postCodes);
         return $stubRuleToAdd;
     }
 
@@ -278,7 +296,7 @@ class RuleRepositoryTest extends \PHPUnit_Framework_TestCase
     private function createMockRuleToDelete()
     {
         $mockRuleToDelete = $this->getMock(RuleToDelete::class, [], [], '', false);
-        $mockRuleToDelete->expects($this->any())->method('getCustomerGroupIdValue')->willReturn($this->testGroupId);
+        $mockRuleToDelete->expects($this->any())->method('getCustomerGroupIdValues')->willReturn([$this->testGroupId]);
         $mockRuleToDelete->expects($this->any())->method('getCountryValue')->willReturn($this->testCountry);
         return $mockRuleToDelete;
     }

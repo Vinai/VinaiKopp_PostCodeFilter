@@ -4,7 +4,7 @@
 namespace VinaiKopp\PostCodeFilter\Command;
 
 use VinaiKopp\PostCodeFilter\RuleComponents\Country;
-use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupId;
+use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList;
 
 /**
  * @covers \VinaiKopp\PostCodeFilter\Command\RuleToDelete
@@ -17,9 +17,9 @@ class RuleToDeleteTest extends \PHPUnit_Framework_TestCase
     private $ruleToDelete;
 
     /**
-     * @var CustomerGroupId|\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerGroupIdList|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubCustomerGroupId;
+    private $stubCustomerGroupIds;
 
     /**
      * @var Country|\PHPUnit_Framework_MockObject_MockObject
@@ -28,26 +28,27 @@ class RuleToDeleteTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubCustomerGroupId = $this->getMock(CustomerGroupId::class, [], [], '', false);
+        $this->stubCustomerGroupIds = $this->getMock(CustomerGroupIdList::class, [], [], '', false);
         $this->stubCountry = $this->getMock(Country::class, [], [], '', false);
-        $this->ruleToDelete = new RuleToDelete($this->stubCustomerGroupId, $this->stubCountry);
+        $this->ruleToDelete = new RuleToDelete($this->stubCustomerGroupIds, $this->stubCountry);
     }
 
     /**
      * @test
      */
-    public function itShouldReturnTheCustomerGroupId()
+    public function itShouldReturnTheCustomerGroupIdList()
     {
-        $this->assertSame($this->stubCustomerGroupId, $this->ruleToDelete->getCustomerGroupId());
+        $this->assertSame($this->stubCustomerGroupIds, $this->ruleToDelete->getCustomerGroupIds());
     }
 
     /**
      * @test
      */
-    public function itShouldReturnTheCustomerGroupIdValue()
+    public function itShouldReturnTheCustomerGroupIdValues()
     {
-        $this->stubCustomerGroupId->expects($this->once())->method('getValue')->willReturn(2);
-        $this->assertSame(2, $this->ruleToDelete->getCustomerGroupIdValue());
+        $testGroupIds = [2, 3];
+        $this->stubCustomerGroupIds->expects($this->once())->method('getValues')->willReturn($testGroupIds);
+        $this->assertSame($testGroupIds, $this->ruleToDelete->getCustomerGroupIdValues());
     }
 
     /**

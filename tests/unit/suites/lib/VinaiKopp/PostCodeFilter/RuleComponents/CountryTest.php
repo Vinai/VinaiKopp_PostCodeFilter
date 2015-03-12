@@ -14,7 +14,7 @@ class CountryTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldThrowIfTheCodeIsNotAString()
     {
-        Country::fromCode(123);
+        Country::fromIso2Code(123);
     }
     /**
      * @test
@@ -22,7 +22,7 @@ class CountryTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldThrowIfTheCodeIsNot2Characters()
     {
-        Country::fromCode('DEU');
+        Country::fromIso2Code('DEU');
     }
 
     /**
@@ -30,7 +30,7 @@ class CountryTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnACountryInstance()
     {
-        $this->assertInstanceOf(Country::class, Country::fromCode('DE'));
+        $this->assertInstanceOf(Country::class, Country::fromIso2Code('DE'));
     }
 
     /**
@@ -38,6 +38,6 @@ class CountryTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnTheCodeInUpperCase()
     {
-        $this->assertSame('DE', Country::fromCode('de')->getValue());
+        $this->assertSame('DE', Country::fromIso2Code('de')->getValue());
     }
 }

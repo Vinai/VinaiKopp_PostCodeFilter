@@ -6,13 +6,13 @@ namespace VinaiKopp\PostCodeFilter\UseCases;
 use VinaiKopp\PostCodeFilter\Query\RuleNotFound;
 use VinaiKopp\PostCodeFilter\Query\RuleReader;
 use VinaiKopp\PostCodeFilter\RuleComponents\Country;
-use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupId;
 use VinaiKopp\PostCodeFilter\Command\RuleToDelete;
 use VinaiKopp\PostCodeFilter\Command\RuleWriter;
+use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList;
 
 /**
  * @covers \VinaiKopp\PostCodeFilter\UseCases\AdminDeletesRule
- * @uses   \VinaiKopp\PostCodeFilter\Query\QueryByCountryAndGroupId
+ * @uses   \VinaiKopp\PostCodeFilter\Query\QueryByCountryAndGroupIds
  */
 class AdminDeletesRuleTest extends \PHPUnit_Framework_TestCase
 {
@@ -45,7 +45,7 @@ class AdminDeletesRuleTest extends \PHPUnit_Framework_TestCase
     public function itShouldThrowIfTheRuleDoesNotExist()
     {
         $stubRule = $this->createStubRuleToDelete();
-        $this->mockRuleReader->expects($this->once())->method('findByCountryAndGroupId')
+        $this->mockRuleReader->expects($this->once())->method('findByCountryAndGroupIds')
             ->willReturn($this->getMock(RuleNotFound::class, [], [], '', false));
         $this->useCase->deleteRule($stubRule);
     }
@@ -61,13 +61,15 @@ class AdminDeletesRuleTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return RuleToDelete|\PHPUnit_Framework_MockObject_MockObject
      */
     private function createStubRuleToDelete()
     {
         $stubRuleToDelete = $this->getMock(RuleToDelete::class, [], [], '', false);
-        $stubRuleToDelete->expects($this->any())->method('getCustomerGroupId')
-            ->willReturn($this->getMock(CustomerGroupId::class, [], [], '', false));
+        $stubRuleToDelete->expects($this->any())->method('getCustomerGroupIds')
+            ->willReturn($this->getMock(CustomerGroupIdList::class, [], [], '', false));
+        $stubRuleToDelete->expects($this->any())->method('getCustomerGroupIdValues')
+            ->willReturn([1, 2]);
         $stubRuleToDelete->expects($this->any())->method('getCountry')
             ->willReturn($this->getMock(Country::class, [], [], '', false));
         return $stubRuleToDelete;

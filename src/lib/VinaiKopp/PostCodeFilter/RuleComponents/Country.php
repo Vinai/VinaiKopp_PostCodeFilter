@@ -24,7 +24,7 @@ class Country
      * @param string $code
      * @return Country
      */
-    public static function fromCode($code)
+    public static function fromIso2Code($code)
     {
         if (! is_string($code)) {
             throw new InvalidCountryException(sprintf('The country code has to be a string'));

@@ -34,7 +34,7 @@ class RuleFoundTest extends \PHPUnit_Framework_TestCase
     {
         $this->rule = new RuleFound(
             CustomerGroupIdList::fromArray([$this->customerGroupId]),
-            Country::fromCode($this->country),
+            Country::fromIso2Code($this->country),
             PostCodeList::fromArray([$this->matchingPostCode])
         );
     }

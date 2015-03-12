@@ -65,7 +65,7 @@ class QueryByCountryAndGroupIdsTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnTheCustomerGroupIdValues()
     {
-        $this->stubCustomerGroupIdList->expects($this->once())->method('getCustomerGroupIdValues')->willReturn([78]);
+        $this->stubCustomerGroupIdList->expects($this->once())->method('getValues')->willReturn([78]);
         $this->assertSame([78], $this->ruleQuery->getCustomerGroupIdValues());
     }
 }

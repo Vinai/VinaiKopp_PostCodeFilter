@@ -33,7 +33,7 @@ class CustomerGroupIdList
     /**
      * @return int[]
      */
-    public function getCustomerGroupIdValues()
+    public function getValues()
     {
         return array_map(function (CustomerGroupId $customerGroupId) {
             return $customerGroupId->getValue();

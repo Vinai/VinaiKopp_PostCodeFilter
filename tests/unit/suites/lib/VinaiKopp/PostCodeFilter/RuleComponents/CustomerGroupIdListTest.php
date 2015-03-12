@@ -45,6 +45,6 @@ class CustomerGroupIdListTest extends \PHPUnit_Framework_TestCase
     public function itShouldReturnTheCustomerGroupIdValues()
     {
         $list = CustomerGroupIdList::fromArray([5]);
-        $this->assertSame([5], $list->getCustomerGroupIdValues());
+        $this->assertSame([5], $list->getValues());
     }
 }

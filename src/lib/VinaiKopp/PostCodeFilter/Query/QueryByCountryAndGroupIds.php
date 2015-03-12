@@ -51,6 +51,6 @@ class QueryByCountryAndGroupIds
      */
     public function getCustomerGroupIdValues()
     {
-        return $this->customerGroupIds->getCustomerGroupIdValues();
+        return $this->customerGroupIds->getValues();
     }
 }

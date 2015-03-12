@@ -4,7 +4,7 @@
 namespace VinaiKopp\PostCodeFilter\Command;
 
 use VinaiKopp\PostCodeFilter\RuleComponents\Country;
-use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupId;
+use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList;
 use VinaiKopp\PostCodeFilter\RuleComponents\PostCode;
 use VinaiKopp\PostCodeFilter\RuleComponents\PostCodeList;
 
@@ -17,17 +17,17 @@ class RuleToAddTest extends \PHPUnit_Framework_TestCase
      * @var mixed[]
      */
     private $testPostCodes = ['123456'];
-    
-    /**
-     * @var int
-     */
-    private $testCustomerGroupId = 15;
 
     /**
      * @var string
      */
     private $testCountry = 'DE';
-    
+
+    /**
+     * @var CustomerGroupIdList|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mockCustomerGroupIdList;
+
     /**
      * @var RuleToAdd
      */
@@ -35,8 +35,7 @@ class RuleToAddTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $stubCustomerGroupId = $this->getMock(CustomerGroupId::class, [], [], '', false);
-        $stubCustomerGroupId->expects($this->any())->method('getValue')->willReturn($this->testCustomerGroupId);
+        $this->mockCustomerGroupIdList = $this->getMock(CustomerGroupIdList::class, [], [], '', false);
         
         $stubCountry = $this->getMock(Country::class, [], [], '', false);
         $stubCountry->expects($this->any())->method('getValue')->willReturn($this->testCountry);
@@ -46,23 +45,24 @@ class RuleToAddTest extends \PHPUnit_Framework_TestCase
         $stubPostCodeList->expects($this->any())->method('getPostCodes')->willReturn(
             [$this->getMock(PostCode::class, [], [], '', false)]
         );
-        $this->ruleToAdd = new RuleToAdd($stubCustomerGroupId, $stubCountry, $stubPostCodeList);
+        $this->ruleToAdd = new RuleToAdd($this->mockCustomerGroupIdList, $stubCountry, $stubPostCodeList);
     }
 
     /**
      * @test
      */
-    public function itShouldReturnTheCustomerGroupId()
+    public function itShouldReturnTheCustomerGroupIds()
     {
-        $this->assertInstanceOf(CustomerGroupId::class, $this->ruleToAdd->getCustomerGroupId());
+        $this->assertInstanceOf(CustomerGroupIdList::class, $this->ruleToAdd->getCustomerGroupIds());
     }
 
     /**
      * @test
      */
-    public function itShouldReturnTheCustomerGroupIdValue()
+    public function itShouldReturnTheCustomerGroupIdValues()
     {
-        $this->assertSame($this->testCustomerGroupId, $this->ruleToAdd->getCustomerGroupIdValue());
+        $this->mockCustomerGroupIdList->expects($this->once())->method('getValues')->willReturn([1, 2, 3]);
+        $this->assertSame([1, 2, 3], $this->ruleToAdd->getCustomerGroupIdValues());
     }
 
     /**

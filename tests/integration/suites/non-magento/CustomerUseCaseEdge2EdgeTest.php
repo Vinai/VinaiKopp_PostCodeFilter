@@ -3,6 +3,10 @@
 
 namespace VinaiKopp\PostCodeFilter;
 
+use VinaiKopp\PostCodeFilter\Command\RuleToAdd;
+use VinaiKopp\PostCodeFilter\RuleComponents\Country;
+use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList;
+use VinaiKopp\PostCodeFilter\RuleComponents\PostCodeList;
 use VinaiKopp\PostCodeFilter\UseCases\CustomerSetsAddress;
 
 class CustomerUseCaseEdge2EdgeTest extends \PHPUnit_Framework_TestCase
@@ -27,14 +31,12 @@ class CustomerUseCaseEdge2EdgeTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $repository = new RuleRepository(new InMemoryRuleStorage());
-        
-        foreach ($this->allowedCustomerGroupIdProvider() as $groupId) {
-            $repository->createRule(new RuleToAdd(
-                CustomerGroupId::fromInt($groupId[0]),
-                Country::fromCode($this->country),
-                PostCodeList::fromArray([$this->allowedPostCode])
-            ));
-        }        
+
+        $repository->createRule(new RuleToAdd(
+            CustomerGroupIdList::fromArray([$this->generalGroupId, $this->guestGroupId]),
+            Country::fromIso2Code($this->country),
+            PostCodeList::fromArray([$this->allowedPostCode])
+        ));
         $this->customerUseCase = new CustomerSetsAddress($repository);
     }
     
@@ -45,10 +47,11 @@ class CustomerUseCaseEdge2EdgeTest extends \PHPUnit_Framework_TestCase
             'guest group id' => [$this->guestGroupId],
         ];
     }
-    
+
     /**
      * @test
      * @dataProvider allowedCustomerGroupIdProvider
+     * @param int $groupId
      */
     public function testCustomerWithAllowedPostCodeMayOrder($groupId)
     {

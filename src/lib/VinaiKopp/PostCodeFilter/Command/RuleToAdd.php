@@ -5,15 +5,15 @@ namespace VinaiKopp\PostCodeFilter\Command;
 
 
 use VinaiKopp\PostCodeFilter\RuleComponents\Country;
-use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupId;
+use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList;
 use VinaiKopp\PostCodeFilter\RuleComponents\PostCodeList;
 
 class RuleToAdd
 {
     /**
-     * @var int
+     * @var CustomerGroupIdList
      */
-    private $customerGroupId;
+    private $customerGroupIds;
 
     /**
      * @var string
@@ -21,36 +21,36 @@ class RuleToAdd
     private $country;
 
     /**
-     * @var mixed[]
+     * @var PostCodeList
      */
     private $postCodes;
 
     /**
-     * @param CustomerGroupId $customerGroupId
+     * @param CustomerGroupIdList $customerGroupIds
      * @param Country $country
      * @param PostCodeList $postCodes
      */
-    public function __construct(CustomerGroupId $customerGroupId, Country $country, PostCodeList $postCodes)
+    public function __construct(CustomerGroupIdList $customerGroupIds, Country $country, PostCodeList $postCodes)
     {
-        $this->customerGroupId = $customerGroupId;
+        $this->customerGroupIds = $customerGroupIds;
         $this->country = $country;
         $this->postCodes = $postCodes;
     }
 
     /**
-     * @return CustomerGroupId
+     * @return CustomerGroupIdList
      */
-    public function getCustomerGroupId()
+    public function getCustomerGroupIds()
     {
-        return $this->customerGroupId;
+        return $this->customerGroupIds;
     }
 
     /**
-     * @return int
+     * @return int[]
      */
-    public function getCustomerGroupIdValue()
+    public function getCustomerGroupIdValues()
     {
-        return $this->customerGroupId->getValue();
+        return $this->customerGroupIds->getValues();
     }
 
     /**

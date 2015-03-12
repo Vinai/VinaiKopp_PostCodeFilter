@@ -54,14 +54,10 @@ class RuleRepository implements RuleWriter, RuleReader
         $records = $this->storage->findRulesByCountryAndGroupIds(
             $ruleQuery->getCountryValue(), $ruleQuery->getCustomerGroupIdValues()
         );
-        $customerGroupIds = [];
-        $postCodes = null;
-        foreach ($records as $record) {
-            $this->validateQueryByCountryAndGroupIdsResultRecord($ruleQuery, $record);
-            $customerGroupIds[] = $record['customer_group_id'];
-            $postCodes = $record['post_codes'];
+        if (empty($records)) {
+            return new RuleNotFound($ruleQuery->getCountry());
         }
-        return $this->makeRuleFound($customerGroupIds, $ruleQuery->getCountryValue(), $postCodes);
+        return $this->combineQueryByCountryAndGroupIdsResultRecords($ruleQuery, $records);
     }
 
     /**
@@ -74,12 +70,20 @@ class RuleRepository implements RuleWriter, RuleReader
 
     public function createRule(RuleToAdd $ruleToAdd)
     {
-        $this->storage->create($ruleToAdd);
+        array_map(function($customerGroupId) use ($ruleToAdd) {
+            $this->storage->create(
+                $ruleToAdd->getCountryValue(),
+                $customerGroupId,
+                $ruleToAdd->getPostCodeValues()
+            );
+        }, $ruleToAdd->getCustomerGroupIdValues());
     }
 
     public function deleteRule(RuleToDelete $ruleToDelete)
     {
-        $this->storage->delete($ruleToDelete);
+        array_map(function($customerGroupId) use ($ruleToDelete) {
+            $this->storage->delete($ruleToDelete->getCountryValue(), $customerGroupId);
+        }, $ruleToDelete->getCustomerGroupIdValues());
     }
 
     /**
@@ -131,10 +135,27 @@ class RuleRepository implements RuleWriter, RuleReader
     {
         return new RuleFound(
             CustomerGroupIdList::fromArray($customerGroupIds),
-            Country::fromCode($country),
+            Country::fromIso2Code($country),
             PostCodeList::fromArray($postCodes)
         );
 
+    }
+
+    /**
+     * @param QueryByCountryAndGroupIds $ruleQuery
+     * @param mixed[] $records
+     * @return RuleFound
+     */
+    private function combineQueryByCountryAndGroupIdsResultRecords(QueryByCountryAndGroupIds $ruleQuery, array $records)
+    {
+        $customerGroupIds = [];
+        $postCodes = null;
+        foreach ($records as $record) {
+            $this->validateQueryByCountryAndGroupIdsResultRecord($ruleQuery, $record);
+            $customerGroupIds[] = $record['customer_group_id'];
+            $postCodes = $record['post_codes'];
+        }
+        return $this->makeRuleFound($customerGroupIds, $ruleQuery->getCountryValue(), $postCodes);
     }
 
     /**

@@ -7,8 +7,8 @@ namespace VinaiKopp\PostCodeFilter\UseCases;
 use VinaiKopp\PostCodeFilter\Command\RuleToAdd;
 use VinaiKopp\PostCodeFilter\Command\RuleWriter;
 use VinaiKopp\PostCodeFilter\Exceptions\RuleAlreadyExistsException;
+use VinaiKopp\PostCodeFilter\Query\QueryByCountryAndGroupIds;
 use VinaiKopp\PostCodeFilter\Query\RuleFound;
-use VinaiKopp\PostCodeFilter\Query\QueryByCountryAndGroupId;
 use VinaiKopp\PostCodeFilter\Query\RuleReader;
 
 class AdminAddsRule
@@ -40,34 +40,35 @@ class AdminAddsRule
 
     /**
      * @param RuleToAdd $ruleToAdd
-     * @return QueryByCountryAndGroupId
-     */
-    private function buildRuleQuery(RuleToAdd $ruleToAdd)
-    {
-        return new QueryByCountryAndGroupId($ruleToAdd->getCustomerGroupId(), $ruleToAdd->getCountry());
-    }
-
-    /**
-     * @param RuleToAdd $ruleToAdd
      */
     private function validateNoConflictingRuleExists(RuleToAdd $ruleToAdd)
     {
-        $ruleQuery = $this->buildRuleQuery($ruleToAdd);
-        $result = $this->ruleReader->findByCountryAndGroupId($ruleQuery);
+        $ruleQuery = $this->makeRuleQuery($ruleToAdd);
+        $result = $this->ruleReader->findByCountryAndGroupIds($ruleQuery);
         if ($result instanceof RuleFound) {
-            throw $this->createRuleExistsException($ruleToAdd);
+            throw $this->makeRuleExistsException($result, $ruleToAdd);
         }
     }
 
     /**
      * @param RuleToAdd $ruleToAdd
+     * @return QueryByCountryAndGroupIds
+     */
+    private function makeRuleQuery(RuleToAdd $ruleToAdd)
+    {
+        return new QueryByCountryAndGroupIds($ruleToAdd->getCountry(), $ruleToAdd->getCustomerGroupIds());
+    }
+
+    /**
+     * @param RuleFound $existingRule
+     * @param RuleToAdd $ruleToAdd
      * @return RuleAlreadyExistsException
      */
-    private function createRuleExistsException(RuleToAdd $ruleToAdd)
+    private function makeRuleExistsException(RuleFound $existingRule, RuleToAdd $ruleToAdd)
     {
         return new RuleAlreadyExistsException(sprintf(
-            'A rule for customer group "%s" and country "%s" already exists',
-            $ruleToAdd->getCustomerGroupIdValue(),
+            'A rule for customer groups "%s" and country "%s" already exists',
+            $existingRule->getCustomerGroupIdValues(),
             $ruleToAdd->getCountryValue()
         ));
     }

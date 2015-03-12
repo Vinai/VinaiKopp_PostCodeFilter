@@ -6,39 +6,40 @@ namespace VinaiKopp\PostCodeFilter\Command;
 
 use VinaiKopp\PostCodeFilter\RuleComponents\Country;
 use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupId;
+use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList;
 
 class RuleToDelete
 {
     /**
-     * @var CustomerGroupId
+     * @var CustomerGroupIdList
      */
-    private $customerGroupId;
+    private $customerGroupIds;
     
     /**
      * @var Country
      */
     private $country;
 
-    public function __construct(CustomerGroupId $customerGroupId, Country $country)
+    public function __construct(CustomerGroupIdList $customerGroupIds, Country $country)
     {
-        $this->customerGroupId = $customerGroupId;
+        $this->customerGroupIds = $customerGroupIds;
         $this->country = $country;
     }
 
     /**
-     * @return CustomerGroupId
+     * @return CustomerGroupIdList
      */
-    public function getCustomerGroupId()
+    public function getCustomerGroupIds()
     {
-        return $this->customerGroupId;
+        return $this->customerGroupIds;
     }
 
     /**
-     * @return int
+     * @return int[]
      */
-    public function getCustomerGroupIdValue()
+    public function getCustomerGroupIdValues()
     {
-        return $this->customerGroupId->getValue();
+        return $this->customerGroupIds->getValues();
     }
 
     /**

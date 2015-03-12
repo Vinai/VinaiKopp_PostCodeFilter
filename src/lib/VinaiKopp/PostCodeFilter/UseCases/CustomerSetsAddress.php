@@ -30,7 +30,7 @@ class CustomerSetsAddress
     {
         $query = new QueryByCountryAndGroupId(
             CustomerGroupId::fromInt($customerGroupId),
-            Country::fromCode($country)
+            Country::fromIso2Code($country)
         );
         $rule = $this->ruleReader->findByCountryAndGroupId($query);
         return $rule->isPostCodeAllowed($postCode);

@@ -7,8 +7,8 @@ namespace VinaiKopp\PostCodeFilter\UseCases;
 use VinaiKopp\PostCodeFilter\Command\RuleToDelete;
 use VinaiKopp\PostCodeFilter\Command\RuleWriter;
 use VinaiKopp\PostCodeFilter\Exceptions\RuleDoesNotExistException;
+use VinaiKopp\PostCodeFilter\Query\QueryByCountryAndGroupIds;
 use VinaiKopp\PostCodeFilter\Query\RuleNotFound;
-use VinaiKopp\PostCodeFilter\Query\QueryByCountryAndGroupId;
 use VinaiKopp\PostCodeFilter\Query\RuleReader;
 
 class AdminDeletesRule
@@ -37,26 +37,26 @@ class AdminDeletesRule
 
     /**
      * @param RuleToDelete $ruleToDelete
-     * @return RuleDoesNotExistException
      */
-    private function buildRuleNotExistsException(RuleToDelete $ruleToDelete)
+    private function validateRuleExists(RuleToDelete $ruleToDelete)
     {
-        return new RuleDoesNotExistException(sprintf(
-            'No rule found with customer group "%s" and country "%s"',
-            $ruleToDelete->getCustomerGroupIdValue(),
-            $ruleToDelete->getCountryValue()
-        ));
+        $ruleQuery = new QueryByCountryAndGroupIds($ruleToDelete->getCountry(), $ruleToDelete->getCustomerGroupIds());
+        $result = $this->ruleReader->findByCountryAndGroupIds($ruleQuery);
+        if ($result instanceof RuleNotFound) {
+            throw $this->makeRuleNotExistsException($ruleToDelete);
+        }
     }
 
     /**
      * @param RuleToDelete $ruleToDelete
+     * @return RuleDoesNotExistException
      */
-    private function validateRuleExists(RuleToDelete $ruleToDelete)
+    private function makeRuleNotExistsException(RuleToDelete $ruleToDelete)
     {
-        $ruleQuery = new QueryByCountryAndGroupId($ruleToDelete->getCustomerGroupId(), $ruleToDelete->getCountry());
-        $result = $this->ruleReader->findByCountryAndGroupId($ruleQuery);
-        if ($result instanceof RuleNotFound) {
-            throw $this->buildRuleNotExistsException($ruleToDelete);
-        }
+        return new RuleDoesNotExistException(sprintf(
+            'No rule found with customer groups "%s" and country "%s"',
+            implode(', ', $ruleToDelete->getCustomerGroupIdValues()),
+            $ruleToDelete->getCountryValue()
+        ));
     }
 }

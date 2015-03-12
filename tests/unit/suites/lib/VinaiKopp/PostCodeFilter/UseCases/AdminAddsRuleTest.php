@@ -7,14 +7,14 @@ namespace VinaiKopp\PostCodeFilter\UseCases;
 use VinaiKopp\PostCodeFilter\Query\RuleFound;
 use VinaiKopp\PostCodeFilter\Query\RuleReader;
 use VinaiKopp\PostCodeFilter\RuleComponents\Country;
-use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupId;
 use VinaiKopp\PostCodeFilter\Command\RuleToAdd;
 use VinaiKopp\PostCodeFilter\Command\RuleWriter;
+use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList;
 
 /**
  * @covers \VinaiKopp\PostCodeFilter\UseCases\AdminAddsRule
  * @uses   \VinaiKopp\PostCodeFilter\Query\RuleFound
- * @uses   \VinaiKopp\PostCodeFilter\Query\QueryByCountryAndGroupId
+ * @uses   \VinaiKopp\PostCodeFilter\Query\QueryByCountryAndGroupIds
  */
 class AdminAddsRuleTest extends \PHPUnit_Framework_TestCase
 {
@@ -47,7 +47,7 @@ class AdminAddsRuleTest extends \PHPUnit_Framework_TestCase
     {
         $stubRuleToAdd = $this->createStubRuleToAdd();
         $this->mockRuleReader->expects($this->once())
-            ->method('findByCountryAndGroupId');
+            ->method('findByCountryAndGroupIds');
         $this->mockRuleWriter->expects($this->once())
             ->method('createRule')
             ->with($stubRuleToAdd);
@@ -62,7 +62,7 @@ class AdminAddsRuleTest extends \PHPUnit_Framework_TestCase
     public function itShouldThrowIfRuleForGroupAndCountryAlreadyExist()
     {
         $this->mockRuleReader->expects($this->once())
-            ->method('findByCountryAndGroupId')
+            ->method('findByCountryAndGroupIds')
             ->willReturn($this->getMock(RuleFound::class, [], [], '', false));
 
         $stubRuleToAdd = $this->createStubRuleToAdd();   
@@ -79,8 +79,8 @@ class AdminAddsRuleTest extends \PHPUnit_Framework_TestCase
     private function createStubRuleToAdd()
     {
         $stubRuleToAdd = $this->getMock(RuleToAdd::class, [], [], '', false);
-        $stubRuleToAdd->expects($this->any())->method('getCustomerGroupId')->willReturn(
-            $this->getMock(CustomerGroupId::class, [], [], '', false)
+        $stubRuleToAdd->expects($this->any())->method('getCustomerGroupIds')->willReturn(
+            $this->getMock(CustomerGroupIdList::class, [], [], '', false)
         );
         $stubRuleToAdd->expects($this->any())->method('getCountry')->willReturn(
             $this->getMock(Country::class, [], [], '', false)

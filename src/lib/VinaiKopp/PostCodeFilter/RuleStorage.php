@@ -4,24 +4,21 @@
 namespace VinaiKopp\PostCodeFilter;
 
 
-use VinaiKopp\PostCodeFilter\Command\RuleToAdd;
-use VinaiKopp\PostCodeFilter\Command\RuleToDelete;
-
 interface RuleStorage
 {
     /**
-     * @param string $country
+     * @param string $iso2country
      * @param int $customerGroupId
      * @return string[]
      */
-    public function findPostCodesByCountryAndGroupId($country, $customerGroupId);
+    public function findPostCodesByCountryAndGroupId($iso2country, $customerGroupId);
 
     /**
-     * @param string $country
+     * @param string $iso2country
      * @param int[] $customerGroupIds
      * @return mixed[]
      */
-    public function findRulesByCountryAndGroupIds($country, array $customerGroupIds);
+    public function findRulesByCountryAndGroupIds($iso2country, array $customerGroupIds);
 
     /**
      * @return mixed[]
@@ -29,14 +26,17 @@ interface RuleStorage
     public function findAllRules();
 
     /**
-     * @param RuleToAdd $ruleToAdd
+     * @param string $iso2country
+     * @param int $customerGroupId
+     * @param array $postCodes
      * @return void
      */
-    public function create(RuleToAdd $ruleToAdd);
+    public function create($iso2country, $customerGroupId, array $postCodes);
 
     /**
-     * @param RuleToDelete $ruleToDelete
+     * @param string $iso2country
+     * @param int $customerGroupId
      * @return void
      */
-    public function delete(RuleToDelete $ruleToDelete);
+    public function delete($iso2country, $customerGroupId);
 }

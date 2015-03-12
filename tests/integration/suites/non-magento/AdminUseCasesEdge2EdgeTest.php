@@ -2,21 +2,28 @@
 
 namespace VinaiKopp\PostCodeFilter;
 
+use VinaiKopp\PostCodeFilter\Command\RuleToAdd;
+use VinaiKopp\PostCodeFilter\Command\RuleToDelete;
+use VinaiKopp\PostCodeFilter\Query\QueryByCountryAndGroupIds;
+use VinaiKopp\PostCodeFilter\Query\RuleFound;
+use VinaiKopp\PostCodeFilter\Query\RuleNotFound;
+use VinaiKopp\PostCodeFilter\RuleComponents\Country;
+use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList;
+use VinaiKopp\PostCodeFilter\RuleComponents\PostCodeList;
 use VinaiKopp\PostCodeFilter\UseCases\AdminAddsRule;
 use VinaiKopp\PostCodeFilter\UseCases\AdminDeletesRule;
-use VinaiKopp\PostCodeFilter\UseCases\AdminUpdatesRule;
 
 class AdminUseCasesEdge2EdgeTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var CustomerGroupId
+     * @var CustomerGroupIdList
      */
-    private $customerGroupId;
+    private $customerGroupIds;
 
     /**
-     * @var CustomerGroupId
+     * @var CustomerGroupIdList
      */
-    private $newCustomerGroupId;
+    private $newCustomerGroupIds;
 
     /**
      * @var Country
@@ -29,25 +36,25 @@ class AdminUseCasesEdge2EdgeTest extends \PHPUnit_Framework_TestCase
     private $newCountry;
 
     /**
-     * @var string[]
+     * @var PostCodeList
      */
     private $postCodes;
 
     /**
-     * @var string[]
+     * @var PostCodeList
      */
     private $newPostCodes;
 
     protected function setUp()
     {
-        $this->customerGroupId = CustomerGroupId::fromInt(5);
-        $this->newCustomerGroupId = CustomerGroupId::fromInt($this->customerGroupId->getValue() + 1);
+        $this->customerGroupIds = CustomerGroupIdList::fromArray([5]);
+        $this->newCustomerGroupIds = CustomerGroupIdList::fromArray([6]);
         
-        $this->country = Country::fromCode('NZ');
-        $this->newCountry = Country::fromCode('GB');
+        $this->country = Country::fromIso2Code('NZ');
+        $this->newCountry = Country::fromIso2Code('GB');
         
-        $this->postCodes = ['121', '131', '141', '151'];
-        $this->newPostCodes = ['222', '333', '444', '555'];
+        $this->postCodes = PostCodeList::fromArray(['121', '131', '141', '151']);
+        $this->newPostCodes = PostCodeList::fromArray(['222', '333', '444', '555']);
     }
     /**
      * @test
@@ -55,20 +62,17 @@ class AdminUseCasesEdge2EdgeTest extends \PHPUnit_Framework_TestCase
     public function itShouldAddARule()
     {
         $storage = new InMemoryRuleStorage();
-        $addRuleUseCase = new AdminAddsRule(new RuleRepository($storage));
+        $ruleRepository = new RuleRepository($storage);
+        $addRuleUseCase = new AdminAddsRule($ruleRepository, $ruleRepository);
 
-        $ruleToAdd = new RuleToAdd(
-            $this->customerGroupId,
-            $this->country,
-            PostCodeList::fromArray($this->postCodes)
-        );
+        $ruleToAdd = new RuleToAdd($this->customerGroupIds, $this->country, $this->postCodes);
 
-        $this->assertRuleNotInStorage($storage, $this->customerGroupId, $this->country);
+        $this->assertRuleNotInStorage($storage, $this->customerGroupIds, $this->country);
         
         $addRuleUseCase->addRule($ruleToAdd);
         
-        $this->assertRuleInStorage($storage, $this->customerGroupId, $this->country);
-        $this->assertPostCodesAllowed($storage, $this->customerGroupId, $this->country, $this->postCodes);
+        $this->assertRuleInStorage($storage, $this->customerGroupIds, $this->country);
+        $this->assertPostCodesAllowed($storage, $this->customerGroupIds, $this->country, $this->postCodes->getValues());
         
         return $storage;
     }
@@ -80,34 +84,32 @@ class AdminUseCasesEdge2EdgeTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldDeleteARule(RuleStorage $storage)
     {
-        $ruleToDelete = new RuleToDelete(
-            $this->customerGroupId,
-            $this->country
-        );
-        $deleteRuleUseCase = new AdminDeletesRule(new RuleRepository($storage));
+        $ruleToDelete = new RuleToDelete($this->customerGroupIds, $this->country);
+        $ruleRepository = new RuleRepository($storage);
+        $deleteRuleUseCase = new AdminDeletesRule($ruleRepository, $ruleRepository);
         
-        $this->assertRuleInStorage($storage, $this->customerGroupId, $this->country);
+        $this->assertRuleInStorage($storage, $this->customerGroupIds, $this->country);
         
         $deleteRuleUseCase->deleteRule($ruleToDelete);
 
-        $this->assertRuleNotInStorage($storage, $this->customerGroupId, $this->country);
+        $this->assertRuleNotInStorage($storage, $this->customerGroupIds, $this->country);
     }
 
     /**
      * @param RuleStorage $storage
-     * @param CustomerGroupId $groupId
+     * @param CustomerGroupIdList $groupIds
      * @param Country $country
      * @param string[]|int[] $postCodes
      */
     private function assertPostCodesAllowed(
         RuleStorage $storage,
-        CustomerGroupId $groupId,
+        CustomerGroupIdList $groupIds,
         Country $country,
         array $postCodes
     )
     {
-        $ruleQuery = new RuleQueryByCountryAndGroupId($groupId, $country);
-        $ruleFound = (new RuleRepository($storage))->findByCountryAndGroupId($ruleQuery);
+        $ruleQuery = new QueryByCountryAndGroupIds($country, $groupIds);
+        $ruleFound = (new RuleRepository($storage))->findByCountryAndGroupIds($ruleQuery);
         foreach ($postCodes as $code) {
             $this->assertTrue($ruleFound->isPostCodeAllowed($code));
         }
@@ -115,23 +117,23 @@ class AdminUseCasesEdge2EdgeTest extends \PHPUnit_Framework_TestCase
     
     private function assertRuleInStorage(
         RuleStorage $storage,
-        CustomerGroupId $groupId,
+        CustomerGroupIdList $groupIds,
         Country $country
     )
     {
-        $ruleQuery = new RuleQueryByCountryAndGroupId($groupId, $country);
-        $rule = (new RuleRepository($storage))->findByCountryAndGroupId($ruleQuery);
+        $ruleQuery = new QueryByCountryAndGroupIds($country, $groupIds);
+        $rule = (new RuleRepository($storage))->findByCountryAndGroupIds($ruleQuery);
         $this->assertInstanceOf(RuleFound::class, $rule);
     }
     
     private function assertRuleNotInStorage(
         RuleStorage $storage,
-        CustomerGroupId $groupId,
+        CustomerGroupIdList $groupId,
         Country $country
     )
     {
-        $ruleQuery = new RuleQueryByCountryAndGroupId($groupId, $country);
-        $rule = (new RuleRepository($storage))->findByCountryAndGroupId($ruleQuery);
+        $ruleQuery = new QueryByCountryAndGroupIds($country, $groupId);
+        $rule = (new RuleRepository($storage))->findByCountryAndGroupIds($ruleQuery);
         $this->assertInstanceOf(RuleNotFound::class, $rule);
     }
 }

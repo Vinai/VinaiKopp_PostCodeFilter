@@ -2,6 +2,9 @@
 
 namespace VinaiKopp\PostCodeFilter;
 
+use VinaiKopp\PostCodeFilter\Command\RuleToAdd;
+use VinaiKopp\PostCodeFilter\Command\RuleToDelete;
+
 class InMemoryRuleStorage implements RuleStorage
 {
     /**
@@ -27,10 +30,10 @@ class InMemoryRuleStorage implements RuleStorage
 
     /**
      * @param string $country
-     * @param $customerGroupIds
-     * @return \array[]
+     * @param int[] $customerGroupIds
+     * @return array[]
      */
-    public function findRulesByCountryAndGroupIds($country, $customerGroupIds)
+    public function findRulesByCountryAndGroupIds($country, array $customerGroupIds)
     {
         $result = [];
         
@@ -67,40 +70,22 @@ class InMemoryRuleStorage implements RuleStorage
     }
 
     /**
-     * @param RuleToAdd $ruleToAdd
-     * @return void
+     * @param string $iso2country
+     * @param int $customerGroupId
+     * @param array $postCodes
      */
-    public function create(RuleToAdd $ruleToAdd)
+    public function create($iso2country, $customerGroupId, array $postCodes)
     {
-        $this->setRule(
-            $ruleToAdd->getCustomerGroupIdValue(),
-            $ruleToAdd->getCountryValue(),
-            $ruleToAdd->getPostCodeValues()
-        );
+        $this->setRule($customerGroupId, $iso2country, $postCodes);
     }
 
     /**
-     * @param RuleToUpdate $ruleToUpdate
-     * @return void
+     * @param string $iso2country
+     * @param int $customerGroupId
      */
-    public function update(RuleToUpdate $ruleToUpdate)
+    public function delete($iso2country, $customerGroupId)
     {
-        $this->unsetRule($ruleToUpdate->getOldCustomerGroupIdValue(), $ruleToUpdate->getOldCountryValue());
-
-        $this->setRule(
-            $ruleToUpdate->getNewCustomerGroupIdValue(),
-            $ruleToUpdate->getNewCountryValue(),
-            $ruleToUpdate->getNewPostCodeValues()
-        );
-    }
-
-    /**
-     * @param RuleToDelete $ruleToDelete
-     * @return void
-     */
-    public function delete(RuleToDelete $ruleToDelete)
-    {
-        $this->unsetRule($ruleToDelete->getCustomerGroupIdValue(), $ruleToDelete->getCountryValue());
+        $this->unsetRule($customerGroupId, $iso2country);
     }
 
     /**
