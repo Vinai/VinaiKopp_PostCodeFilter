@@ -16,7 +16,12 @@ spl_autoload_register(function ($class) {
     }
 
     $classFile = str_replace('\\', '/', $class) . '.php';
-    foreach (['/../../src/lib/', '/suites/lib/'] as $dir) {
+    $dirs = [
+        '/../../src/lib/',
+        '/suites/lib/',
+        '/suites/app/code/community/VinaiKopp/PostCodeFilter/'
+    ];
+    foreach ($dirs as $dir) {
         $file = __DIR__ . $dir . $classFile;
         if (file_exists($file)) {
             require $file;
