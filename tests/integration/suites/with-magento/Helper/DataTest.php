@@ -2,6 +2,10 @@
 
 namespace VinaiKopp\PostCodeFilter;
 
+use VinaiKopp\PostCodeFilter\Command\RuleToAdd;
+use VinaiKopp\PostCodeFilter\Command\RuleToDelete;
+use VinaiKopp\PostCodeFilter\Query\QueryByCountryAndGroupIds;
+
 /**
  * @covers \VinaiKopp_PostCodeFilter_Helper_Data
  */
@@ -30,7 +34,7 @@ class DataTest extends IntegrationTestCase
      */
     public function itShouldReturnARepositoryInstance()
     {
-        $this->assertInstanceOf(RuleRepository::class, $this->helper->getRuleRepository());
+        $this->assertInstanceOf(RuleRepository::class, $this->helper->getRuleWriter());
     }
 
     /**
@@ -38,7 +42,7 @@ class DataTest extends IntegrationTestCase
      */
     public function itShouldReturnARuleToAdd()
     {
-        $this->assertInstanceOf(RuleToAdd::class, $this->helper->createRuleToAdd(11, 'DE', ['1', '2']));
+        $this->assertInstanceOf(RuleToAdd::class, $this->helper->createRuleToAdd([11], 'DE', ['1', '2']));
     }
 
     /**
@@ -46,7 +50,7 @@ class DataTest extends IntegrationTestCase
      */
     public function itShouldReturnARuleToDelete()
     {
-        $this->assertInstanceOf(RuleToDelete::class, $this->helper->createRuleToDelete(11, 'DE'));
+        $this->assertInstanceOf(RuleToDelete::class, $this->helper->createRuleToDelete([11], 'DE'));
     }
 
     /**
@@ -54,6 +58,9 @@ class DataTest extends IntegrationTestCase
      */
     public function itShouldReturnARuleQueryByCountry()
     {
-        $this->assertInstanceOf(RuleQueryByCountryAndGroupIds::class, $this->helper->createRuleQueryForCountry('DE'));
+        $this->assertInstanceOf(
+            QueryByCountryAndGroupIds::class,
+            $this->helper->createRuleQueryForGroupIdsAndCountry([11], 'DE')
+        );
     }
 }

@@ -131,7 +131,7 @@ class RuleRepository implements RuleWriter, RuleReader
      * @param string[]|int[] $postCodes
      * @return RuleFound
      */
-    private function makeRuleFound(array $customerGroupIds, $country, $postCodes)
+    private function makeRuleFound(array $customerGroupIds, $country, array $postCodes)
     {
         return new RuleFound(
             CustomerGroupIdList::fromArray($customerGroupIds),

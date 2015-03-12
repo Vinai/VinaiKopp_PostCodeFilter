@@ -28,7 +28,7 @@ interface RuleStorage
     /**
      * @param string $iso2country
      * @param int $customerGroupId
-     * @param array $postCodes
+     * @param string[]|int[] $postCodes
      * @return void
      */
     public function create($iso2country, $customerGroupId, array $postCodes);

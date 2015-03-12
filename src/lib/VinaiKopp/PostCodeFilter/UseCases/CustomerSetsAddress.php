@@ -22,15 +22,15 @@ class CustomerSetsAddress
     
     /**
      * @param int $customerGroupId
-     * @param string $country
+     * @param string $iso2country
      * @param string $postCode
      * @return bool
      */
-    public function mayOrder($customerGroupId, $country, $postCode)
+    public function mayOrder($customerGroupId, $iso2country, $postCode)
     {
         $query = new QueryByCountryAndGroupId(
             CustomerGroupId::fromInt($customerGroupId),
-            Country::fromIso2Code($country)
+            Country::fromIso2Code($iso2country)
         );
         $rule = $this->ruleReader->findByCountryAndGroupId($query);
         return $rule->isPostCodeAllowed($postCode);

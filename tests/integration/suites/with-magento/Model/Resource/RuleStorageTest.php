@@ -25,12 +25,7 @@ class RuleStorageTest extends IntegrationTestCase
     protected function setUp()
     {
         $this->mockReadConnection = $this->getMock(\Varien_Db_Adapter_Interface::class);
-        $this->mockReadConnection->expects($this->any())->method('select')->willReturnCallback(function () {
-            $mock = $this->getMock(\Varien_Db_Select::class, [], [], '', false);
-            $mock->expects($this->any())->method('from')->willReturnSelf();
-            $mock->expects($this->any())->method('where')->willReturnSelf();
-            return $mock;
-        });
+        $this->addMockSelectFactory($this->mockReadConnection);
         $this->mockWriteConnection = $this->getMock(\Varien_Db_Adapter_Interface::class);
         $this->storage = new \VinaiKopp_PostCodeFilter_Model_Resource_RuleStorage(
             $this->mockReadConnection,
@@ -80,17 +75,8 @@ class RuleStorageTest extends IntegrationTestCase
      */
     public function itShouldReturnAnArrayIfAMatchIsFound()
     {
-        $this->mockReadConnection->expects($this->once())->method('fetchOne')->willReturn([
-            'country' => 'DE',
-            'customer_group_id' => 3,
-            'post_codes' => '1,2,3,4'
-        ]);
-        $result = $this->storage->findPostCodesByCountryAndGroupId('DE', 3);
-        $this->assertEquals([
-            'country' => 'DE',
-            'customer_group_id' => 3,
-            'post_codes' => ['1', '2', '3', '4']
-        ], $result);
+        $this->mockReadConnection->expects($this->once())->method('fetchOne')->willReturn('1,2,3,4');
+        $this->assertEquals(['1', '2', '3', '4'], $this->storage->findPostCodesByCountryAndGroupId('DE', 3));
     }
 
     /**
@@ -98,15 +84,18 @@ class RuleStorageTest extends IntegrationTestCase
      */
     public function itShouldCreateANewRule()
     {
-        $this->mockWriteConnection->expects($this->once())->method('insert');
-        $ruleToAdd = new RuleToAdd(
-            CustomerGroupId::fromInt(5),
-            Country::fromCode('NZ'),
-            PostCodeList::fromArray(['1234', '5678'])
+        $this->mockWriteConnection->expects($this->once())->method('insert')
+            ->with(
+                $this->isType('string'),
+                [
+                    'customer_group_id' => 5,
+                    'country' => 'NZ',
+                    'post_codes' => '1234,5678'
+                ]
         );
-        $this->storage->create($ruleToAdd);
+        $this->storage->create('NZ', 5, ['1234', '5678']);
     }
-    
+
     /**
      * @test
      */
@@ -120,10 +109,19 @@ class RuleStorageTest extends IntegrationTestCase
                     'customer_group_id=?' => 10
                 ]
             );
-        $ruleToDelete = new RuleToDelete(
-            CustomerGroupId::fromInt(10),
-            Country::fromCode('GB')
-        );
-        $this->storage->delete($ruleToDelete);
+        $this->storage->delete('GB', 10);
+    }
+
+    /**
+     * @param \PHPUnit_Framework_MockObject_MockObject $mockConnection
+     */
+    private function addMockSelectFactory($mockConnection)
+    {
+        $mockConnection->expects($this->any())->method('select')->willReturnCallback(function () {
+            $mock = $this->getMock(\Varien_Db_Select::class, [], [], '', false);
+            $mock->expects($this->any())->method('from')->willReturnSelf();
+            $mock->expects($this->any())->method('where')->willReturnSelf();
+            return $mock;
+        });
     }
 }

@@ -2,8 +2,10 @@
 
 namespace VinaiKopp\PostCodeFilter;
 
+use VinaiKopp\PostCodeFilter\Query\RuleResult;
 use VinaiKopp\PostCodeFilter\UseCases\AdminAddsRule;
 use VinaiKopp\PostCodeFilter\UseCases\AdminDeletesRule;
+use VinaiKopp\PostCodeFilter\UseCases\AdminViewsSingleRule;
 
 /**
  * @covers \VinaiKopp_PostCodeFilter_Adminhtml_Vinaikopp_PostcodefilterController
@@ -36,6 +38,11 @@ class PostcodefilterControllerTest extends IntegrationTestCase
      * @var AdminDeletesRule|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockDeleteUseCase;
+
+    /**
+     * @var AdminViewsSingleRule|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mockViewSingleRuleUseCase;
 
     /**
      * @return string
@@ -96,10 +103,12 @@ class PostcodefilterControllerTest extends IntegrationTestCase
         $this->mockResponse = $this->getMock(\Mage_Core_Controller_Response_Http::class);
         $this->mockAddUseCase = $this->getMock(AdminAddsRule::class, [], [], '', false);
         $this->mockDeleteUseCase = $this->getMock(AdminDeletesRule::class, [], [], '', false);
+        $this->mockViewSingleRuleUseCase = $this->getMock(AdminViewsSingleRule::class, [], [], '', false);
         
         $this->controller = $this->createInstance();
         $this->controller->setAddUseCase($this->mockAddUseCase);
         $this->controller->setDeleteUseCase($this->mockDeleteUseCase);
+        $this->controller->setViewSingleRuleUseCase($this->mockViewSingleRuleUseCase);
 
     }
 
@@ -135,10 +144,8 @@ class PostcodefilterControllerTest extends IntegrationTestCase
      */
     public function itShouldInstantiateTheFormContainerBlockForTheEditAction()
     {
-        $stubRule = new \Varien_Object();
-        $mockCollection = $this->getMock(\VinaiKopp_PostCodeFilter_Model_Resource_PostCodeFilter_Collection::class);
-        $mockCollection->expects($this->once())->method('getFirstItem')->willReturn($stubRule);
-        $this->controller->setCollection($mockCollection);
+        $stubRule = $this->getMock(RuleResult::class);
+        $this->mockViewSingleRuleUseCase->expects($this->once())->method('fetchRule')->willReturn($stubRule);
         
         $this->dispatchAction('edit');
         
@@ -157,7 +164,7 @@ class PostcodefilterControllerTest extends IntegrationTestCase
             ['customer_group_ids', null, [0, 1]],
             ['post_codes', null, "1234\n5678,\n1313, 4444"]
         ]);
-        $this->mockAddUseCase->expects($this->exactly(2))->method('addRule');
+        $this->mockAddUseCase->expects($this->once())->method('addRule');
         $this->dispatchAction('create');
     }
 
@@ -177,8 +184,8 @@ class PostcodefilterControllerTest extends IntegrationTestCase
             ['post_codes', null, "1234\n5678,\n1313, 4444"]
         ]);
         
-        $this->mockDeleteUseCase->expects($this->exactly(2))->method('deleteRule');
-        $this->mockAddUseCase->expects($this->exactly(2))->method('addRule');
+        $this->mockDeleteUseCase->expects($this->once())->method('deleteRule');
+        $this->mockAddUseCase->expects($this->once())->method('addRule');
         $this->dispatchAction('update');
     }
 
@@ -191,7 +198,7 @@ class PostcodefilterControllerTest extends IntegrationTestCase
             ['old_country', null, 'DE'],
             ['old_customer_group_ids', null, '0,1,3']
         ]);
-        $this->mockDeleteUseCase->expects($this->exactly(3))->method('deleteRule');
+        $this->mockDeleteUseCase->expects($this->once())->method('deleteRule');
         $this->dispatchAction('delete');
     }
 

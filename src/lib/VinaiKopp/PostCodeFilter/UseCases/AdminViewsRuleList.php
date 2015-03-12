@@ -7,7 +7,7 @@ namespace VinaiKopp\PostCodeFilter\UseCases;
 
 use VinaiKopp\PostCodeFilter\Query\RuleReader;
 
-class AdminListsRules
+class AdminViewsRuleList
 {
     /**
      * @var RuleReader
@@ -19,7 +19,7 @@ class AdminListsRules
         $this->ruleReader = $ruleReader;
     }
     
-    public function fetchAll()
+    public function fetchAllRules()
     {
         return $this->ruleReader->findAll();
     }
