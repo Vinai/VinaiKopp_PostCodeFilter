@@ -6,7 +6,7 @@ namespace VinaiKopp\PostCodeFilter\UseCases;
 
 use VinaiKopp\PostCodeFilter\Command\RuleToAdd;
 use VinaiKopp\PostCodeFilter\Command\RuleWriter;
-use VinaiKopp\PostCodeFilter\Exceptions\RuleAlreadyExistsException;
+use VinaiKopp\PostCodeFilter\Exceptions\RuleForGroupAndCountryAlreadyExistsException;
 use VinaiKopp\PostCodeFilter\Query\QueryByCountryAndGroupIds;
 use VinaiKopp\PostCodeFilter\Query\RuleFound;
 use VinaiKopp\PostCodeFilter\Query\RuleReader;
@@ -70,11 +70,11 @@ class AdminAddsRule
     /**
      * @param RuleFound $existingRule
      * @param RuleToAdd $ruleToAdd
-     * @return RuleAlreadyExistsException
+     * @return RuleForGroupAndCountryAlreadyExistsException
      */
     private function makeRuleExistsException(RuleFound $existingRule, RuleToAdd $ruleToAdd)
     {
-        return new RuleAlreadyExistsException(sprintf(
+        return new RuleForGroupAndCountryAlreadyExistsException(sprintf(
             'A rule for customer group(s) "%s" and country "%s" already exists',
             implode(', ', $existingRule->getCustomerGroupIdValues()),
             $ruleToAdd->getCountryValue()

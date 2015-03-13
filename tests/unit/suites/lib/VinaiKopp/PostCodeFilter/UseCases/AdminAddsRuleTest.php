@@ -57,7 +57,7 @@ class AdminAddsRuleTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \VinaiKopp\PostCodeFilter\Exceptions\RuleAlreadyExistsException
+     * @expectedException \VinaiKopp\PostCodeFilter\Exceptions\RuleForGroupAndCountryAlreadyExistsException
      */
     public function itShouldThrowIfRuleForGroupAndCountryAlreadyExist()
     {

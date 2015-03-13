@@ -3,7 +3,7 @@
 
 namespace VinaiKopp\PostCodeFilter\Exceptions;
 
-class RuleForGroupAndCountryAlreadyExistsException extends \RangeException
+class RuleForGroupAndCountryAlreadyExistsException extends \OutOfBoundsException
 {
 
 }
