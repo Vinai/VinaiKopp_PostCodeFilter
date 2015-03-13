@@ -15,6 +15,44 @@ class MageConfigTest extends IntegrationTestCase
      */
     private $classGroup;
 
+    /**
+     * @param string $moduleName
+     */
+    private function assertModuleIsKnown($moduleName)
+    {
+        $node = \Mage::getConfig()->getNode('modules/' . $moduleName);
+        if (false === $node) {
+            $this->fail(sprintf('The module "%s" is not registered', $moduleName));
+        }
+        $this->assertSame('true', (string) $node->active, sprintf(
+            'The module "%s" is not active', $moduleName)
+        );
+    }
+
+    /**
+     * @param string $moduleName
+     * @param string $expectedCodePool
+     */
+    private function assertCodePool($moduleName, $expectedCodePool)
+    {
+        $codePool = (string) \Mage::getConfig()->getNode('modules/' . $moduleName . '/codePool');
+        $this->assertEquals($expectedCodePool, $codePool, sprintf(
+            'The codePool for the module "%s" is not "%s"', $moduleName, $expectedCodePool
+        ));
+    }
+
+    /**
+     * @param string[] $areas
+     * @param string $event
+     */
+    private function assertObserverConfig(array $areas, $event)
+    {
+        $xpath = '*[self::' . implode(' or self::', $areas) . ']/events/' . $event . ' /observers/' . $this->classGroup;
+        $nodes = \Mage::getConfig()->getNode()->xpath($xpath);
+        $message = sprintf('No observer registered for event "%s" by module "%s"', $event, $this->classGroup);
+        $this->assertGreaterThanOrEqual(1, count($nodes), $message);
+    }
+
     public static function setUpBeforeClass()
     {
         self::resetMagento();
@@ -24,7 +62,7 @@ class MageConfigTest extends IntegrationTestCase
     {
         $this->classGroup = strtolower($this->moduleName);
     }
-    
+
     /**
      * @test
      */
@@ -157,28 +195,23 @@ class MageConfigTest extends IntegrationTestCase
     }
 
     /**
-     * @param string $moduleName
+     * @test
      */
-    private function assertModuleIsKnown($moduleName)
+    public function itShouldAddAFrontendRoute()
     {
-        $node = \Mage::getConfig()->getNode('modules/' . $moduleName);
-        if (false === $node) {
-            $this->fail(sprintf('The module "%s" is not registered', $moduleName));
-        }
-        $this->assertSame('true', (string) $node->active, sprintf(
-                'The module "%s" is not active', $moduleName)
-        );
+        $front = \Mage::app()->getFrontController();
+        /** @var \Mage_Core_Controller_Varien_Router_Standard $route */
+        $route = $front->getRouterByRoute('standard');
+        $frontName = $route->getFrontNameByRoute($this->classGroup);
+        $modules = $route->getModuleByFrontName($frontName);
+        $this->assertContains($this->moduleName . '_Frontend', $modules);
     }
 
     /**
-     * @param string $moduleName
-     * @param string $expectedCodePool
+     * @test
      */
-    private function assertCodePool($moduleName, $expectedCodePool)
+    public function itShouldAddAnObserverFor_sales_model_service_quote_submit_before()
     {
-        $codePool = (string) \Mage::getConfig()->getNode('modules/' . $moduleName . '/codePool');
-        $this->assertEquals($expectedCodePool, $codePool, sprintf(
-            'The codePool for the module "%s" is not "%s"', $moduleName, $expectedCodePool
-        ));
+        $this->assertObserverConfig(['global'], 'sales_model_service_quote_submit_before');
     }
 }

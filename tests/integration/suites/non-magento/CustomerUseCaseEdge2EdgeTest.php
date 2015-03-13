@@ -7,7 +7,7 @@ use VinaiKopp\PostCodeFilter\Command\RuleToAdd;
 use VinaiKopp\PostCodeFilter\RuleComponents\Country;
 use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList;
 use VinaiKopp\PostCodeFilter\RuleComponents\PostCodeList;
-use VinaiKopp\PostCodeFilter\UseCases\CustomerSetsAddress;
+use VinaiKopp\PostCodeFilter\UseCases\CustomerChecksPostCode;
 
 class CustomerUseCaseEdge2EdgeTest extends \PHPUnit_Framework_TestCase
 {
@@ -24,7 +24,7 @@ class CustomerUseCaseEdge2EdgeTest extends \PHPUnit_Framework_TestCase
     private $resellerGroupId = 6;
 
     /**
-     * @var CustomerSetsAddress
+     * @var CustomerChecksPostCode
      */
     private $customerUseCase;
 
@@ -37,7 +37,7 @@ class CustomerUseCaseEdge2EdgeTest extends \PHPUnit_Framework_TestCase
             Country::fromIso2Code($this->country),
             PostCodeList::fromArray([$this->allowedPostCode])
         ));
-        $this->customerUseCase = new CustomerSetsAddress($repository);
+        $this->customerUseCase = new CustomerChecksPostCode($repository);
     }
     
     public function allowedCustomerGroupIdProvider()

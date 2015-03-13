@@ -10,6 +10,7 @@ use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList;
 use VinaiKopp\PostCodeFilter\RuleComponents\PostCodeList;
 use VinaiKopp\PostCodeFilter\RuleRepository;
 use VinaiKopp\PostCodeFilter\RuleStorage;
+use VinaiKopp\PostCodeFilter\UseCases\CustomerChecksPostCode;
 
 class VinaiKopp_PostCodeFilter_Helper_Data extends Mage_Core_Helper_Abstract
 {
@@ -72,20 +73,13 @@ class VinaiKopp_PostCodeFilter_Helper_Data extends Mage_Core_Helper_Abstract
     }
 
     /**
-     * @param int[] $customerGroupIds
-     * @param string $country
-     * @return QueryByCountryAndGroupIds
+     * @param string $oldCountry
+     * @param int[] $oldCustomerGroupIds
+     * @param string $newCountry
+     * @param int[] $newCustomerGroupIds
+     * @param string[]|int[] $newPostCodes
+     * @return RuleToUpdate
      */
-    public function createRuleQueryForGroupIdsAndCountry(array $customerGroupIds, $country)
-    {
-        array_walk($customerGroupIds, [$this, 'convertToInteger']);
-        $this->registerPostCodeFilterAutoloader();
-        return new QueryByCountryAndGroupIds(
-            Country::fromIso2Code($country),
-            CustomerGroupIdList::fromArray($customerGroupIds)
-        );
-    }
-
     public function createRuleToUpdate(
         $oldCountry,
         $oldCustomerGroupIds,
@@ -103,6 +97,30 @@ class VinaiKopp_PostCodeFilter_Helper_Data extends Mage_Core_Helper_Abstract
             CustomerGroupIdList::fromArray($newCustomerGroupIds),
             PostCodeList::fromArray($newPostCodes)
         );
+    }
+
+    /**
+     * @param int[] $customerGroupIds
+     * @param string $country
+     * @return QueryByCountryAndGroupIds
+     */
+    public function createRuleQueryForGroupIdsAndCountry(array $customerGroupIds, $country)
+    {
+        array_walk($customerGroupIds, [$this, 'convertToInteger']);
+        $this->registerPostCodeFilterAutoloader();
+        return new QueryByCountryAndGroupIds(
+            Country::fromIso2Code($country),
+            CustomerGroupIdList::fromArray($customerGroupIds)
+        );
+    }
+
+    /**
+     * @return CustomerChecksPostCode
+     */
+    public function createCustomerChecksPostCodeUseCase()
+    {
+        $this->registerPostCodeFilterAutoloader();
+        return new CustomerChecksPostCode($this->getRuleReader());
     }
 
     /**

@@ -37,7 +37,29 @@
                 </setup>
             </vinaikopp_postcodefilter_setup>
         </resources>
+        <events>
+            <sales_model_service_quote_submit_before>
+                <observers>
+                    <vinaikopp_postcodefilter>
+                        <type>model</type>
+                        <class>vinaikopp_postcodefilter/observer</class>
+                        <method>salesModelServiceQuoteSubmitBefore</method>
+                    </vinaikopp_postcodefilter>
+                </observers>
+            </sales_model_service_quote_submit_before>
+        </events>
     </global>
+    <frontend>
+        <routers>
+            <vinaikopp_postcodefilter>
+                <use>standard</use>
+                <args>
+                    <module>VinaiKopp_PostCodeFilter_Frontend</module>
+                    <frontName>postcodefilter</frontName>
+                </args>
+            </vinaikopp_postcodefilter>
+        </routers>
+    </frontend>
     <adminhtml>
         <layout>
             <updates>

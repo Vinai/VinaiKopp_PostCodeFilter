@@ -6,15 +6,15 @@ use VinaiKopp\PostCodeFilter\Query\RuleReader;
 use VinaiKopp\PostCodeFilter\Query\RuleResult;
 
 /**
- * @covers \VinaiKopp\PostCodeFilter\UseCases\CustomerSetsAddress
+ * @covers \VinaiKopp\PostCodeFilter\UseCases\CustomerChecksPostCode
  * @uses   \VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupId
  * @uses   \VinaiKopp\PostCodeFilter\RuleComponents\Country
  * @uses   \VinaiKopp\PostCodeFilter\Query\QueryByCountryAndGroupId
  */
-class CustomerSetsAddressTest extends \PHPUnit_Framework_TestCase
+class CustomerChecksPostCodeTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var CustomerSetsAddress
+     * @var CustomerChecksPostCode
      */
     private $useCase;
 
@@ -48,7 +48,7 @@ class CustomerSetsAddressTest extends \PHPUnit_Framework_TestCase
         $this->mockRule = $this->getMock(RuleResult::class);
         $this->mockRuleReader = $this->getMock(RuleReader::class);
         $this->mockRuleReader->expects($this->any())->method('findByCountryAndGroupId')->willReturn($this->mockRule);
-        $this->useCase = new CustomerSetsAddress($this->mockRuleReader);
+        $this->useCase = new CustomerChecksPostCode($this->mockRuleReader);
     }
     
     /**

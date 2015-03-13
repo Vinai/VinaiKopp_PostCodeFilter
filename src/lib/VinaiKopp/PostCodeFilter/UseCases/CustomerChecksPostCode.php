@@ -8,7 +8,7 @@ use VinaiKopp\PostCodeFilter\Query\RuleReader;
 use VinaiKopp\PostCodeFilter\RuleComponents\Country;
 use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupId;
 
-class CustomerSetsAddress
+class CustomerChecksPostCode
 {
     /**
      * @var RuleReader

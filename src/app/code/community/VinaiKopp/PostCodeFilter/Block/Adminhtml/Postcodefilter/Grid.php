@@ -72,7 +72,7 @@ class VinaiKopp_PostCodeFilter_Block_Adminhtml_Postcodefilter_Grid
                             'base' => '*/*/edit',
                             'params' => $this->currentItemParams
                         ),
-                        'field' => 'id'
+                        //'field' => 'country'
                     )
                 ),
                 'filter' => false,
