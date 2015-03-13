@@ -51,7 +51,7 @@ To uninstall this extension you need to run the following SQL after removing the
 Developer
 ---------
 Vinai Kopp  
-Web: [http://www.netzarbeiter.com](http://www.netzarbeiter.com)  
+Web: [http://vinaikopp.com](http://vinaikopp.com)  
 Twitter: [@VinaiKopp](https://twitter.com/VinaiKopp)
 
 Licence
