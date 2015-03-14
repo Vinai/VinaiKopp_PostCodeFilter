@@ -25,6 +25,10 @@ class PostCodeTest extends \PHPUnit_Framework_TestCase
             'null' => [null],
             'float' => [0.5],
             'object' => [new \stdClass()],
+            'invalid char: <' => ['<'],
+            'invalid char: >' => ['>'],
+            'invalid char: \'' => ['\''],
+            'invalid char: "' => ['"'],
         ];
     }
 

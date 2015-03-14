@@ -12,6 +12,8 @@ class PostCode
      * @var int|string
      */
     private $postCode;
+    
+    private static $invalidChars = '<>\'"';
 
     private function __construct($postCode)
     {
@@ -26,6 +28,12 @@ class PostCode
     {
         if (! is_string($postCode) && ! is_int($postCode)) {
             throw new InvalidPostCodeException(sprintf('Each post code has to be a string or an integer'));
+        }
+        if (preg_match('/[' . self::$invalidChars . ']/', $postCode)) {
+            throw new InvalidPostCodeException(sprintf(
+                'The post code contains one of the following invalid characters: %s',
+                self::$invalidChars
+            ));
         }
         return new self($postCode);
     }
