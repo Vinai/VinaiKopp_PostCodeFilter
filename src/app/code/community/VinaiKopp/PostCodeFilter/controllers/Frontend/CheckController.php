@@ -41,7 +41,6 @@ class VinaiKopp_PostCodeFilter_Frontend_CheckController extends Mage_Core_Contro
 
             $content = $this->buildRegularResponse(
                 $country,
-                $customerGroupId,
                 $postCode,
                 $this->mayOrder($customerGroupId, $country, $postCode)
             );
@@ -75,16 +74,15 @@ class VinaiKopp_PostCodeFilter_Frontend_CheckController extends Mage_Core_Contro
 
     /**
      * @param string $country
-     * @param int $customerGroupId
      * @param string $postCode
      * @param bool $mayOrder
      * @return mixed[]
+     * @internal param int $customerGroupId
      */
-    private function buildRegularResponse($country, $customerGroupId, $postCode, $mayOrder)
+    private function buildRegularResponse($country, $postCode, $mayOrder)
     {
         return [
             'country' => $country,
-            'customer_group_id' => $customerGroupId,
             'postcode' => $postCode,
             'may_order' => $mayOrder
         ];

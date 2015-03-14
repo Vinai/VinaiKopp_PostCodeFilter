@@ -28,7 +28,7 @@ class CheckControllerTest extends ControllerTestCase
     }
 
     /**
-     * @return \Mage_Core_Controller_Varien_Action
+     * @return \VinaiKopp_PostCodeFilter_Frontend_CheckController
      */
     protected function getControllerUnderTest()
     {
@@ -84,8 +84,7 @@ class CheckControllerTest extends ControllerTestCase
         $mayOrder,
         $postCode,
         $country,
-        $customerGroupId,
-        $expectedCustomerGroupId
+        $customerGroupId
     ) {
         $this->getMockRequest()->expects($this->any())->method('getParam')->willReturnMap([
             ['postcode', null, $postCode],
@@ -98,7 +97,6 @@ class CheckControllerTest extends ControllerTestCase
             ->willReturn($mayOrder);
         $expectedResponse = json_encode([
             'country' => $country,
-            'customer_group_id' => $expectedCustomerGroupId,
             'postcode' => $postCode,
             'may_order' => $mayOrder,
         ]);
@@ -108,11 +106,11 @@ class CheckControllerTest extends ControllerTestCase
 
     public function useCaseResponseDataProvider()
     {
-        // $mayOrder, $postCode, $country, $customerGroupId, $expectedCustomerGroupId
+        // $mayOrder, $postCode, $country, $customerGroupId
         return [
-            'may order' => [true, '69123', 'DE', '2', 2],
-            'may not order' => [false, '69123', 'DE', '2', 2],
-            'customer group defaults to 0' => [true, '69123', 'DE', null, 0],
+            'may order' => [true, '69123', 'DE', '2'],
+            'may not order' => [false, '69123', 'DE', '2'],
+            'customer group defaults to 0' => [true, '69123', 'DE', null],
         ];
     }
 
