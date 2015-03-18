@@ -78,13 +78,14 @@ class CheckControllerTest extends ControllerTestCase
      * @param string $postCode
      * @param string $country
      * @param int|string $customerGroupId
-     * @param int $expectedCustomerGroupId
+     * @param string $message
      */
     public function itShouldSetTheReturnJsonResponse(
         $mayOrder,
         $postCode,
         $country,
-        $customerGroupId
+        $customerGroupId,
+        $message
     ) {
         $this->getMockRequest()->expects($this->any())->method('getParam')->willReturnMap([
             ['postcode', null, $postCode],
@@ -99,6 +100,7 @@ class CheckControllerTest extends ControllerTestCase
             'country' => $country,
             'postcode' => $postCode,
             'may_order' => $mayOrder,
+            'message' => $message
         ]);
         $this->getMockResponse()->expects($this->once())->method('setBody')->with($expectedResponse);
         $this->dispatch('index');
@@ -106,11 +108,12 @@ class CheckControllerTest extends ControllerTestCase
 
     public function useCaseResponseDataProvider()
     {
-        // $mayOrder, $postCode, $country, $customerGroupId
+        // $mayOrder, $postCode, $country, $customerGroupId, $message
+        $errorMessage = 'The shipping address postcode "69123" is not within our delivery area.';
         return [
-            'may order' => [true, '69123', 'DE', '2'],
-            'may not order' => [false, '69123', 'DE', '2'],
-            'customer group defaults to 0' => [true, '69123', 'DE', null],
+            'may order' => [true, '69123', 'DE', '2', ''],
+            'may not order' => [false, '69123', 'DE', '2', $errorMessage],
+            'customer group defaults to 0' => [true, '69123', 'DE', null, ''],
         ];
     }
 

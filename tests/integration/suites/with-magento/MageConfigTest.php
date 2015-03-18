@@ -122,6 +122,17 @@ class MageConfigTest extends IntegrationTestCase
     /**
      * @test
      */
+    public function itShouldRegisterFrontendLayoutFile()
+    {
+        $value = (string) \Mage::getConfig()->getNode('frontend/layout/updates/' . $this->classGroup . '/file');
+        $this->assertEquals('vinaikopp/postcodefilter.xml', $value);
+        $file = \Mage::getBaseDir('design') . '/frontend/base/default/layout/' . $value;
+        $this->assertFileExists($file);
+    }
+
+    /**
+     * @test
+     */
     public function itShouldAddItselfToTheAdminRoute()
     {
         $front = \Mage::app()->getFrontController();
@@ -213,5 +224,47 @@ class MageConfigTest extends IntegrationTestCase
     public function itShouldAddAnObserverFor_sales_model_service_quote_submit_before()
     {
         $this->assertObserverConfig(['global'], 'sales_model_service_quote_submit_before');
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldAddAnObserverFor_controller_action_postdispatch_checkout_onepage_saveShipping()
+    {
+        $this->assertObserverConfig(['frontend'], 'controller_action_postdispatch_checkout_onepage_saveShipping');
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldAddAnObserverFor_controller_action_postdispatch_checkout_onepage_saveBilling()
+    {
+        $this->assertObserverConfig(['frontend'], 'controller_action_postdispatch_checkout_onepage_saveBilling');
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldAddAnObserverFor_checkout_type_multishipping_set_shipping_items()
+    {
+        $this->assertObserverConfig(['frontend'], 'checkout_type_multishipping_set_shipping_items');
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldAddADefaultMessageConfiguration()
+    {
+        $this->assertNotEmpty(\Mage::getStoreConfig('vinaikopp/postcodefilter/error_message'));
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldAddAFrontendTranslationFile()
+    {
+        $configPath = 'frontend/translate/modules/' . $this->moduleName . '/files/default';
+        $this->assertEquals($this->moduleName . '.csv', (string) \Mage::getConfig()->getNode($configPath));
+        $this->assertFileExists(\Mage::getBaseDir('locale') . '/de_DE/' . $this->moduleName . '.csv');
     }
 }

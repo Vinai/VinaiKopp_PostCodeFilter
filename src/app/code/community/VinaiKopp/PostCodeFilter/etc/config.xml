@@ -50,6 +50,13 @@
         </events>
     </global>
     <frontend>
+        <layout>
+            <updates>
+                <vinaikopp_postcodefilter>
+                    <file>vinaikopp/postcodefilter.xml</file>
+                </vinaikopp_postcodefilter>
+            </updates>
+        </layout>
         <routers>
             <vinaikopp_postcodefilter>
                 <use>standard</use>
@@ -59,6 +66,44 @@
                 </args>
             </vinaikopp_postcodefilter>
         </routers>
+        <events>
+            <controller_action_postdispatch_checkout_onepage_saveShipping>
+                <observers>
+                    <vinaikopp_postcodefilter>
+                        <type>model</type>
+                        <class>vinaikopp_postcodefilter/observer</class>
+                        <method>controllerActionPostdispatchCheckoutOnepageSaveShipping</method>
+                    </vinaikopp_postcodefilter>
+                </observers>
+            </controller_action_postdispatch_checkout_onepage_saveShipping>
+            <controller_action_postdispatch_checkout_onepage_saveBilling>
+                <observers>
+                    <vinaikopp_postcodefilter>
+                        <type>model</type>
+                        <class>vinaikopp_postcodefilter/observer</class>
+                        <method>controllerActionPostdispatchCheckoutOnepageSaveBilling</method>
+                    </vinaikopp_postcodefilter>
+                </observers>
+            </controller_action_postdispatch_checkout_onepage_saveBilling>
+            <checkout_type_multishipping_set_shipping_items>
+                <observers>
+                    <vinaikopp_postcodefilter>
+                        <type>model</type>
+                        <class>vinaikopp_postcodefilter/observer</class>
+                        <method>checkoutTypeMultishippingSetShippingItems</method>
+                    </vinaikopp_postcodefilter>
+                </observers>
+            </checkout_type_multishipping_set_shipping_items>
+        </events>
+        <translate>
+            <modules>
+                <VinaiKopp_PostCodeFilter>
+                    <files>
+                        <default>VinaiKopp_PostCodeFilter.csv</default>
+                    </files>
+                </VinaiKopp_PostCodeFilter>
+            </modules>
+        </translate>
     </frontend>
     <adminhtml>
         <layout>
@@ -80,4 +125,11 @@
             </adminhtml>
         </routers>
     </admin>
+    <default>
+        <vinaikopp>
+            <postcodefilter>
+                <error_message>The shipping address postcode "%s" is not within our delivery area.</error_message>
+            </postcodefilter>
+        </vinaikopp>
+    </default>
 </config>

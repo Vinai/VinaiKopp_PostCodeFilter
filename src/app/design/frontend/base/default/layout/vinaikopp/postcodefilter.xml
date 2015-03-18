@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<layout>
+    <checkout_cart_index>
+        <update handle="add_postodefilter_js_to_page"/>
+    </checkout_cart_index>
+    <checkout_onepage_index>
+        <update handle="add_postodefilter_js_to_page"/>
+    </checkout_onepage_index>
+    <add_postodefilter_js_to_page>
+        <reference name="head">
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>js/vinaikopp/postcodefilter.js</name>
+            </action>
+        </reference>
+    </add_postodefilter_js_to_page>
+</layout>

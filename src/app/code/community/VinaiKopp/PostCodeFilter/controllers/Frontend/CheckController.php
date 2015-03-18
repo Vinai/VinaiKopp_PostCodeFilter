@@ -84,8 +84,24 @@ class VinaiKopp_PostCodeFilter_Frontend_CheckController extends Mage_Core_Contro
         return [
             'country' => $country,
             'postcode' => $postCode,
-            'may_order' => $mayOrder
+            'may_order' => $mayOrder,
+            'message' => $this->buildResponseMessage($mayOrder, $postCode)
         ];
+    }
+
+    /**
+     * @param bool $mayOrder
+     * @param string $postCode
+     * @return string
+     */
+    private function buildResponseMessage($mayOrder, $postCode)
+    {
+        if ($mayOrder) {
+            return '';
+        } else {
+            
+            return $this->__(Mage::getStoreConfig('vinaikopp/postcodefilter/error_message'), $postCode);
+        }
     }
 
     /**
