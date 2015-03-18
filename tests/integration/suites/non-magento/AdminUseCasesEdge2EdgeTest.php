@@ -15,6 +15,9 @@ use VinaiKopp\PostCodeFilter\UseCases\AdminAddsRule;
 use VinaiKopp\PostCodeFilter\UseCases\AdminDeletesRule;
 use VinaiKopp\PostCodeFilter\UseCases\AdminUpdatesRule;
 
+/**
+ * @coversNothing
+ */
 class AdminUseCasesEdge2EdgeTest extends \PHPUnit_Framework_TestCase
 {
     /**

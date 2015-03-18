@@ -2,6 +2,9 @@
 
 namespace VinaiKopp\PostCodeFilter;
 
+/**
+ * @coversNothing
+ */
 class DbTest extends IntegrationTestCase
 {
     private $tableName;

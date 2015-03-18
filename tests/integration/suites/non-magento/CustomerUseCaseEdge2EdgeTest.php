@@ -9,6 +9,9 @@ use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList;
 use VinaiKopp\PostCodeFilter\RuleComponents\PostCodeList;
 use VinaiKopp\PostCodeFilter\UseCases\CustomerChecksPostCode;
 
+/**
+ * @coversNothing
+ */
 class CustomerUseCaseEdge2EdgeTest extends \PHPUnit_Framework_TestCase
 {
     private $forbiddenPostCode = '888';

@@ -3,7 +3,9 @@
 
 namespace VinaiKopp\PostCodeFilter;
 
-
+/**
+ * @coversNothing
+ */
 class CartPageRenderingTest extends ControllerTestCase
 {
     /**
