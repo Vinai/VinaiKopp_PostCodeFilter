@@ -27,6 +27,19 @@ class RuleToDelete
     }
 
     /**
+     * @param int[] $customerGroupIds
+     * @param string $iso2country
+     * @return RuleToDelete
+     */
+    public static function createFromScalars(array $customerGroupIds, $iso2country)
+    {
+        return new self(
+            CustomerGroupIdList::fromArray($customerGroupIds),
+            Country::fromIso2Code($iso2country)
+        );
+    }
+
+    /**
      * @return CustomerGroupIdList
      */
     public function getCustomerGroupIds()

@@ -43,74 +43,14 @@ class VinaiKopp_PostCodeFilter_Helper_Data extends Mage_Core_Helper_Abstract
     /**
      * @param int[] $customerGroupIds
      * @param string $country
-     * @param string[]|int[] $postCodes
-     * @return RuleToAdd
-     */
-    public function createRuleToAdd(array $customerGroupIds, $country, array $postCodes)
-    {
-        array_walk($customerGroupIds, [$this, 'convertToInteger']);
-        $this->registerPostCodeFilterAutoloader();
-        return new RuleToAdd(
-            CustomerGroupIdList::fromArray($customerGroupIds),
-            Country::fromIso2Code($country),
-            PostCodeList::fromArray($postCodes)
-        );
-    }
-
-    /**
-     * @param int[] $customerGroupIds
-     * @param string $country
-     * @return RuleToDelete
-     */
-    public function createRuleToDelete(array $customerGroupIds, $country)
-    {
-        array_walk($customerGroupIds, [$this, 'convertToInteger']);
-        $this->registerPostCodeFilterAutoloader();
-        return new RuleToDelete(
-            CustomerGroupIdList::fromArray($customerGroupIds),
-            Country::fromIso2Code($country)
-        );
-    }
-
-    /**
-     * @param string $oldCountry
-     * @param int[] $oldCustomerGroupIds
-     * @param string $newCountry
-     * @param int[] $newCustomerGroupIds
-     * @param string[]|int[] $newPostCodes
-     * @return RuleToUpdate
-     */
-    public function createRuleToUpdate(
-        $oldCountry,
-        $oldCustomerGroupIds,
-        $newCountry,
-        $newCustomerGroupIds,
-        $newPostCodes
-    ) {
-        array_walk($oldCustomerGroupIds, [$this, 'convertToInteger']);
-        array_walk($newCustomerGroupIds, [$this, 'convertToInteger']);
-        $this->registerPostCodeFilterAutoloader();
-        return new RuleToUpdate(
-            Country::fromIso2Code($oldCountry),
-            CustomerGroupIdList::fromArray($oldCustomerGroupIds),
-            Country::fromIso2Code($newCountry),
-            CustomerGroupIdList::fromArray($newCustomerGroupIds),
-            PostCodeList::fromArray($newPostCodes)
-        );
-    }
-
-    /**
-     * @param int[] $customerGroupIds
-     * @param string $country
      * @return QueryByCountryAndGroupIds
      */
     public function createRuleQueryForGroupIdsAndCountry(array $customerGroupIds, $country)
     {
-        array_walk($customerGroupIds, [$this, 'convertToInteger']);
         $this->registerPostCodeFilterAutoloader();
         return new QueryByCountryAndGroupIds(
             Country::fromIso2Code($country),
-            CustomerGroupIdList::fromArray($customerGroupIds)
+            CustomerGroupIdList::fromArray(array_map('intval', $customerGroupIds))
         );
     }
 
@@ -121,14 +61,6 @@ class VinaiKopp_PostCodeFilter_Helper_Data extends Mage_Core_Helper_Abstract
     {
         $this->registerPostCodeFilterAutoloader();
         return new CustomerChecksPostCode($this->getRuleReader());
-    }
-
-    /**
-     * @param mixed $value
-     * @return int
-     */
-    private function convertToInteger(&$value) {
-        $value = (int) $value;
     }
 
     private function registerPostCodeFilterAutoloader()

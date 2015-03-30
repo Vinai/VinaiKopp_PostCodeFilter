@@ -10,6 +10,11 @@ use VinaiKopp\PostCodeFilter\RuleComponents\PostCodeList;
 
 /**
  * @covers \VinaiKopp\PostCodeFilter\Command\RuleToUpdate
+ * @uses \VinaiKopp\PostCodeFilter\RuleComponents\Country
+ * @uses \VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupId
+ * @uses \VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList
+ * @uses \VinaiKopp\PostCodeFilter\RuleComponents\PostCode
+ * @uses \VinaiKopp\PostCodeFilter\RuleComponents\PostCodeList
  */
 class RuleToUpdateTest extends \PHPUnit_Framework_TestCase
 {
@@ -42,6 +47,12 @@ class RuleToUpdateTest extends \PHPUnit_Framework_TestCase
      * @var PostCodeList|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockNewPostCodes;
+    
+    private $testGroupIds = [1, 2];
+    
+    private $testPostCodes = ['aaa', 'bbb'];
+    
+    private $testCountryCode = 'XX';
 
     protected function setUp()
     {
@@ -73,9 +84,8 @@ class RuleToUpdateTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnTheOldCountryValue()
     {
-        $testCountryCode = 'XX';
-        $this->mockOldCountry->expects($this->once())->method('getValue')->willReturn($testCountryCode);
-        $this->assertSame($testCountryCode, $this->ruleToUpdate->getOldCountryValue());
+        $this->mockOldCountry->expects($this->once())->method('getValue')->willReturn($this->testCountryCode);
+        $this->assertSame($this->testCountryCode, $this->ruleToUpdate->getOldCountryValue());
     }
 
     /**
@@ -91,9 +101,8 @@ class RuleToUpdateTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnTheOldCustomerGroupIdValues()
     {
-        $testGroupIds = [1, 2];
-        $this->mockOldCustomerGroupIds->expects($this->once())->method('getValues')->willReturn($testGroupIds);
-        $this->assertSame($testGroupIds, $this->ruleToUpdate->getOldCustomerGroupIdValues());
+        $this->mockOldCustomerGroupIds->expects($this->once())->method('getValues')->willReturn($this->testGroupIds);
+        $this->assertSame($this->testGroupIds, $this->ruleToUpdate->getOldCustomerGroupIdValues());
     }
 
     /**
@@ -109,9 +118,8 @@ class RuleToUpdateTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnTheNewCountryValue()
     {
-        $testCountryCode = 'QQ';
-        $this->mockNewCountry->expects($this->once())->method('getValue')->willReturn($testCountryCode);
-        $this->assertSame($testCountryCode, $this->ruleToUpdate->getNewCountryValue());
+        $this->mockNewCountry->expects($this->once())->method('getValue')->willReturn($this->testCountryCode);
+        $this->assertSame($this->testCountryCode, $this->ruleToUpdate->getNewCountryValue());
     }
 
     /**
@@ -127,9 +135,8 @@ class RuleToUpdateTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnTheNewCustomerGroupIdListValues()
     {
-        $testGroupIds = [1, 2];
-        $this->mockNewCustomerGroupIds->expects($this->once())->method('getValues')->willReturn($testGroupIds);
-        $this->assertSame($testGroupIds, $this->ruleToUpdate->getNewCustomerGroupIdValues());
+        $this->mockNewCustomerGroupIds->expects($this->once())->method('getValues')->willReturn($this->testGroupIds);
+        $this->assertSame($this->testGroupIds, $this->ruleToUpdate->getNewCustomerGroupIdValues());
     }
 
     /**
@@ -145,8 +152,28 @@ class RuleToUpdateTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnTheNewPostCodeListValues()
     {
-        $testPostCodes = ['aaa', 'bbb'];
-        $this->mockNewPostCodes->expects($this->once())->method('getValues')->willReturn($testPostCodes);
-        $this->assertSame($testPostCodes, $this->ruleToUpdate->getNewPostCodeValues());
+        $this->mockNewPostCodes->expects($this->once())->method('getValues')->willReturn($this->testPostCodes);
+        $this->assertSame($this->testPostCodes, $this->ruleToUpdate->getNewPostCodeValues());
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldCreateAnInstanceFromScalars()
+    {
+        $oldCountryCode = $this->testCountryCode;
+        $oldCustomerGroupIds = $this->testGroupIds;
+        $newCountryCode = $this->testCountryCode;
+        $newCustomerGroupIds = $this->testGroupIds;
+        $newPostCodes = $this->testPostCodes;
+        
+        $ruleToUpdate = RuleToUpdate::createFromScalars(
+            $oldCountryCode,
+            $oldCustomerGroupIds,
+            $newCountryCode,
+            $newCustomerGroupIds,
+            $newPostCodes
+        );
+        $this->assertInstanceOf(RuleToUpdate::class, $ruleToUpdate);
     }
 }

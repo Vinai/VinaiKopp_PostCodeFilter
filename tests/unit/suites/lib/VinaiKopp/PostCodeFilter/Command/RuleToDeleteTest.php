@@ -8,6 +8,9 @@ use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList;
 
 /**
  * @covers \VinaiKopp\PostCodeFilter\Command\RuleToDelete
+ * @uses   \VinaiKopp\PostCodeFilter\RuleComponents\Country
+ * @uses   \VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupId
+ * @uses   \VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList
  */
 class RuleToDeleteTest extends \PHPUnit_Framework_TestCase
 {
@@ -66,5 +69,14 @@ class RuleToDeleteTest extends \PHPUnit_Framework_TestCase
     {
         $this->stubCountry->expects($this->once())->method('getValue')->willReturn('XX');
         $this->assertSame('XX', $this->ruleToDelete->getCountryValue());
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldCreateAnInstanceFromScalarValues()
+    {
+        $ruleToDelete = RuleToDelete::createFromScalars([0, 2, 3], 'GB');
+        $this->assertInstanceOf(RuleToDelete::class, $ruleToDelete);
     }
 }

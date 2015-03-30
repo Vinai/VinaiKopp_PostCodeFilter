@@ -100,6 +100,26 @@ class AdminUpdatesRuleTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @test
+     */
+    public function itShouldUpdateTheRuleWithScalarInputValues()
+    {
+        $this->mockRuleWriter->expects($this->once())->method('createRule');
+        $oldIso2Country = 'DE';
+        $oldCustomerGroupIds = [0, 1];
+        $newCountry = 'DE';
+        $newCustomerGroupIds = [0, 1, 2];
+        $newPostCodes = ['10111', '10123'];
+        $this->useCase->updateRuleFromScalars(
+            $oldIso2Country,
+            $oldCustomerGroupIds,
+            $newCountry,
+            $newCustomerGroupIds,
+            $newPostCodes
+        );
+    }
+
+    /**
      * @return RuleToUpdate|\PHPUnit_Framework_MockObject_MockObject
      */
     private function getMockRuleToUpdate()

@@ -38,6 +38,21 @@ class RuleToAdd
     }
 
     /**
+     * @param int[] $customerGroupIds
+     * @param string $iso2Country
+     * @param string[] $postCodes
+     * @return RuleToAdd
+     */
+    public static function createFromScalars(array $customerGroupIds, $iso2Country, array $postCodes)
+    {
+        return new self(
+            CustomerGroupIdList::fromArray($customerGroupIds),
+            Country::fromIso2Code($iso2Country),
+            PostCodeList::fromArray($postCodes)
+        );
+    }
+
+    /**
      * @return CustomerGroupIdList
      */
     public function getCustomerGroupIds()

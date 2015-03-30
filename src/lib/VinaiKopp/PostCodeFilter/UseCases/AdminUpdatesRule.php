@@ -54,6 +54,29 @@ class AdminUpdatesRule
     }
 
     /**
+     * @param string $oldIso2Country
+     * @param int[] $oldCustomerGroupIds
+     * @param string $newIso2Country
+     * @param int[] $newCustomerGroupIds
+     * @param string[] $newPostCodes
+     */
+    public function updateRuleFromScalars(
+        $oldIso2Country,
+        array $oldCustomerGroupIds,
+        $newIso2Country,
+        array $newCustomerGroupIds,
+        array $newPostCodes
+    ) {
+        $this->updateRule(RuleToUpdate::createFromScalars(
+            $oldIso2Country,
+            $oldCustomerGroupIds,
+            $newIso2Country,
+            $newCustomerGroupIds,
+            $newPostCodes
+        ));
+    }
+
+    /**
      * @param RuleToUpdate $ruleToUpdate
      * @throws RuleDoesNotExistException
      */

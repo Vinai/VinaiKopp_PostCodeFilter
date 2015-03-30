@@ -10,11 +10,21 @@ use VinaiKopp\PostCodeFilter\RuleComponents\PostCodeList;
 
 /**
  * @covers \VinaiKopp\PostCodeFilter\Command\RuleToAdd
+ * @uses   \VinaiKopp\PostCodeFilter\RuleComponents\Country
+ * @uses   \VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupId
+ * @uses   \VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList
+ * @uses   \VinaiKopp\PostCodeFilter\RuleComponents\PostCode
+ * @uses   \VinaiKopp\PostCodeFilter\RuleComponents\PostCodeList
  */
 class RuleToAddTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var mixed[]
+     * @var int[]
+     */
+    private $testCustomerGroupIds = [1, 2, 3];
+
+    /**
+     * @var string[]
      */
     private $testPostCodes = ['123456'];
 
@@ -36,10 +46,10 @@ class RuleToAddTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->mockCustomerGroupIdList = $this->getMock(CustomerGroupIdList::class, [], [], '', false);
-        
+
         $stubCountry = $this->getMock(Country::class, [], [], '', false);
         $stubCountry->expects($this->any())->method('getValue')->willReturn($this->testCountry);
-        
+
         $stubPostCodeList = $this->getMock(PostCodeList::class, [], [], '', false);
         $stubPostCodeList->expects($this->any())->method('getValues')->willReturn($this->testPostCodes);
         $stubPostCodeList->expects($this->any())->method('getPostCodes')->willReturn(
@@ -61,8 +71,9 @@ class RuleToAddTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnTheCustomerGroupIdValues()
     {
-        $this->mockCustomerGroupIdList->expects($this->once())->method('getValues')->willReturn([1, 2, 3]);
-        $this->assertSame([1, 2, 3], $this->ruleToAdd->getCustomerGroupIdValues());
+        $this->mockCustomerGroupIdList->expects($this->once())->method('getValues')
+            ->willReturn($this->testCustomerGroupIds);
+        $this->assertSame($this->testCustomerGroupIds, $this->ruleToAdd->getCustomerGroupIdValues());
     }
 
     /**
@@ -87,5 +98,18 @@ class RuleToAddTest extends \PHPUnit_Framework_TestCase
     public function itShouldReturnThePostCodeList()
     {
         $this->assertSame($this->testPostCodes, $this->ruleToAdd->getPostCodeValues());
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldCreateAnInstanceFromScalarInput()
+    {
+        $ruleToAdd = RuleToAdd::createFromScalars(
+            $this->testCustomerGroupIds,
+            $this->testCountry,
+            $this->testPostCodes
+        );
+        $this->assertInstanceOf(RuleToAdd::class, $ruleToAdd);
     }
 }

@@ -52,30 +52,6 @@ class DataTest extends IntegrationTestCase
     /**
      * @test
      */
-    public function itShouldReturnARuleToAdd()
-    {
-        $this->assertInstanceOf(RuleToAdd::class, $this->helper->createRuleToAdd([11], 'DE', ['1', '2']));
-    }
-
-    /**
-     * @test
-     */
-    public function itShouldReturnARuleToUpdate()
-    {
-        $this->assertInstanceOf(RuleToUpdate::class, $this->helper->createRuleToUpdate('DE', [2], 'RU', [3], ['123']));
-    }
-
-    /**
-     * @test
-     */
-    public function itShouldReturnARuleToDelete()
-    {
-        $this->assertInstanceOf(RuleToDelete::class, $this->helper->createRuleToDelete([11], 'DE'));
-    }
-
-    /**
-     * @test
-     */
     public function itShouldReturnARuleQueryByCountry()
     {
         $this->assertInstanceOf(

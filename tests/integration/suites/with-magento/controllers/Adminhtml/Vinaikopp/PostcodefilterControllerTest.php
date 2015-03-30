@@ -136,7 +136,7 @@ class PostcodefilterControllerTest extends ControllerTestCase
             ['customer_group_ids', null, [0, 1]],
             ['post_codes', null, "1234\n5678,\n1313, 4444"]
         ]);
-        $this->mockAddUseCase->expects($this->once())->method('addRule');
+        $this->mockAddUseCase->expects($this->once())->method('addRuleFromScalars');
         $this->dispatch('create');
     }
 
@@ -156,7 +156,7 @@ class PostcodefilterControllerTest extends ControllerTestCase
             ['post_codes', null, "1234\n5678,\n1313, 4444"]
         ]);
         
-        $this->mockUpdateUseCase->expects($this->once())->method('updateRule');
+        $this->mockUpdateUseCase->expects($this->once())->method('updateRuleFromScalars');
         $this->dispatch('update');
     }
 
@@ -169,7 +169,7 @@ class PostcodefilterControllerTest extends ControllerTestCase
             ['country', null, 'DE'],
             ['customer_group_ids', null, '0,1,3']
         ]);
-        $this->mockDeleteUseCase->expects($this->once())->method('deleteRule');
+        $this->mockDeleteUseCase->expects($this->once())->method('deleteRuleFromScalars');
         $this->dispatch('delete');
     }
 }

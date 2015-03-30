@@ -29,7 +29,7 @@ class AdminViewsSingleRule
      */
     public function fetchRule($iso2country, array $customerGroupIds)
     {
-        $query = $this->makeQuery($iso2country, array_map([$this, 'convertToInt'], $customerGroupIds));
+        $query = $this->createQuery($iso2country, array_map([$this, 'convertToInt'], $customerGroupIds));
         return $this->reader->findByCountryAndGroupIds($query);
     }
 
@@ -38,7 +38,7 @@ class AdminViewsSingleRule
      * @param int[] $customerGroupIds
      * @return QueryByCountryAndGroupIds
      */
-    private function makeQuery($iso2country, array $customerGroupIds)
+    private function createQuery($iso2country, array $customerGroupIds)
     {
         $query = new QueryByCountryAndGroupIds(
             Country::fromIso2Code($iso2country),

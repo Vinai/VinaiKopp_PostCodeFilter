@@ -47,6 +47,15 @@ class AdminDeletesRule
     }
 
     /**
+     * @param int[] $customerGroupIds
+     * @param string $iso2country
+     */
+    public function deleteRuleFromScalars(array $customerGroupIds, $iso2country)
+    {
+        $this->deleteRule(RuleToDelete::createFromScalars($customerGroupIds, $iso2country));
+    }
+
+    /**
      * @param RuleToDelete $ruleToDelete
      */
     private function validateRuleExists(RuleToDelete $ruleToDelete)

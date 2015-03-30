@@ -102,6 +102,18 @@ class AdminAddsRuleTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @test
+     */
+    public function itShouldAddARuleUsingScalarInput()
+    {
+        $this->mockRuleWriter->expects($this->once())->method('createRule');
+        $customerGroupIds = [1, 2];
+        $iso2Country = 'DE';
+        $postCodes = ['10115'];
+        $this->useCase->addRuleFromScalars($customerGroupIds, $iso2Country, $postCodes);
+    }
+
+    /**
      * @return RuleToAdd|\PHPUnit_Framework_MockObject_MockObject
      */
     private function createStubRuleToAdd()

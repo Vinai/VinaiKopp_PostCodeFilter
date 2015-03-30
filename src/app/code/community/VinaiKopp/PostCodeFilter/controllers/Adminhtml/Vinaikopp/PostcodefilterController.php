@@ -82,15 +82,13 @@ class VinaiKopp_PostCodeFilter_Adminhtml_Vinaikopp_PostcodefilterController
     public function updateAction()
     {
         try {
-            $ruleToUpdate =  $this->getHelper()->createRuleToUpdate(
+            $this->updateRule(
                 $this->getOldCountry(),
                 $this->getOldCustomerGroupIds(),
                 $this->getPostedCountry(),
                 $this->getPostedCustomerGroupIds(),
                 $this->getPostedPostCodes()
             );
-            $this->getUpdateUseCase()->updateRule($ruleToUpdate);
-            
             $this->_getSession()->addSuccess($this->__('Post Code Filter Rule updated'));
         } catch (Exception $e) {
             Mage::logException($e);
@@ -196,8 +194,22 @@ class VinaiKopp_PostCodeFilter_Adminhtml_Vinaikopp_PostcodefilterController
      */
     private function addRule(array $customerGroupIds, $country, array $postCodes)
     {
-        $ruleToAdd = $this->getHelper()->createRuleToAdd($customerGroupIds, $country, $postCodes);
-        $this->getAddUseCase()->addRule($ruleToAdd);
+        $this->getAddUseCase()->addRuleFromScalars(
+            array_map('intval', $customerGroupIds),
+            $country,
+            $postCodes
+        );
+    }
+
+    private function updateRule($oldCountry, $oldCustomerGroupIds, $newCountry, $newCustomerGroupIds, $newPostCodes)
+    {
+        $this->getUpdateUseCase()->updateRuleFromScalars(
+            $oldCountry,
+            array_map('intval', $oldCustomerGroupIds),
+            $newCountry,
+            array_map('intval', $newCustomerGroupIds),
+            $newPostCodes
+        );
     }
 
     /**
@@ -206,8 +218,10 @@ class VinaiKopp_PostCodeFilter_Adminhtml_Vinaikopp_PostcodefilterController
      */
     private function deleteRule(array $customerGroupIds, $country)
     {
-        $ruleToDelete = $this->getHelper()->createRuleToDelete($customerGroupIds, $country);
-        $this->getDeleteUseCase()->deleteRule($ruleToDelete);
+        $this->getDeleteUseCase()->deleteRuleFromScalars(
+            array_map('intval', $customerGroupIds),
+            $country
+        );
     }
 
     /**
@@ -257,7 +271,7 @@ class VinaiKopp_PostCodeFilter_Adminhtml_Vinaikopp_PostcodefilterController
     {
         return $this->splitParam($this->getRequest()->getParam('customer_group_ids'));
     }
-    
+
     private function getCountryParam()
     {
         return $this->getRequest()->getParam('country');

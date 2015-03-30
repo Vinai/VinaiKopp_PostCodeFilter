@@ -47,6 +47,16 @@ class AdminAddsRule
     }
 
     /**
+     * @param int[] $customerGroupIds
+     * @param string $iso2Country
+     * @param string[] $postCodes
+     */
+    public function addRuleFromScalars(array $customerGroupIds, $iso2Country, array $postCodes)
+    {
+        $this->addRule(RuleToAdd::createFromScalars($customerGroupIds, $iso2Country, $postCodes));
+    }
+
+    /**
      * @param RuleToAdd $ruleToAdd
      */
     private function validateNoConflictingRuleExists(RuleToAdd $ruleToAdd)

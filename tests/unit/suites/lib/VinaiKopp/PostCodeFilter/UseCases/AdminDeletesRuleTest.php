@@ -87,6 +87,15 @@ class AdminDeletesRuleTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @test
+     */
+    public function itShouldDeleteARuleFromScalarValues()
+    {
+        $this->mockRuleWriter->expects($this->once())->method('deleteRule');
+        $this->useCase->deleteRuleFromScalars([0, 1, 2], 'US');
+    }
+
+    /**
      * @return RuleToDelete|\PHPUnit_Framework_MockObject_MockObject
      */
     private function createStubRuleToDelete()

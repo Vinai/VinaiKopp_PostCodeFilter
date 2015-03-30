@@ -49,7 +49,31 @@ class RuleToUpdate
         $this->newCustomerGroupIds = $newCustomerGroupIds;
         $this->newPostCodes = $newPostCodes;
     }
-    
+
+    /**
+     * @param string $oldIso2Country
+     * @param int[] $oldCustomerGroupIds
+     * @param string $newIso2Country
+     * @param int[] $newCustomerGroupIds
+     * @param string[] $newPostCodes
+     * @return RuleToUpdate
+     */
+    public static function createFromScalars(
+        $oldIso2Country,
+        array $oldCustomerGroupIds,
+        $newIso2Country,
+        array $newCustomerGroupIds,
+        array $newPostCodes
+    ) {
+        return new self(
+            Country::fromIso2Code($oldIso2Country),
+            CustomerGroupIdList::fromArray($oldCustomerGroupIds),
+            Country::fromIso2Code($newIso2Country),
+            CustomerGroupIdList::fromArray($newCustomerGroupIds),
+            PostCodeList::fromArray($newPostCodes)
+        );
+    }
+
     public function getOldCountryValue()
     {
         return $this->oldCountry->getValue();
