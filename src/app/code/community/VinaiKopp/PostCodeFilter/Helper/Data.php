@@ -1,13 +1,9 @@
 <?php
 
 
-use VinaiKopp\PostCodeFilter\Command\RuleToAdd;
-use VinaiKopp\PostCodeFilter\Command\RuleToDelete;
-use VinaiKopp\PostCodeFilter\Command\RuleToUpdate;
-use VinaiKopp\PostCodeFilter\Query\CountryAndGroupIdsRuleSpec;
+use VinaiKopp\PostCodeFilter\Query\RuleSpecByCountryAndGroupIds;
 use VinaiKopp\PostCodeFilter\RuleComponents\Country;
 use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList;
-use VinaiKopp\PostCodeFilter\RuleComponents\PostCodeList;
 use VinaiKopp\PostCodeFilter\RuleRepository;
 use VinaiKopp\PostCodeFilter\RuleStorage;
 use VinaiKopp\PostCodeFilter\UseCases\CustomerChecksPostCode;
@@ -43,12 +39,12 @@ class VinaiKopp_PostCodeFilter_Helper_Data extends Mage_Core_Helper_Abstract
     /**
      * @param int[] $customerGroupIds
      * @param string $country
-     * @return CountryAndGroupIdsRuleSpec
+     * @return RuleSpecByCountryAndGroupIds
      */
     public function createRuleSpecForGroupIdsAndCountry(array $customerGroupIds, $country)
     {
         $this->registerPostCodeFilterAutoloader();
-        return new CountryAndGroupIdsRuleSpec(
+        return new RuleSpecByCountryAndGroupIds(
             Country::fromIso2Code($country),
             CustomerGroupIdList::fromArray(array_map('intval', $customerGroupIds))
         );

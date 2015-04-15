@@ -68,7 +68,7 @@ class AdminAddsRuleTest extends \PHPUnit_Framework_TestCase
     public function itShouldThrowIfRuleForGroupAndCountryAlreadyExist()
     {
         $stubRuleFound = $this->getMock(RuleFound::class, [], [], '', false);
-        $stubRuleFound->expects($this->any())->method('getCustomerGroupIdValues')->willReturn([1, 2]);
+        $stubRuleFound->method('getCustomerGroupIdValues')->willReturn([1, 2]);
         $this->mockRuleReader->expects($this->once())
             ->method('findByCountryAndGroupIds')
             ->willReturn($stubRuleFound);
@@ -97,7 +97,7 @@ class AdminAddsRuleTest extends \PHPUnit_Framework_TestCase
     public function itShouldAbortATransactionIfAnExceptionIsThrown()
     {
         $testException = new \Exception('Test Exception');
-        $this->mockRuleReader->expects($this->any())->method('findByCountryAndGroupIds')
+        $this->mockRuleReader->method('findByCountryAndGroupIds')
             ->willThrowException($testException);
         $this->mockRuleWriter->expects($this->once())->method('rollbackTransaction');
         try {
@@ -125,10 +125,10 @@ class AdminAddsRuleTest extends \PHPUnit_Framework_TestCase
     private function createStubRuleToAdd()
     {
         $stubRuleToAdd = $this->getMock(RuleToAdd::class, [], [], '', false);
-        $stubRuleToAdd->expects($this->any())->method('getCustomerGroupIds')->willReturn(
+        $stubRuleToAdd->method('getCustomerGroupIds')->willReturn(
             $this->getMock(CustomerGroupIdList::class, [], [], '', false)
         );
-        $stubRuleToAdd->expects($this->any())->method('getCountry')->willReturn(
+        $stubRuleToAdd->method('getCountry')->willReturn(
             $this->getMock(Country::class, [], [], '', false)
         );
         return $stubRuleToAdd;

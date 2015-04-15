@@ -42,7 +42,7 @@ class RuleRepository implements RuleWriter, RuleReader
         if (empty($postCodes)) {
             return new RuleNotFound($ruleSpec->getCountry());
         }
-        return $this->makeRuleFound([$ruleSpec->getCustomerGroupIdValue()], $ruleSpec->getCountryValue(), $postCodes);
+        return $this->createRuleFound([$ruleSpec->getCustomerGroupIdValue()], $ruleSpec->getCountryValue(), $postCodes);
     }
 
     /**
@@ -94,7 +94,7 @@ class RuleRepository implements RuleWriter, RuleReader
     {
         $combinedRecords = $this->mergeMatchingCountryAndPostcodes($records);
         return array_map(function (array $record) {
-            return $this->makeRuleFound($record['customer_group_ids'], $record['country'], $record['post_codes']);
+            return $this->createRuleFound($record['customer_group_ids'], $record['country'], $record['post_codes']);
         }, $combinedRecords);
     }
 
@@ -131,7 +131,7 @@ class RuleRepository implements RuleWriter, RuleReader
      * @param string[]|int[] $postCodes
      * @return RuleFound
      */
-    private function makeRuleFound(array $customerGroupIds, $country, array $postCodes)
+    private function createRuleFound(array $customerGroupIds, $country, array $postCodes)
     {
         return new RuleFound(
             CustomerGroupIdList::fromArray($customerGroupIds),
@@ -155,7 +155,7 @@ class RuleRepository implements RuleWriter, RuleReader
             $customerGroupIds[] = $record['customer_group_id'];
             $postCodes = $record['post_codes'];
         }
-        return $this->makeRuleFound($customerGroupIds, $ruleSpec->getCountryValue(), $postCodes);
+        return $this->createRuleFound($customerGroupIds, $ruleSpec->getCountryValue(), $postCodes);
     }
 
     /**

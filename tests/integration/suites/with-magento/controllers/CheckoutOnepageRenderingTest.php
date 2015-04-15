@@ -54,9 +54,9 @@ class CheckoutOnepageRenderingTest extends ControllerTestCase
     private function prepareMockCart()
     {
         $this->mockQuote = $this->getMock(\Mage_Sales_Model_Quote::class, [], [], '', false);
-        $this->mockQuote->expects($this->any())->method('getMessages')->willReturn([]);
+        $this->mockQuote->method('getMessages')->willReturn([]);
         $this->mockCart = $this->getMock(\Mage_Checkout_Model_Cart::class, ['getQupte'], [], '', false);
-        $this->mockCart->expects($this->any())->method('getQuote')->willReturn($this->mockQuote);
+        $this->mockCart->method('getQuote')->willReturn($this->mockQuote);
         \Mage::unregister('_singleton/checkout/cart');
         \Mage::register('_singleton/checkout/cart', $this->mockCart);
     }

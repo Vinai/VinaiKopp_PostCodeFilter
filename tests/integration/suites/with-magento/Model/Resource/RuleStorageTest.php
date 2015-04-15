@@ -162,10 +162,10 @@ class RuleStorageTest extends IntegrationTestCase
      */
     private function addMockSelectFactory($mockConnection)
     {
-        $mockConnection->expects($this->any())->method('select')->willReturnCallback(function () {
+        $mockConnection->method('select')->willReturnCallback(function () {
             $mock = $this->getMock(\Varien_Db_Select::class, [], [], '', false);
-            $mock->expects($this->any())->method('from')->willReturnSelf();
-            $mock->expects($this->any())->method('where')->willReturnSelf();
+            $mock->method('from')->willReturnSelf();
+            $mock->method('where')->willReturnSelf();
             return $mock;
         });
     }

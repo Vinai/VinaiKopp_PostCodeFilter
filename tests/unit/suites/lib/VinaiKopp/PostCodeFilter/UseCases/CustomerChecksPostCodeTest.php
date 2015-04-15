@@ -47,7 +47,7 @@ class CustomerChecksPostCodeTest extends \PHPUnit_Framework_TestCase
     {
         $this->mockRule = $this->getMock(RuleResult::class);
         $this->mockRuleReader = $this->getMock(RuleReader::class);
-        $this->mockRuleReader->expects($this->any())->method('findByCountryAndGroupId')->willReturn($this->mockRule);
+        $this->mockRuleReader->method('findByCountryAndGroupId')->willReturn($this->mockRule);
         $this->useCase = new CustomerChecksPostCode($this->mockRuleReader);
     }
     

@@ -48,11 +48,11 @@ class RuleToAddTest extends \PHPUnit_Framework_TestCase
         $this->mockCustomerGroupIdList = $this->getMock(CustomerGroupIdList::class, [], [], '', false);
 
         $stubCountry = $this->getMock(Country::class, [], [], '', false);
-        $stubCountry->expects($this->any())->method('getValue')->willReturn($this->testCountry);
+        $stubCountry->method('getValue')->willReturn($this->testCountry);
 
         $stubPostCodeList = $this->getMock(PostCodeList::class, [], [], '', false);
-        $stubPostCodeList->expects($this->any())->method('getValues')->willReturn($this->testPostCodes);
-        $stubPostCodeList->expects($this->any())->method('getPostCodes')->willReturn(
+        $stubPostCodeList->method('getValues')->willReturn($this->testPostCodes);
+        $stubPostCodeList->method('getPostCodes')->willReturn(
             [$this->getMock(PostCode::class, [], [], '', false)]
         );
         $this->ruleToAdd = new RuleToAdd($this->mockCustomerGroupIdList, $stubCountry, $stubPostCodeList);

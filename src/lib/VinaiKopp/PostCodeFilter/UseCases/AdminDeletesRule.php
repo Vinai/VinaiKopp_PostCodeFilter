@@ -63,7 +63,7 @@ class AdminDeletesRule
         $ruleSpec = new RuleSpecByCountryAndGroupIds($ruleToDelete->getCountry(), $ruleToDelete->getCustomerGroupIds());
         $result = $this->ruleReader->findByCountryAndGroupIds($ruleSpec);
         if ($result instanceof RuleNotFound) {
-            throw $this->makeRuleNotExistsException($ruleToDelete);
+            throw $this->createRuleNotExistsException($ruleToDelete);
         }
     }
 
@@ -71,7 +71,7 @@ class AdminDeletesRule
      * @param RuleToDelete $ruleToDelete
      * @return RuleDoesNotExistException
      */
-    private function makeRuleNotExistsException(RuleToDelete $ruleToDelete)
+    private function createRuleNotExistsException(RuleToDelete $ruleToDelete)
     {
         return new RuleDoesNotExistException(sprintf(
             'No rule found with customer groups "%s" and country "%s"',

@@ -131,14 +131,14 @@ class AdminUpdatesRuleTest extends \PHPUnit_Framework_TestCase
     {
         $testGroupIds = [0, 1, 2];
         $mockRuleToUpdate = $this->getMock(RuleToUpdate::class, [], [], '', false);
-        $mockRuleToUpdate->expects($this->any())->method('getOldCountry')->willReturn(Country::fromIso2Code('DE'));
-        $mockRuleToUpdate->expects($this->any())->method('getOldCustomerGroupIds')
+        $mockRuleToUpdate->method('getOldCountry')->willReturn(Country::fromIso2Code('DE'));
+        $mockRuleToUpdate->method('getOldCustomerGroupIds')
             ->willReturn($this->getMock(CustomerGroupIdList::class, [], [], '', false));
-        $mockRuleToUpdate->expects($this->any())->method('getOldCustomerGroupIdValues')->willReturn($testGroupIds);
-        $mockRuleToUpdate->expects($this->any())->method('getNewCountry')->willReturn(Country::fromIso2Code('NZ'));
-        $mockRuleToUpdate->expects($this->any())->method('getNewCustomerGroupIds')
+        $mockRuleToUpdate->method('getOldCustomerGroupIdValues')->willReturn($testGroupIds);
+        $mockRuleToUpdate->method('getNewCountry')->willReturn(Country::fromIso2Code('NZ'));
+        $mockRuleToUpdate->method('getNewCustomerGroupIds')
             ->willReturn($this->getMock(CustomerGroupIdList::class, [], [], '', false));
-        $mockRuleToUpdate->expects($this->any())->method('getNewPostCodes')
+        $mockRuleToUpdate->method('getNewPostCodes')
             ->willReturn($this->getMock(PostCodeList::class, [], [], '', false));
         return $mockRuleToUpdate;
     }

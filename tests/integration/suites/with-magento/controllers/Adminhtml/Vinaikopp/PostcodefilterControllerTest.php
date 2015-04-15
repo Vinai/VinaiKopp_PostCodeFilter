@@ -111,9 +111,9 @@ class PostcodefilterControllerTest extends ControllerTestCase
     public function itShouldInstantiateTheFormContainerBlockForTheEditAction()
     {
         $stubRule = $this->getMock(RuleResult::class);
-        $stubRule->expects($this->any())->method('getCustomerGroupIdValues')->willReturn([4]);
-        $stubRule->expects($this->any())->method('getCountryValue')->willReturn('QQ');
-        $stubRule->expects($this->any())->method('getPostCodeValues')->willReturn(['A', 'B']);
+        $stubRule->method('getCustomerGroupIdValues')->willReturn([4]);
+        $stubRule->method('getCountryValue')->willReturn('QQ');
+        $stubRule->method('getPostCodeValues')->willReturn(['A', 'B']);
         $this->mockViewSingleRuleUseCase->expects($this->once())->method('fetchRule')->willReturn($stubRule);
         
         $this->dispatch('edit');
@@ -130,8 +130,8 @@ class PostcodefilterControllerTest extends ControllerTestCase
      */
     public function itShouldAddThePostedRules()
     {
-        $this->getMockRequest()->expects($this->any())->method('getMethod')->willReturn('POST');
-        $this->getMockRequest()->expects($this->any())->method('getPost')->willReturnMap([
+        $this->getMockRequest()->method('getMethod')->willReturn('POST');
+        $this->getMockRequest()->method('getPost')->willReturnMap([
             ['country', null, 'DE'],
             ['customer_group_ids', null, [0, 1]],
             ['post_codes', null, "1234\n5678,\n1313, 4444"]
@@ -145,12 +145,12 @@ class PostcodefilterControllerTest extends ControllerTestCase
      */
     public function itShouldUpdateThePostedRules()
     {
-        $this->getMockRequest()->expects($this->any())->method('getMethod')->willReturn('POST');
-        $this->getMockRequest()->expects($this->any())->method('getParam')->willReturnMap([
+        $this->getMockRequest()->method('getMethod')->willReturn('POST');
+        $this->getMockRequest()->method('getParam')->willReturnMap([
             ['old_country', null, 'DE'],
             ['old_customer_group_ids', null, '0,1']
         ]);
-        $this->getMockRequest()->expects($this->any())->method('getPost')->willReturnMap([
+        $this->getMockRequest()->method('getPost')->willReturnMap([
             ['country', null, 'DE'],
             ['customer_group_ids', null, [0, 1]],
             ['post_codes', null, "1234\n5678,\n1313, 4444"]
@@ -165,7 +165,7 @@ class PostcodefilterControllerTest extends ControllerTestCase
      */
     public function itShouldDeleteTheSubmittedRules()
     {
-        $this->getMockRequest()->expects($this->any())->method('getParam')->willReturnMap([
+        $this->getMockRequest()->method('getParam')->willReturnMap([
             ['country', null, 'DE'],
             ['customer_group_ids', null, '0,1,3']
         ]);

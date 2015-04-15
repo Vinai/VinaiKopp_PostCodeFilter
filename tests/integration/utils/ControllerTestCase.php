@@ -102,11 +102,11 @@ abstract class ControllerTestCase extends IntegrationTestCase
      */
     protected function dispatchRoute($frontname, $controller, $action)
     {
-        $this->getMockRequest()->expects($this->any())->method('getRequestedRouteName')
+        $this->getMockRequest()->method('getRequestedRouteName')
             ->willReturn($frontname);
-        $this->getMockRequest()->expects($this->any())->method('getRequestedControllerName')
+        $this->getMockRequest()->method('getRequestedControllerName')
             ->willReturn($controller);
-        $this->getMockRequest()->expects($this->any())->method('getRequestedActionName')
+        $this->getMockRequest()->method('getRequestedActionName')
             ->willReturn($action);
         $this->getMockRequest()->setDispatched(true);
         \Mage::getSingleton('admin/session')->setData('user', $this->getMock(\Mage_Admin_Model_User::class));

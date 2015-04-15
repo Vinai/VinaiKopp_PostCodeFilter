@@ -80,22 +80,6 @@ class VinaiKopp_PostCodeFilter_Model_Resource_RuleStorage implements RuleStorage
         return array_map([$this, 'processResultRecord'], $this->readConnection->fetchAll($query));
     }
 
-    private function processResultRecord($row)
-    {
-        $row['post_codes'] = $this->splitPostCodes($row['post_codes']);
-        $row['customer_group_id'] = (int) $row['customer_group_id'];
-        return $row;
-    }
-
-    /**
-     * @param string $postCodesAsString
-     * @return string[]
-     */
-    private function splitPostCodes($postCodesAsString)
-    {
-        return preg_split('/ *[,\n\r] */', $postCodesAsString, null, PREG_SPLIT_NO_EMPTY);
-    }
-
     /**
      * @param string $iso2country
      * @param int $customerGroupId
@@ -142,5 +126,21 @@ class VinaiKopp_PostCodeFilter_Model_Resource_RuleStorage implements RuleStorage
     public function rollbackTransaction()
     {
         $this->writeConnection->rollBack();
+    }
+
+    private function processResultRecord($row)
+    {
+        $row['post_codes'] = $this->splitPostCodes($row['post_codes']);
+        $row['customer_group_id'] = (int) $row['customer_group_id'];
+        return $row;
+    }
+
+    /**
+     * @param string $postCodesAsString
+     * @return string[]
+     */
+    private function splitPostCodes($postCodesAsString)
+    {
+        return preg_split('/ *[,\n\r] */', $postCodesAsString, null, PREG_SPLIT_NO_EMPTY);
     }
 }

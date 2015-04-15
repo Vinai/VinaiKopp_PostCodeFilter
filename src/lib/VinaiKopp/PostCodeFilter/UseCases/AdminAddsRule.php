@@ -61,10 +61,10 @@ class AdminAddsRule
      */
     private function validateNoConflictingRuleExists(RuleToAdd $ruleToAdd)
     {
-        $ruleSpec = $this->makeRuleSpec($ruleToAdd);
+        $ruleSpec = $this->createRuleSpec($ruleToAdd);
         $result = $this->ruleReader->findByCountryAndGroupIds($ruleSpec);
         if ($result instanceof RuleFound) {
-            throw $this->makeRuleExistsException($result, $ruleToAdd);
+            throw $this->createRuleExistsException($result, $ruleToAdd);
         }
     }
 
@@ -72,7 +72,7 @@ class AdminAddsRule
      * @param RuleToAdd $ruleToAdd
      * @return RuleSpecByCountryAndGroupIds
      */
-    private function makeRuleSpec(RuleToAdd $ruleToAdd)
+    private function createRuleSpec(RuleToAdd $ruleToAdd)
     {
         return new RuleSpecByCountryAndGroupIds($ruleToAdd->getCountry(), $ruleToAdd->getCustomerGroupIds());
     }
@@ -82,7 +82,7 @@ class AdminAddsRule
      * @param RuleToAdd $ruleToAdd
      * @return RuleForGroupAndCountryAlreadyExistsException
      */
-    private function makeRuleExistsException(RuleFound $existingRule, RuleToAdd $ruleToAdd)
+    private function createRuleExistsException(RuleFound $existingRule, RuleToAdd $ruleToAdd)
     {
         return new RuleForGroupAndCountryAlreadyExistsException(sprintf(
             'A rule for customer group(s) "%s" and country "%s" already exists',

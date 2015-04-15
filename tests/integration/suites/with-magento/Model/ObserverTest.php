@@ -33,8 +33,8 @@ class ObserverTest extends IntegrationTestCase
     {
         $stubEvent = $this->getMock(Event::class, ['getData', 'getQuote'], [], '', false);
         $mockQuote = $this->getMockQuote();
-        $stubEvent->expects($this->any())->method('getData')->with('quote')->willReturn($mockQuote);
-        $stubEvent->expects($this->any())->method('getQuote')->willReturn($mockQuote);
+        $stubEvent->method('getData')->with('quote')->willReturn($mockQuote);
+        $stubEvent->method('getQuote')->willReturn($mockQuote);
         return $stubEvent;
     }
 
@@ -45,9 +45,9 @@ class ObserverTest extends IntegrationTestCase
     {
         $stubEvent = $this->getMock(Event::class, ['getData', 'getControllerAction'], [], '', false);
         $stubController = $this->getMockOnepageController();
-        $stubEvent->expects($this->any())->method('getData')->with('controller_action')
+        $stubEvent->method('getData')->with('controller_action')
             ->willReturn($stubController);
-        $stubEvent->expects($this->any())->method('getControllerAction')
+        $stubEvent->method('getControllerAction')
             ->willReturn($stubController);
         return $stubEvent;
     }
@@ -58,8 +58,8 @@ class ObserverTest extends IntegrationTestCase
     private function getMockQuote()
     {
         $mockQuote = $this->getMock(\Mage_Sales_Model_Quote::class, [], [], '', false);
-        $mockQuote->expects($this->any())->method('getShippingAddress')->willReturn($this->getMockQuoteAddress());
-        $mockQuote->expects($this->any())->method('getCustomerGroupId')->willReturn($this->testCustomerGroupId);
+        $mockQuote->method('getShippingAddress')->willReturn($this->getMockQuoteAddress());
+        $mockQuote->method('getCustomerGroupId')->willReturn($this->testCustomerGroupId);
         return $mockQuote;
     }
 
@@ -72,10 +72,10 @@ class ObserverTest extends IntegrationTestCase
             ->disableOriginalConstructor()
             ->setMethods(['getResponse', 'getRequest'])
             ->getMock();
-        $mockController->expects($this->any())->method('getResponse')->willReturn(
+        $mockController->method('getResponse')->willReturn(
             $this->getMock(\Mage_Core_Controller_Response_Http::class)
         );
-        $mockController->expects($this->any())->method('getRequest')->willReturn(
+        $mockController->method('getRequest')->willReturn(
             $this->getMock(\Mage_Core_Controller_Request_Http::class, [], [], '', false)
         );
         return $mockController;
@@ -90,15 +90,15 @@ class ObserverTest extends IntegrationTestCase
             ->setMethods(['getPostcode', 'getCountry'])
             ->disableOriginalConstructor()
             ->getMock();
-        $mockAddress->expects($this->any())->method('getPostcode')->willReturn($this->testPostcode);
-        $mockAddress->expects($this->any())->method('getCountry')->willReturn($this->testCountry);
+        $mockAddress->method('getPostcode')->willReturn($this->testPostcode);
+        $mockAddress->method('getCountry')->willReturn($this->testCountry);
         return $mockAddress;
     }
 
     private function registerMockCart()
     {
         $mockCart = $this->getMock(\Mage_Checkout_Model_Cart::class, [], [], '', false);
-        $mockCart->expects($this->any())->method('getQuote')->willReturn($this->getMockQuote());
+        $mockCart->method('getQuote')->willReturn($this->getMockQuote());
         \Mage::register('_singleton/checkout/cart', $mockCart);
         return $mockCart;
     }
@@ -207,7 +207,7 @@ class ObserverTest extends IntegrationTestCase
         $quote = $event->getQuote();
         /** @var \Mage_Sales_Model_Quote_Address|\PHPUnit_Framework_MockObject_MockObject $mockShippingAddress */
         $mockShippingAddress = $quote->getShippingAddress();
-        $quote->expects($this->any())->method('getAllShippingAddresses')->willReturn(
+        $quote->method('getAllShippingAddresses')->willReturn(
             [$mockShippingAddress, $mockShippingAddress]
         );
         $this->mockUseCase->expects($this->exactly(2))->method('mayOrder')->willReturn(true);
@@ -226,10 +226,10 @@ class ObserverTest extends IntegrationTestCase
         $quote = $event->getQuote();
         /** @var \Mage_Sales_Model_Quote_Address|\PHPUnit_Framework_MockObject_MockObject $mockShippingAddress */
         $mockShippingAddress = $quote->getShippingAddress();
-        $quote->expects($this->any())->method('getAllShippingAddresses')->willReturn(
+        $quote->method('getAllShippingAddresses')->willReturn(
             [$mockShippingAddress, $mockShippingAddress]
         );
-        $this->mockUseCase->expects($this->any())->method('mayOrder')->willReturnOnConsecutiveCalls(true, false);
+        $this->mockUseCase->method('mayOrder')->willReturnOnConsecutiveCalls(true, false);
 
         $this->observer->checkoutTypeMultishippingSetShippingItems($event);
     }

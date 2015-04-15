@@ -105,11 +105,11 @@ class AdminDeletesRuleTest extends \PHPUnit_Framework_TestCase
     private function createStubRuleToDelete()
     {
         $stubRuleToDelete = $this->getMock(RuleToDelete::class, [], [], '', false);
-        $stubRuleToDelete->expects($this->any())->method('getCustomerGroupIds')
+        $stubRuleToDelete->method('getCustomerGroupIds')
             ->willReturn($this->getMock(CustomerGroupIdList::class, [], [], '', false));
-        $stubRuleToDelete->expects($this->any())->method('getCustomerGroupIdValues')
+        $stubRuleToDelete->method('getCustomerGroupIdValues')
             ->willReturn([1, 2]);
-        $stubRuleToDelete->expects($this->any())->method('getCountry')
+        $stubRuleToDelete->method('getCountry')
             ->willReturn($this->getMock(Country::class, [], [], '', false));
         return $stubRuleToDelete;
     }

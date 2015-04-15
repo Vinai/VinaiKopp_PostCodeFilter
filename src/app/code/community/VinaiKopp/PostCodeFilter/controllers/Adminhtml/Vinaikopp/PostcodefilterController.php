@@ -27,8 +27,7 @@ class VinaiKopp_PostCodeFilter_Adminhtml_Vinaikopp_PostcodefilterController
      * @var AdminViewsSingleRule
      */
     private $viewsRuleUseCase;
-
-
+    
     /**
      * @var VinaiKopp_PostCodeFilter_Helper_Data
      */

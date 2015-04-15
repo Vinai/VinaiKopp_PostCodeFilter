@@ -56,7 +56,7 @@ class CheckControllerTest extends ControllerTestCase
      */
     public function itShouldReturnAJsonContentType()
     {
-        $this->getMockRequest()->expects($this->any())->method('getParam')->willReturnMap([
+        $this->getMockRequest()->method('getParam')->willReturnMap([
             ['postcode', null, '69123'],
             ['country', null, 'DE'],
         ]);
@@ -87,7 +87,7 @@ class CheckControllerTest extends ControllerTestCase
         $customerGroupId,
         $message
     ) {
-        $this->getMockRequest()->expects($this->any())->method('getParam')->willReturnMap([
+        $this->getMockRequest()->method('getParam')->willReturnMap([
             ['postcode', null, $postCode],
             ['country', null, $country],
             ['customer_group_id', null, $customerGroupId]
@@ -123,7 +123,7 @@ class CheckControllerTest extends ControllerTestCase
     public function itShouldHandleExceptionsGracefully()
     {
         $testException = new \Exception('Test Exception');
-        $this->mockCheckPostCodeUseCase->expects($this->any())->method('mayOrder')
+        $this->mockCheckPostCodeUseCase->method('mayOrder')
             ->willThrowException($testException);
         $expectedResponse = json_encode([
             'error' => $testException->getMessage(),

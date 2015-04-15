@@ -84,7 +84,7 @@ class AdminUpdatesRule
     {
         $result = $this->fetchExistingRule($ruleToUpdate);
         if ($result instanceof RuleNotFound) {
-            throw $this->makeRuleDoesNotExistException($ruleToUpdate);
+            throw $this->createRuleDoesNotExistException($ruleToUpdate);
         }
     }
 
@@ -94,7 +94,7 @@ class AdminUpdatesRule
      */
     private function fetchExistingRule(RuleToUpdate $ruleToUpdate)
     {
-        $ruleSpec = $this->makeRuleSpecByCountryAndGroupIds(
+        $ruleSpec = $this->createRuleSpecByCountryAndGroupIds(
             $ruleToUpdate->getOldCountry(),
             $ruleToUpdate->getOldCustomerGroupIds()
         );
@@ -105,7 +105,7 @@ class AdminUpdatesRule
      * @param RuleToUpdate $ruleToUpdate
      * @return RuleDoesNotExistException
      */
-    private function makeRuleDoesNotExistException(RuleToUpdate $ruleToUpdate)
+    private function createRuleDoesNotExistException(RuleToUpdate $ruleToUpdate)
     {
         return new RuleDoesNotExistException(sprintf(
             'Update failure: there is no rule for the country "%s" and the customer group ID(s) "%s"',
@@ -114,28 +114,28 @@ class AdminUpdatesRule
         ));
     }
 
-    private function makeRuleSpecByCountryAndGroupIds(Country $country, CustomerGroupIdList $customerGroupIds)
+    private function createRuleSpecByCountryAndGroupIds(Country $country, CustomerGroupIdList $customerGroupIds)
     {
         return new RuleSpecByCountryAndGroupIds($country, $customerGroupIds);
     }
 
     private function deleteOldRule(RuleToUpdate $ruleToUpdate)
     {
-        $ruleToDelete = $this->makeRuleToDelete(
+        $ruleToDelete = $this->createRuleToDelete(
             $ruleToUpdate->getOldCountry(),
             $ruleToUpdate->getOldCustomerGroupIds()
         );
         $this->ruleWriter->deleteRule($ruleToDelete);
     }
 
-    private function makeRuleToDelete(Country $country, CustomerGroupIdList $customerGroupIds)
+    private function createRuleToDelete(Country $country, CustomerGroupIdList $customerGroupIds)
     {
         return new RuleToDelete($customerGroupIds, $country);
     }
 
     private function insertNewRule(RuleToUpdate $ruleToUpdate)
     {
-        $ruleToAdd = $this->makeRuleToAdd(
+        $ruleToAdd = $this->createRuleToAdd(
             $ruleToUpdate->getNewCountry(),
             $ruleToUpdate->getNewCustomerGroupIds(),
             $ruleToUpdate->getNewPostCodes()
@@ -143,7 +143,7 @@ class AdminUpdatesRule
         $this->ruleWriter->createRule($ruleToAdd);
     }
 
-    private function makeRuleToAdd(Country $country, CustomerGroupIdList $customerGroupIds, PostCodeList $postCodes)
+    private function createRuleToAdd(Country $country, CustomerGroupIdList $customerGroupIds, PostCodeList $postCodes)
     {
         return new RuleToAdd($customerGroupIds, $country, $postCodes);
     }
