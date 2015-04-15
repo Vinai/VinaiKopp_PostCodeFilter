@@ -1,8 +1,6 @@
 <?php
 
-
 namespace VinaiKopp\PostCodeFilter;
-
 
 interface RuleStorage
 {
@@ -17,11 +15,13 @@ interface RuleStorage
      * @param string $iso2country
      * @param int[] $customerGroupIds
      * @return mixed[]
+     * @see RuleRepository::findByCountryAndGroupIds()
      */
     public function findRulesByCountryAndGroupIds($iso2country, array $customerGroupIds);
 
     /**
      * @return mixed[]
+     * @see RuleRepository::findAll()
      */
     public function findAllRules();
 

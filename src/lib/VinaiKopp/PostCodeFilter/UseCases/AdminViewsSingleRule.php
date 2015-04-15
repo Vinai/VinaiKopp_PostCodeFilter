@@ -1,8 +1,6 @@
 <?php
 
-
 namespace VinaiKopp\PostCodeFilter\UseCases;
-
 
 use VinaiKopp\PostCodeFilter\Query\RuleSpecByCountryAndGroupIds;
 use VinaiKopp\PostCodeFilter\Query\RuleReader;

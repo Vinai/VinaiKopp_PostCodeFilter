@@ -1,8 +1,6 @@
 <?php
 
-
 namespace VinaiKopp\PostCodeFilter\UseCases;
-
 
 use VinaiKopp\PostCodeFilter\Command\RuleToAdd;
 use VinaiKopp\PostCodeFilter\Command\RuleToDelete;
@@ -83,6 +81,10 @@ class AdminUpdatesRule
         }
     }
 
+    /**
+     * @param RuleToDelete $ruleToDelete
+     * @return RuleSpecByCountryAndGroupIds
+     */
     private function createRuleSpecByCountryAndGroupIds(RuleToDelete $ruleToDelete)
     {
         return new RuleSpecByCountryAndGroupIds(

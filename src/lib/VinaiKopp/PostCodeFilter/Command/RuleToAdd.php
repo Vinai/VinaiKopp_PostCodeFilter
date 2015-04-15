@@ -1,8 +1,6 @@
 <?php
 
-
 namespace VinaiKopp\PostCodeFilter\Command;
-
 
 use VinaiKopp\PostCodeFilter\RuleComponents\Country;
 use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList;
@@ -25,11 +23,6 @@ class RuleToAdd
      */
     private $postCodes;
 
-    /**
-     * @param CustomerGroupIdList $customerGroupIds
-     * @param Country $country
-     * @param PostCodeList $postCodes
-     */
     public function __construct(CustomerGroupIdList $customerGroupIds, Country $country, PostCodeList $postCodes)
     {
         $this->customerGroupIds = $customerGroupIds;

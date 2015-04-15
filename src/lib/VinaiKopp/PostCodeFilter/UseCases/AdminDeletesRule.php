@@ -1,8 +1,6 @@
 <?php
 
-
 namespace VinaiKopp\PostCodeFilter\UseCases;
-
 
 use VinaiKopp\PostCodeFilter\Command\RuleToDelete;
 use VinaiKopp\PostCodeFilter\Command\RuleWriter;

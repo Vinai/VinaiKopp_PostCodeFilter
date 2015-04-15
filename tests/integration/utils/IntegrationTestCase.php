@@ -1,6 +1,5 @@
 <?php
 
-
 namespace VinaiKopp\PostCodeFilter;
 
 class IntegrationTestCase extends \PHPUnit_Framework_TestCase

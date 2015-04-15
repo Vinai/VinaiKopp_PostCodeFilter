@@ -1,6 +1,5 @@
 <?php
 
-
 use VinaiKopp\PostCodeFilter\Query\RuleResult;
 
 class VinaiKopp_PostCodeFilter_Block_Adminhtml_Postcodefilter_Edit_Form

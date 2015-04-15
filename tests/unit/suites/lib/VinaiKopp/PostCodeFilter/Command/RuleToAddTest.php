@@ -1,6 +1,5 @@
 <?php
 
-
 namespace VinaiKopp\PostCodeFilter\Command;
 
 use VinaiKopp\PostCodeFilter\RuleComponents\Country;

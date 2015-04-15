@@ -1,8 +1,6 @@
 <?php
 
-
 namespace VinaiKopp\PostCodeFilter\Query;
-
 
 use VinaiKopp\PostCodeFilter\RuleComponents\Country;
 use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupId;
@@ -25,6 +23,9 @@ class RuleSpecByCountryAndGroupId
         $this->country = $country;
     }
 
+    /**
+     * @return CustomerGroupId
+     */
     public function getCustomerGroupId()
     {
         return $this->customerGroupId;
@@ -38,6 +39,9 @@ class RuleSpecByCountryAndGroupId
         return $this->customerGroupId->getValue();
     }
 
+    /**
+     * @return Country
+     */
     public function getCountry()
     {
         return $this->country;

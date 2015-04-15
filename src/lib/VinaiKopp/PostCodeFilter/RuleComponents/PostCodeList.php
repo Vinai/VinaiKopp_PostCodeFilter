@@ -1,8 +1,6 @@
 <?php
 
-
 namespace VinaiKopp\PostCodeFilter\RuleComponents;
-
 
 class PostCodeList
 {

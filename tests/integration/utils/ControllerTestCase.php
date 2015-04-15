@@ -1,8 +1,6 @@
 <?php
 
-
 namespace VinaiKopp\PostCodeFilter;
-
 
 abstract class ControllerTestCase extends IntegrationTestCase
 {

@@ -1,6 +1,5 @@
 <?php
 
-
 class VinaiKopp_PostCodeFilter_Block_Adminhtml_Postcodefilter_New
     extends Mage_Adminhtml_Block_Widget_Form_Container
 {

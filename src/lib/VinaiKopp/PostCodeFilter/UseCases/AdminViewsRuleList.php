@@ -1,11 +1,9 @@
 <?php
 
-
 namespace VinaiKopp\PostCodeFilter\UseCases;
 
-
-
 use VinaiKopp\PostCodeFilter\Query\RuleReader;
+use VinaiKopp\PostCodeFilter\Query\RuleResult;
 
 class AdminViewsRuleList
 {
@@ -18,7 +16,10 @@ class AdminViewsRuleList
     {
         $this->ruleReader = $ruleReader;
     }
-    
+
+    /**
+     * @return RuleResult[]
+     */
     public function fetchAllRules()
     {
         return $this->ruleReader->findAll();

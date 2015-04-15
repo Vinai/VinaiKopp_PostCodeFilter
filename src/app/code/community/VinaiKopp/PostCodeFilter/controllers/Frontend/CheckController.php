@@ -1,6 +1,5 @@
 <?php
 
-
 use VinaiKopp\PostCodeFilter\UseCases\CustomerChecksPostCode;
 
 class VinaiKopp_PostCodeFilter_Frontend_CheckController extends Mage_Core_Controller_Front_Action

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace VinaiKopp\PostCodeFilter\RuleComponents;
 
 use VinaiKopp\PostCodeFilter\Exceptions\InvalidCountryException;

@@ -3,7 +3,6 @@
 
 namespace VinaiKopp\PostCodeFilter\RuleComponents;
 
-
 use VinaiKopp\PostCodeFilter\Exceptions\InvalidPostCodeException;
 
 class PostCode

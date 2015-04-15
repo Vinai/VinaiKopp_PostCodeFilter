@@ -1,6 +1,5 @@
 <?php
 
-
 namespace VinaiKopp\PostCodeFilter;
 
 use VinaiKopp\PostCodeFilter\Command\RuleToAdd;

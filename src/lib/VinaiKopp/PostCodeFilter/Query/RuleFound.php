@@ -1,9 +1,7 @@
 <?php
 
-
 namespace VinaiKopp\PostCodeFilter\Query;
 
-use VinaiKopp\PostCodeFilter\Exceptions\InvalidCustomerGroupIdException;
 use VinaiKopp\PostCodeFilter\RuleComponents\Country;
 use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupId;
 use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList;
@@ -27,11 +25,6 @@ class RuleFound implements RuleResult
      */
     private $country;
 
-    /**
-     * @param CustomerGroupIdList $customerGroupIds
-     * @param Country $country
-     * @param PostCodeList $allowedPostCodes
-     */
     public function __construct(
         CustomerGroupIdList $customerGroupIds,
         Country $country,

@@ -1,6 +1,5 @@
 <?php
 
-
 use VinaiKopp\PostCodeFilter\Query\RuleResult;
 use VinaiKopp\PostCodeFilter\UseCases\AdminViewsRuleList;
 

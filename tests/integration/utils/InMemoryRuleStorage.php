@@ -2,9 +2,6 @@
 
 namespace VinaiKopp\PostCodeFilter;
 
-use VinaiKopp\PostCodeFilter\Command\RuleToAdd;
-use VinaiKopp\PostCodeFilter\Command\RuleToDelete;
-
 class InMemoryRuleStorage implements RuleStorage
 {
     /**

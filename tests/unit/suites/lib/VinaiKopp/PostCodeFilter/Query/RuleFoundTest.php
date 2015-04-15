@@ -1,10 +1,8 @@
 <?php
 
-
 namespace VinaiKopp\PostCodeFilter\Query;
 
 use VinaiKopp\PostCodeFilter\RuleComponents\Country;
-use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupId;
 use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList;
 use VinaiKopp\PostCodeFilter\RuleComponents\PostCode;
 use VinaiKopp\PostCodeFilter\RuleComponents\PostCodeList;
