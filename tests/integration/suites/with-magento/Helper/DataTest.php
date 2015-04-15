@@ -6,7 +6,7 @@ use VinaiKopp\PostCodeFilter\Command\RuleToAdd;
 use VinaiKopp\PostCodeFilter\Command\RuleToDelete;
 use VinaiKopp\PostCodeFilter\Command\RuleToUpdate;
 use VinaiKopp\PostCodeFilter\Command\RuleToUpdateTest;
-use VinaiKopp\PostCodeFilter\Query\QueryByCountryAndGroupIds;
+use VinaiKopp\PostCodeFilter\Query\RuleSpecByCountryAndGroupIds;
 use VinaiKopp\PostCodeFilter\UseCases\CustomerChecksPostCode;
 use VinaiKopp\PostCodeFilter\UseCases\CustomerChecksPostCodeTest;
 
@@ -52,11 +52,11 @@ class DataTest extends IntegrationTestCase
     /**
      * @test
      */
-    public function itShouldReturnARuleQueryByCountry()
+    public function itShouldReturnARuleSpecByCountry()
     {
         $this->assertInstanceOf(
-            QueryByCountryAndGroupIds::class,
-            $this->helper->createRuleQueryForGroupIdsAndCountry([11], 'DE')
+            RuleSpecByCountryAndGroupIds::class,
+            $this->helper->createRuleSpecForGroupIdsAndCountry([11], 'DE')
         );
     }
 

@@ -9,7 +9,7 @@ use VinaiKopp\PostCodeFilter\Query\RuleResult;
  * @covers \VinaiKopp\PostCodeFilter\UseCases\CustomerChecksPostCode
  * @uses   \VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupId
  * @uses   \VinaiKopp\PostCodeFilter\RuleComponents\Country
- * @uses   \VinaiKopp\PostCodeFilter\Query\QueryByCountryAndGroupId
+ * @uses   \VinaiKopp\PostCodeFilter\Query\RuleSpecByCountryAndGroupId
  */
 class CustomerChecksPostCodeTest extends \PHPUnit_Framework_TestCase
 {

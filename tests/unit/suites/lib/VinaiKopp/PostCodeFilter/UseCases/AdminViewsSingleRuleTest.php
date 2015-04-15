@@ -9,7 +9,7 @@ use VinaiKopp\PostCodeFilter\Query\RuleResult;
 
 /**
  * @covers \VinaiKopp\PostCodeFilter\UseCases\AdminViewsSingleRule
- * @uses   \VinaiKopp\PostCodeFilter\Query\QueryByCountryAndGroupIds
+ * @uses   \VinaiKopp\PostCodeFilter\Query\RuleSpecByCountryAndGroupIds
  * @uses   \VinaiKopp\PostCodeFilter\RuleComponents\Country
  * @uses   \VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupId
  * @uses   \VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList

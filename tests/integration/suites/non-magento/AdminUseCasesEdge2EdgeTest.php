@@ -5,7 +5,7 @@ namespace VinaiKopp\PostCodeFilter;
 use VinaiKopp\PostCodeFilter\Command\RuleToAdd;
 use VinaiKopp\PostCodeFilter\Command\RuleToDelete;
 use VinaiKopp\PostCodeFilter\Command\RuleToUpdate;
-use VinaiKopp\PostCodeFilter\Query\QueryByCountryAndGroupIds;
+use VinaiKopp\PostCodeFilter\Query\RuleSpecByCountryAndGroupIds;
 use VinaiKopp\PostCodeFilter\Query\RuleFound;
 use VinaiKopp\PostCodeFilter\Query\RuleNotFound;
 use VinaiKopp\PostCodeFilter\RuleComponents\Country;
@@ -142,8 +142,8 @@ class AdminUseCasesEdge2EdgeTest extends \PHPUnit_Framework_TestCase
         array $postCodes
     )
     {
-        $ruleQuery = new QueryByCountryAndGroupIds($country, $groupIds);
-        $ruleFound = (new RuleRepository($storage))->findByCountryAndGroupIds($ruleQuery);
+        $ruleSpec = new RuleSpecByCountryAndGroupIds($country, $groupIds);
+        $ruleFound = (new RuleRepository($storage))->findByCountryAndGroupIds($ruleSpec);
         foreach ($postCodes as $code) {
             $this->assertTrue($ruleFound->isPostCodeAllowed($code));
         }
@@ -155,8 +155,8 @@ class AdminUseCasesEdge2EdgeTest extends \PHPUnit_Framework_TestCase
         Country $country
     )
     {
-        $ruleQuery = new QueryByCountryAndGroupIds($country, $groupIds);
-        $rule = (new RuleRepository($storage))->findByCountryAndGroupIds($ruleQuery);
+        $ruleSpec = new RuleSpecByCountryAndGroupIds($country, $groupIds);
+        $rule = (new RuleRepository($storage))->findByCountryAndGroupIds($ruleSpec);
         $this->assertInstanceOf(RuleFound::class, $rule);
     }
     
@@ -166,8 +166,8 @@ class AdminUseCasesEdge2EdgeTest extends \PHPUnit_Framework_TestCase
         Country $country
     )
     {
-        $ruleQuery = new QueryByCountryAndGroupIds($country, $groupId);
-        $rule = (new RuleRepository($storage))->findByCountryAndGroupIds($ruleQuery);
+        $ruleSpec = new RuleSpecByCountryAndGroupIds($country, $groupId);
+        $rule = (new RuleRepository($storage))->findByCountryAndGroupIds($ruleSpec);
         $this->assertInstanceOf(RuleNotFound::class, $rule);
     }
 }

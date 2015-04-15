@@ -9,8 +9,8 @@ use VinaiKopp\PostCodeFilter\Command\RuleWriter;
 use VinaiKopp\PostCodeFilter\Exceptions\NonMatchingRecordInResultException;
 use VinaiKopp\PostCodeFilter\Query\RuleFound;
 use VinaiKopp\PostCodeFilter\Query\RuleNotFound;
-use VinaiKopp\PostCodeFilter\Query\QueryByCountryAndGroupId;
-use VinaiKopp\PostCodeFilter\Query\QueryByCountryAndGroupIds;
+use VinaiKopp\PostCodeFilter\Query\RuleSpecByCountryAndGroupId;
+use VinaiKopp\PostCodeFilter\Query\RuleSpecByCountryAndGroupIds;
 use VinaiKopp\PostCodeFilter\Query\RuleReader;
 use VinaiKopp\PostCodeFilter\Query\RuleResult;
 use VinaiKopp\PostCodeFilter\RuleComponents\Country;
@@ -31,33 +31,33 @@ class RuleRepository implements RuleWriter, RuleReader
     }
 
     /**
-     * @param QueryByCountryAndGroupId $ruleQuery
+     * @param RuleSpecByCountryAndGroupId $ruleSpec
      * @return RuleResult
      */
-    public function findByCountryAndGroupId(QueryByCountryAndGroupId $ruleQuery)
+    public function findByCountryAndGroupId(RuleSpecByCountryAndGroupId $ruleSpec)
     {
         $postCodes = $this->storage->findPostCodesByCountryAndGroupId(
-            $ruleQuery->getCountryValue(), $ruleQuery->getCustomerGroupIdValue()
+            $ruleSpec->getCountryValue(), $ruleSpec->getCustomerGroupIdValue()
         );
         if (empty($postCodes)) {
-            return new RuleNotFound($ruleQuery->getCountry());
+            return new RuleNotFound($ruleSpec->getCountry());
         }
-        return $this->makeRuleFound([$ruleQuery->getCustomerGroupIdValue()], $ruleQuery->getCountryValue(), $postCodes);
+        return $this->makeRuleFound([$ruleSpec->getCustomerGroupIdValue()], $ruleSpec->getCountryValue(), $postCodes);
     }
 
     /**
-     * @param QueryByCountryAndGroupIds $ruleQuery
+     * @param RuleSpecByCountryAndGroupIds $ruleSpec
      * @return RuleResult
      */
-    public function findByCountryAndGroupIds(QueryByCountryAndGroupIds $ruleQuery)
+    public function findByCountryAndGroupIds(RuleSpecByCountryAndGroupIds $ruleSpec)
     {
         $records = $this->storage->findRulesByCountryAndGroupIds(
-            $ruleQuery->getCountryValue(), $ruleQuery->getCustomerGroupIdValues()
+            $ruleSpec->getCountryValue(), $ruleSpec->getCustomerGroupIdValues()
         );
         if (empty($records)) {
-            return new RuleNotFound($ruleQuery->getCountry());
+            return new RuleNotFound($ruleSpec->getCountry());
         }
-        return $this->combineQueryByCountryAndGroupIdsResultRecords($ruleQuery, $records);
+        return $this->combineQueryByCountryAndGroupIdsResultRecords($ruleSpec, $records);
     }
 
     /**
@@ -142,58 +142,58 @@ class RuleRepository implements RuleWriter, RuleReader
     }
 
     /**
-     * @param QueryByCountryAndGroupIds $ruleQuery
+     * @param RuleSpecByCountryAndGroupIds $ruleSpec
      * @param mixed[] $records
      * @return RuleFound
      */
-    private function combineQueryByCountryAndGroupIdsResultRecords(QueryByCountryAndGroupIds $ruleQuery, array $records)
+    private function combineQueryByCountryAndGroupIdsResultRecords(RuleSpecByCountryAndGroupIds $ruleSpec, array $records)
     {
         $customerGroupIds = [];
         $postCodes = null;
         foreach ($records as $record) {
-            $this->validateQueryByCountryAndGroupIdsResultRecord($ruleQuery, $record);
+            $this->validateRUleSpecByCountryAndGroupIdsMatchesResultRecord($ruleSpec, $record);
             $customerGroupIds[] = $record['customer_group_id'];
             $postCodes = $record['post_codes'];
         }
-        return $this->makeRuleFound($customerGroupIds, $ruleQuery->getCountryValue(), $postCodes);
+        return $this->makeRuleFound($customerGroupIds, $ruleSpec->getCountryValue(), $postCodes);
     }
 
     /**
-     * @param QueryByCountryAndGroupIds $ruleQuery
+     * @param RuleSpecByCountryAndGroupIds $ruleSpec
      * @param mixed[] $record
      */
-    private function validateQueryByCountryAndGroupIdsResultRecord(QueryByCountryAndGroupIds $ruleQuery, array $record)
+    private function validateRUleSpecByCountryAndGroupIdsMatchesResultRecord(RuleSpecByCountryAndGroupIds $ruleSpec, array $record)
     {
-        $this->validateCountryMatchesQuery($record['country'], $ruleQuery);
-        $this->validateCustomerGroupIdMatchesQuery($record['customer_group_id'], $ruleQuery);
+        $this->validateCountryMatchesSpec($record['country'], $ruleSpec);
+        $this->validateCustomerGroupIdMatchesSpec($record['customer_group_id'], $ruleSpec);
     }
 
     /**
      * @param string $country
-     * @param QueryByCountryAndGroupIds $ruleQuery
+     * @param RuleSpecByCountryAndGroupIds $ruleSpec
      * @throws NonMatchingRecordInResultException
      */
-    private function validateCountryMatchesQuery($country, QueryByCountryAndGroupIds $ruleQuery)
+    private function validateCountryMatchesSpec($country, RuleSpecByCountryAndGroupIds $ruleSpec)
     {
-        if ($country != $ruleQuery->getCountryValue()) {
+        if ($country != $ruleSpec->getCountryValue()) {
             throw new NonMatchingRecordInResultException(sprintf(
-                'The country "%s" does not match the query country value "%s"', $country, $ruleQuery->getCountryValue()
+                'The country "%s" does not match the query country value "%s"', $country, $ruleSpec->getCountryValue()
             ));
         }
     }
 
     /**
      * @param int $customerGroupId
-     * @param QueryByCountryAndGroupIds $ruleQuery
+     * @param RuleSpecByCountryAndGroupIds $ruleSpec
      * @throws NonMatchingRecordInResultException
      */
-    private function validateCustomerGroupIdMatchesQuery($customerGroupId, QueryByCountryAndGroupIds $ruleQuery)
+    private function validateCustomerGroupIdMatchesSpec($customerGroupId, RuleSpecByCountryAndGroupIds $ruleSpec)
     {
-        if (!in_array($customerGroupId, $ruleQuery->getCustomerGroupIdValues())) {
+        if (!in_array($customerGroupId, $ruleSpec->getCustomerGroupIdValues())) {
             throw new NonMatchingRecordInResultException(sprintf(
                 'The customer group ID "%s" does not match the query customer group ID values "%s"',
                 $customerGroupId,
-                implode(', ', $ruleQuery->getCustomerGroupIdValues())
+                implode(', ', $ruleSpec->getCustomerGroupIdValues())
             ));
         }
     }

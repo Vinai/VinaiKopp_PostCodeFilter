@@ -9,7 +9,7 @@ use VinaiKopp\PostCodeFilter\Command\RuleToDelete;
 use VinaiKopp\PostCodeFilter\Command\RuleToUpdate;
 use VinaiKopp\PostCodeFilter\Command\RuleWriter;
 use VinaiKopp\PostCodeFilter\Exceptions\RuleDoesNotExistException;
-use VinaiKopp\PostCodeFilter\Query\QueryByCountryAndGroupIds;
+use VinaiKopp\PostCodeFilter\Query\RuleSpecByCountryAndGroupIds;
 use VinaiKopp\PostCodeFilter\Query\RuleNotFound;
 use VinaiKopp\PostCodeFilter\Query\RuleReader;
 use VinaiKopp\PostCodeFilter\Query\RuleResult;
@@ -94,11 +94,11 @@ class AdminUpdatesRule
      */
     private function fetchExistingRule(RuleToUpdate $ruleToUpdate)
     {
-        $query = $this->makeQueryByCountryAndGroupIds(
+        $ruleSpec = $this->makeRuleSpecByCountryAndGroupIds(
             $ruleToUpdate->getOldCountry(),
             $ruleToUpdate->getOldCustomerGroupIds()
         );
-        return $this->ruleReader->findByCountryAndGroupIds($query);
+        return $this->ruleReader->findByCountryAndGroupIds($ruleSpec);
     }
 
     /**
@@ -114,9 +114,9 @@ class AdminUpdatesRule
         ));
     }
 
-    private function makeQueryByCountryAndGroupIds(Country $country, CustomerGroupIdList $customerGroupIds)
+    private function makeRuleSpecByCountryAndGroupIds(Country $country, CustomerGroupIdList $customerGroupIds)
     {
-        return new QueryByCountryAndGroupIds($country, $customerGroupIds);
+        return new RuleSpecByCountryAndGroupIds($country, $customerGroupIds);
     }
 
     private function deleteOldRule(RuleToUpdate $ruleToUpdate)

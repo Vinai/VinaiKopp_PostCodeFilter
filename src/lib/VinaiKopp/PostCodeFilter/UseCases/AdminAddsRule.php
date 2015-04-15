@@ -7,7 +7,7 @@ namespace VinaiKopp\PostCodeFilter\UseCases;
 use VinaiKopp\PostCodeFilter\Command\RuleToAdd;
 use VinaiKopp\PostCodeFilter\Command\RuleWriter;
 use VinaiKopp\PostCodeFilter\Exceptions\RuleForGroupAndCountryAlreadyExistsException;
-use VinaiKopp\PostCodeFilter\Query\QueryByCountryAndGroupIds;
+use VinaiKopp\PostCodeFilter\Query\RuleSpecByCountryAndGroupIds;
 use VinaiKopp\PostCodeFilter\Query\RuleFound;
 use VinaiKopp\PostCodeFilter\Query\RuleReader;
 
@@ -61,8 +61,8 @@ class AdminAddsRule
      */
     private function validateNoConflictingRuleExists(RuleToAdd $ruleToAdd)
     {
-        $ruleQuery = $this->makeRuleQuery($ruleToAdd);
-        $result = $this->ruleReader->findByCountryAndGroupIds($ruleQuery);
+        $ruleSpec = $this->makeRuleSpec($ruleToAdd);
+        $result = $this->ruleReader->findByCountryAndGroupIds($ruleSpec);
         if ($result instanceof RuleFound) {
             throw $this->makeRuleExistsException($result, $ruleToAdd);
         }
@@ -70,11 +70,11 @@ class AdminAddsRule
 
     /**
      * @param RuleToAdd $ruleToAdd
-     * @return QueryByCountryAndGroupIds
+     * @return RuleSpecByCountryAndGroupIds
      */
-    private function makeRuleQuery(RuleToAdd $ruleToAdd)
+    private function makeRuleSpec(RuleToAdd $ruleToAdd)
     {
-        return new QueryByCountryAndGroupIds($ruleToAdd->getCountry(), $ruleToAdd->getCustomerGroupIds());
+        return new RuleSpecByCountryAndGroupIds($ruleToAdd->getCountry(), $ruleToAdd->getCustomerGroupIds());
     }
 
     /**

@@ -7,16 +7,16 @@ namespace VinaiKopp\PostCodeFilter\Query;
 interface RuleReader
 {
     /**
-     * @param QueryByCountryAndGroupId $ruleQuery
+     * @param RuleSpecByCountryAndGroupId $ruleSpec
      * @return RuleResult
      */
-    public function findByCountryAndGroupId(QueryByCountryAndGroupId $ruleQuery);
+    public function findByCountryAndGroupId(RuleSpecByCountryAndGroupId $ruleSpec);
 
     /**
-     * @param QueryByCountryAndGroupIds $ruleQuery
+     * @param RuleSpecByCountryAndGroupIds $ruleSpec
      * @return RuleResult
      */
-    public function findByCountryAndGroupIds(QueryByCountryAndGroupIds $ruleQuery);
+    public function findByCountryAndGroupIds(RuleSpecByCountryAndGroupIds $ruleSpec);
 
     /**
      * @return RuleResult[]

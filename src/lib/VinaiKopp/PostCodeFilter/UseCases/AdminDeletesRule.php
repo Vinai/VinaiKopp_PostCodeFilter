@@ -7,7 +7,7 @@ namespace VinaiKopp\PostCodeFilter\UseCases;
 use VinaiKopp\PostCodeFilter\Command\RuleToDelete;
 use VinaiKopp\PostCodeFilter\Command\RuleWriter;
 use VinaiKopp\PostCodeFilter\Exceptions\RuleDoesNotExistException;
-use VinaiKopp\PostCodeFilter\Query\QueryByCountryAndGroupIds;
+use VinaiKopp\PostCodeFilter\Query\RuleSpecByCountryAndGroupIds;
 use VinaiKopp\PostCodeFilter\Query\RuleNotFound;
 use VinaiKopp\PostCodeFilter\Query\RuleReader;
 
@@ -60,8 +60,8 @@ class AdminDeletesRule
      */
     private function validateRuleExists(RuleToDelete $ruleToDelete)
     {
-        $ruleQuery = new QueryByCountryAndGroupIds($ruleToDelete->getCountry(), $ruleToDelete->getCustomerGroupIds());
-        $result = $this->ruleReader->findByCountryAndGroupIds($ruleQuery);
+        $ruleSpec = new RuleSpecByCountryAndGroupIds($ruleToDelete->getCountry(), $ruleToDelete->getCustomerGroupIds());
+        $result = $this->ruleReader->findByCountryAndGroupIds($ruleSpec);
         if ($result instanceof RuleNotFound) {
             throw $this->makeRuleNotExistsException($ruleToDelete);
         }

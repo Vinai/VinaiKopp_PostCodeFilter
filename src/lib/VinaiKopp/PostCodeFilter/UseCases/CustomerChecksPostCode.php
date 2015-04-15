@@ -3,7 +3,7 @@
 
 namespace VinaiKopp\PostCodeFilter\UseCases;
 
-use VinaiKopp\PostCodeFilter\Query\QueryByCountryAndGroupId;
+use VinaiKopp\PostCodeFilter\Query\RuleSpecByCountryAndGroupId;
 use VinaiKopp\PostCodeFilter\Query\RuleReader;
 use VinaiKopp\PostCodeFilter\RuleComponents\Country;
 use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupId;
@@ -28,11 +28,11 @@ class CustomerChecksPostCode
      */
     public function mayOrder($customerGroupId, $iso2country, $postCode)
     {
-        $query = new QueryByCountryAndGroupId(
+        $spec = new RuleSpecByCountryAndGroupId(
             CustomerGroupId::fromInt($customerGroupId),
             Country::fromIso2Code($iso2country)
         );
-        $rule = $this->ruleReader->findByCountryAndGroupId($query);
+        $rule = $this->ruleReader->findByCountryAndGroupId($spec);
         return $rule->isPostCodeAllowed($postCode);
     }
 }

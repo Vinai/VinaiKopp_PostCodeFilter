@@ -7,7 +7,7 @@ namespace VinaiKopp\PostCodeFilter\Query;
 use VinaiKopp\PostCodeFilter\RuleComponents\Country;
 use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupId;
 
-class QueryByCountryAndGroupId
+class RuleSpecByCountryAndGroupId
 {
     /**
      * @var CustomerGroupId

@@ -4,7 +4,7 @@
 namespace VinaiKopp\PostCodeFilter\UseCases;
 
 
-use VinaiKopp\PostCodeFilter\Query\QueryByCountryAndGroupIds;
+use VinaiKopp\PostCodeFilter\Query\RuleSpecByCountryAndGroupIds;
 use VinaiKopp\PostCodeFilter\Query\RuleReader;
 use VinaiKopp\PostCodeFilter\Query\RuleResult;
 use VinaiKopp\PostCodeFilter\RuleComponents\Country;
@@ -29,22 +29,22 @@ class AdminViewsSingleRule
      */
     public function fetchRule($iso2country, array $customerGroupIds)
     {
-        $query = $this->createQuery($iso2country, array_map([$this, 'convertToInt'], $customerGroupIds));
-        return $this->reader->findByCountryAndGroupIds($query);
+        $ruleSpec = $this->createRuleSpec($iso2country, array_map([$this, 'convertToInt'], $customerGroupIds));
+        return $this->reader->findByCountryAndGroupIds($ruleSpec);
     }
 
     /**
      * @param string $iso2country
      * @param int[] $customerGroupIds
-     * @return QueryByCountryAndGroupIds
+     * @return RuleSpecByCountryAndGroupIds
      */
-    private function createQuery($iso2country, array $customerGroupIds)
+    private function createRuleSpec($iso2country, array $customerGroupIds)
     {
-        $query = new QueryByCountryAndGroupIds(
+        $ruleSpec = new RuleSpecByCountryAndGroupIds(
             Country::fromIso2Code($iso2country),
             CustomerGroupIdList::fromArray($customerGroupIds)
         );
-        return $query;
+        return $ruleSpec;
     }
 
     /**

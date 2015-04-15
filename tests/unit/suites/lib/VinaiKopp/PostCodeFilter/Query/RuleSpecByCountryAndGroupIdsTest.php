@@ -8,14 +8,14 @@ use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupId;
 use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList;
 
 /**
- * @covers \VinaiKopp\PostCodeFilter\Query\QueryByCountryAndGroupIds
+ * @covers \VinaiKopp\PostCodeFilter\Query\RuleSpecByCountryAndGroupIds
  */
-class QueryByCountryAndGroupIdsTest extends \PHPUnit_Framework_TestCase
+class RuleSpecByCountryAndGroupIdsTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var QueryByCountryAndGroupIds
+     * @var RuleSpecByCountryAndGroupIds
      */
-    private $ruleQuery;
+    private $ruleSpec;
 
     /**
      * @var Country|\PHPUnit_Framework_MockObject_MockObject
@@ -31,7 +31,7 @@ class QueryByCountryAndGroupIdsTest extends \PHPUnit_Framework_TestCase
     {
         $this->stubCountry = $this->getMock(Country::class, [], [], '', false);
         $this->stubCustomerGroupIdList = $this->getMock(CustomerGroupIdList::class, [], [], '', false);
-        $this->ruleQuery = new QueryByCountryAndGroupIds($this->stubCountry, $this->stubCustomerGroupIdList);
+        $this->ruleSpec = new RuleSpecByCountryAndGroupIds($this->stubCountry, $this->stubCustomerGroupIdList);
     }
 
     /**
@@ -39,7 +39,7 @@ class QueryByCountryAndGroupIdsTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnTheCountryInstance()
     {
-        $this->assertSame($this->stubCountry, $this->ruleQuery->getCountry());
+        $this->assertSame($this->stubCountry, $this->ruleSpec->getCountry());
     }
 
     /**
@@ -49,7 +49,7 @@ class QueryByCountryAndGroupIdsTest extends \PHPUnit_Framework_TestCase
     {
         $countryValue = 'DE';
         $this->stubCountry->expects($this->once())->method('getValue')->willReturn($countryValue);
-        $this->assertSame($countryValue, $this->ruleQuery->getCountryValue());
+        $this->assertSame($countryValue, $this->ruleSpec->getCountryValue());
     }
 
     /**
@@ -57,7 +57,7 @@ class QueryByCountryAndGroupIdsTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnTheCustomerGroupIdInstances()
     {
-        $this->assertSame($this->stubCustomerGroupIdList, $this->ruleQuery->getCustomerGroupIds());
+        $this->assertSame($this->stubCustomerGroupIdList, $this->ruleSpec->getCustomerGroupIds());
     }
 
     /**
@@ -66,6 +66,6 @@ class QueryByCountryAndGroupIdsTest extends \PHPUnit_Framework_TestCase
     public function itShouldReturnTheCustomerGroupIdValues()
     {
         $this->stubCustomerGroupIdList->expects($this->once())->method('getValues')->willReturn([78]);
-        $this->assertSame([78], $this->ruleQuery->getCustomerGroupIdValues());
+        $this->assertSame([78], $this->ruleSpec->getCustomerGroupIdValues());
     }
 }

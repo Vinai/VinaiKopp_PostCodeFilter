@@ -8,8 +8,8 @@ use VinaiKopp\PostCodeFilter\Command\RuleToDelete;
 use VinaiKopp\PostCodeFilter\Command\RuleWriter;
 use VinaiKopp\PostCodeFilter\Query\RuleFound;
 use VinaiKopp\PostCodeFilter\Query\RuleNotFound;
-use VinaiKopp\PostCodeFilter\Query\QueryByCountryAndGroupId;
-use VinaiKopp\PostCodeFilter\Query\QueryByCountryAndGroupIds;
+use VinaiKopp\PostCodeFilter\Query\RuleSpecByCountryAndGroupId;
+use VinaiKopp\PostCodeFilter\Query\RuleSpecByCountryAndGroupIds;
 use VinaiKopp\PostCodeFilter\Query\RuleReader;
 use VinaiKopp\PostCodeFilter\Query\RuleResult;
 use VinaiKopp\PostCodeFilter\RuleComponents\Country;
@@ -77,9 +77,9 @@ class RuleRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldReturnARuleResultFromAQuery()
+    public function itShouldReturnARuleResultFromASpec()
     {
-        $result = $this->repository->findByCountryAndGroupId($this->createMockRuleQueryByCountryAndGroupId());
+        $result = $this->repository->findByCountryAndGroupId($this->createMockRuleSpecByCountryAndGroupId());
         $this->assertInstanceOf(RuleResult::class, $result);
     }
 
@@ -92,7 +92,7 @@ class RuleRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->mockStorage->expects($this->once())->method('findPostCodesByCountryAndGroupId')
             ->with($this->testCountry, $this->testGroupId)
             ->willReturn($storageFoundNoMatchesReturnValue);
-        $result = $this->repository->findByCountryAndGroupId($this->createMockRuleQueryByCountryAndGroupId());
+        $result = $this->repository->findByCountryAndGroupId($this->createMockRuleSpecByCountryAndGroupId());
         $this->assertInstanceOf(RuleNotFound::class, $result);
     }
 
@@ -109,7 +109,7 @@ class RuleRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->mockStorage->expects($this->once())->method('findPostCodesByCountryAndGroupId')
             ->with($this->testCountry, $this->testGroupId)
             ->willReturn(['123']);
-        $result = $this->repository->findByCountryAndGroupId($this->createMockRuleQueryByCountryAndGroupId());
+        $result = $this->repository->findByCountryAndGroupId($this->createMockRuleSpecByCountryAndGroupId());
         $this->assertInstanceOf(RuleFound::class, $result);
     }
 
@@ -118,16 +118,16 @@ class RuleRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnAllMatchesForGivenCountryAndGroupIds()
     {
-        $queryGroupIds = [3, 4, 5, 6];
+        $specGroupIds = [3, 4, 5, 6];
         $this->mockStorage->expects($this->once())->method('findRulesByCountryAndGroupIds')
-            ->with($this->testCountry, $queryGroupIds)
+            ->with($this->testCountry, $specGroupIds)
             ->willReturn([
                 ['customer_group_id' => 3, 'country' => 'DE', 'post_codes' => [123, 456]],
                 ['customer_group_id' => 4, 'country' => 'DE', 'post_codes' => [123, 456]],
                 ['customer_group_id' => 6, 'country' => 'DE', 'post_codes' => [123, 456]],
             ]);
         $ruleResult = $this->repository->findByCountryAndGroupIds(
-            $this->createMockRuleQueryByCountryAndGroupIdsFor('DE', $queryGroupIds)
+            $this->createMockRuleSpecByCountryAndGroupIdsFor('DE', $specGroupIds)
         );
         $this->assertInstanceOf(RuleFound::class, $ruleResult);
         $this->assertSame([3, 4, 6], $ruleResult->getCustomerGroupIdValues());
@@ -144,7 +144,7 @@ class RuleRepositoryTest extends \PHPUnit_Framework_TestCase
             ->with($this->testCountry, [2, 3])
             ->willReturn([]);
         $ruleResult = $this->repository->findByCountryAndGroupIds(
-            $this->createMockRuleQueryByCountryAndGroupIdsFor('DE', [2, 3])
+            $this->createMockRuleSpecByCountryAndGroupIdsFor('DE', [2, 3])
         );
         $this->assertInstanceOf(RuleNotFound::class, $ruleResult);
     }
@@ -154,14 +154,14 @@ class RuleRepositoryTest extends \PHPUnit_Framework_TestCase
      * @expectedException \VinaiKopp\PostCodeFilter\Exceptions\NonMatchingRecordInResultException
      * @expectedExceptionMessage The country "XX" does not match the query country value "DE"
      */
-    public function itShouldThrowIfTheStorageReturnsACountryNotMatchingTheQuery()
+    public function itShouldThrowIfTheStorageReturnsACountryNotMatchingTheSpec()
     {
         $this->mockStorage->expects($this->once())->method('findRulesByCountryAndGroupIds')
             ->willReturn([
                 ['customer_group_id' => 12, 'country' => 'XX', 'post_codes' => [123, 456]]
             ]);
         $this->repository->findByCountryAndGroupIds(
-            $this->createMockRuleQueryByCountryAndGroupIdsFor('DE', [12])
+            $this->createMockRuleSpecByCountryAndGroupIdsFor('DE', [12])
         );
     }
 
@@ -170,14 +170,14 @@ class RuleRepositoryTest extends \PHPUnit_Framework_TestCase
      * @expectedException \VinaiKopp\PostCodeFilter\Exceptions\NonMatchingRecordInResultException
      * @expectedExceptionMessage The customer group ID "12" does not match the query customer group ID values "13, 14"
      */
-    public function itShouldThrowIfTheStorageReturnsACustomerGroupIdNotMatchingTheQuery()
+    public function itShouldThrowIfTheStorageReturnsACustomerGroupIdNotMatchingTheSpec()
     {
         $this->mockStorage->expects($this->once())->method('findRulesByCountryAndGroupIds')
             ->willReturn([
                 ['customer_group_id' => 12, 'country' => 'DE', 'post_codes' => [123, 456]]
             ]);
         $this->repository->findByCountryAndGroupIds(
-            $this->createMockRuleQueryByCountryAndGroupIdsFor('DE', [13, 14])
+            $this->createMockRuleSpecByCountryAndGroupIdsFor('DE', [13, 14])
         );
     }
 
@@ -284,37 +284,37 @@ class RuleRepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return QueryByCountryAndGroupId|\PHPUnit_Framework_MockObject_MockObject
+     * @return RuleSpecByCountryAndGroupId|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createMockRuleQueryByCountryAndGroupId()
+    private function createMockRuleSpecByCountryAndGroupId()
     {
-        $mockRuleQuery = $this->getMock(QueryByCountryAndGroupId::class, [], [], '', false);
-        $mockRuleQuery->expects($this->any())->method('getCustomerGroupId')->willReturn(
+        $mockRuleSpec = $this->getMock(RuleSpecByCountryAndGroupId::class, [], [], '', false);
+        $mockRuleSpec->expects($this->any())->method('getCustomerGroupId')->willReturn(
             $this->getMock(CustomerGroupId::class, [], [], '', false)
         );
-        $mockRuleQuery->expects($this->any())->method('getCountry')->willReturn(
+        $mockRuleSpec->expects($this->any())->method('getCountry')->willReturn(
             $this->getMock(Country::class, [], [], '', false)
         );
-        $mockRuleQuery->expects($this->any())->method('getCustomerGroupIdValue')->willReturn($this->testGroupId);
-        $mockRuleQuery->expects($this->any())->method('getCountryValue')->willReturn($this->testCountry);
-        return $mockRuleQuery;
+        $mockRuleSpec->expects($this->any())->method('getCustomerGroupIdValue')->willReturn($this->testGroupId);
+        $mockRuleSpec->expects($this->any())->method('getCountryValue')->willReturn($this->testCountry);
+        return $mockRuleSpec;
     }
 
     /**
-     * @return QueryByCountryAndGroupIds|\PHPUnit_Framework_MockObject_MockObject
+     * @return RuleSpecByCountryAndGroupIds|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createMockRuleQueryByCountryAndGroupIdsFor($country, array $groupIds)
+    private function createMockRuleSpecByCountryAndGroupIdsFor($country, array $groupIds)
     {
-        $mockRuleQuery = $this->getMock(QueryByCountryAndGroupIds::class, [], [], '', false);
-        $mockRuleQuery->expects($this->any())->method('getCountry')->willReturn(
+        $mockRuleSpec = $this->getMock(RuleSpecByCountryAndGroupIds::class, [], [], '', false);
+        $mockRuleSpec->expects($this->any())->method('getCountry')->willReturn(
             $this->getMock(Country::class, [], [], '', false)
         );
-        $mockRuleQuery->expects($this->any())->method('getCountryValue')->willReturn($country);
-        $mockRuleQuery->expects($this->any())->method('getCustomerGroupIds')->willReturn(
+        $mockRuleSpec->expects($this->any())->method('getCountryValue')->willReturn($country);
+        $mockRuleSpec->expects($this->any())->method('getCustomerGroupIds')->willReturn(
             [$this->getMock(CustomerGroupId::class, [], [], '', false)]
         );
-        $mockRuleQuery->expects($this->any())->method('getCustomerGroupIdValues')->willReturn($groupIds);
-        return $mockRuleQuery;
+        $mockRuleSpec->expects($this->any())->method('getCustomerGroupIdValues')->willReturn($groupIds);
+        return $mockRuleSpec;
     }
 
     /**

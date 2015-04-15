@@ -14,7 +14,13 @@ use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList;
 /**
  * @covers \VinaiKopp\PostCodeFilter\UseCases\AdminAddsRule
  * @uses   \VinaiKopp\PostCodeFilter\Query\RuleFound
- * @uses   \VinaiKopp\PostCodeFilter\Query\QueryByCountryAndGroupIds
+ * @uses   \VinaiKopp\PostCodeFilter\Query\RuleSpecByCountryAndGroupIds
+ * @uses   \VinaiKopp\PostCodeFilter\Command\RuleToAdd
+ * @uses   \VinaiKopp\PostCodeFilter\RuleComponents\Country
+ * @uses   \VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupId
+ * @uses   \VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList
+ * @uses   \VinaiKopp\PostCodeFilter\RuleComponents\PostCode
+ * @uses   \VinaiKopp\PostCodeFilter\RuleComponents\PostCodeList
  */
 class AdminAddsRuleTest extends \PHPUnit_Framework_TestCase
 {

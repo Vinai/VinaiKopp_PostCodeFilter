@@ -7,14 +7,14 @@ use VinaiKopp\PostCodeFilter\RuleComponents\Country;
 use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupId;
 
 /**
- * @covers \VinaiKopp\PostCodeFilter\Query\QueryByCountryAndGroupId
+ * @covers \VinaiKopp\PostCodeFilter\Query\RuleSpecByCountryAndGroupId
  */
-class QueryByCountryAndGroupIdTest extends \PHPUnit_Framework_TestCase
+class RuleSpecByCountryAndGroupIdTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var QueryByCountryAndGroupId
+     * @var RuleSpecByCountryAndGroupId
      */
-    private $ruleQuery;
+    private $ruleSpec;
 
     /**
      * @var CustomerGroupId|\PHPUnit_Framework_MockObject_MockObject
@@ -30,7 +30,7 @@ class QueryByCountryAndGroupIdTest extends \PHPUnit_Framework_TestCase
     {
         $this->stubCustomerGroupId = $this->getMock(CustomerGroupId::class, [], [], '', false);
         $this->stubCountry = $this->getMock(Country::class, [], [], '', false);
-        $this->ruleQuery = new QueryByCountryAndGroupId($this->stubCustomerGroupId, $this->stubCountry);
+        $this->ruleSpec = new RuleSpecByCountryAndGroupId($this->stubCustomerGroupId, $this->stubCountry);
     }
 
     /**
@@ -38,7 +38,7 @@ class QueryByCountryAndGroupIdTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnTheCustomerGroupIdInstance()
     {
-        $this->assertSame($this->stubCustomerGroupId, $this->ruleQuery->getCustomerGroupId());
+        $this->assertSame($this->stubCustomerGroupId, $this->ruleSpec->getCustomerGroupId());
     }
 
     /**
@@ -48,7 +48,7 @@ class QueryByCountryAndGroupIdTest extends \PHPUnit_Framework_TestCase
     {
         $groupIdValue = 2;
         $this->stubCustomerGroupId->expects($this->once())->method('getValue')->willReturn($groupIdValue);
-        $this->assertSame($groupIdValue, $this->ruleQuery->getCustomerGroupIdValue());
+        $this->assertSame($groupIdValue, $this->ruleSpec->getCustomerGroupIdValue());
     }
 
     /**
@@ -56,7 +56,7 @@ class QueryByCountryAndGroupIdTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnTheCountryInstance()
     {
-        $this->assertSame($this->stubCountry, $this->ruleQuery->getCountry());
+        $this->assertSame($this->stubCountry, $this->ruleSpec->getCountry());
     }
 
     /**
@@ -66,6 +66,6 @@ class QueryByCountryAndGroupIdTest extends \PHPUnit_Framework_TestCase
     {
         $countryValue = 'DE';
         $this->stubCountry->expects($this->once())->method('getValue')->willReturn($countryValue);
-        $this->assertSame($countryValue, $this->ruleQuery->getCountryValue());
+        $this->assertSame($countryValue, $this->ruleSpec->getCountryValue());
     }
 }

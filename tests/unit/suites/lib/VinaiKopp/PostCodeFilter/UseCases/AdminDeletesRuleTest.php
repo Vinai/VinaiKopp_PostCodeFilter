@@ -12,7 +12,11 @@ use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList;
 
 /**
  * @covers \VinaiKopp\PostCodeFilter\UseCases\AdminDeletesRule
- * @uses   \VinaiKopp\PostCodeFilter\Query\QueryByCountryAndGroupIds
+ * @uses   \VinaiKopp\PostCodeFilter\Command\RuleToDelete
+ * @uses   \VinaiKopp\PostCodeFilter\Query\RuleSpecByCountryAndGroupIds
+ * @uses   \VinaiKopp\PostCodeFilter\RuleComponents\Country
+ * @uses   \VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupId
+ * @uses   \VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList
  */
 class AdminDeletesRuleTest extends \PHPUnit_Framework_TestCase
 {
