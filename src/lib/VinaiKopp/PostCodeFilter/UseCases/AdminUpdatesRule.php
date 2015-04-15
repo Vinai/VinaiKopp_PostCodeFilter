@@ -6,16 +6,12 @@ namespace VinaiKopp\PostCodeFilter\UseCases;
 
 use VinaiKopp\PostCodeFilter\Command\RuleToAdd;
 use VinaiKopp\PostCodeFilter\Command\RuleToDelete;
-use VinaiKopp\PostCodeFilter\Command\RuleToUpdate;
 use VinaiKopp\PostCodeFilter\Command\RuleWriter;
 use VinaiKopp\PostCodeFilter\Exceptions\RuleDoesNotExistException;
 use VinaiKopp\PostCodeFilter\Query\RuleSpecByCountryAndGroupIds;
 use VinaiKopp\PostCodeFilter\Query\RuleNotFound;
 use VinaiKopp\PostCodeFilter\Query\RuleReader;
 use VinaiKopp\PostCodeFilter\Query\RuleResult;
-use VinaiKopp\PostCodeFilter\RuleComponents\Country;
-use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList;
-use VinaiKopp\PostCodeFilter\RuleComponents\PostCodeList;
 
 class AdminUpdatesRule
 {
@@ -36,16 +32,17 @@ class AdminUpdatesRule
     }
 
     /**
-     * @param RuleToUpdate $ruleToUpdate
+     * @param RuleToDelete $ruleToDelete
+     * @param RuleToAdd $ruleToAdd
      * @throws \Exception
      */
-    public function updateRule(RuleToUpdate $ruleToUpdate)
+    public function updateRule(RuleToDelete $ruleToDelete, RuleToAdd $ruleToAdd)
     {
         try {
             $this->ruleWriter->beginTransaction();
-            $this->validateOldRuleExists($ruleToUpdate);
-            $this->deleteOldRule($ruleToUpdate);
-            $this->insertNewRule($ruleToUpdate);
+            $this->validateOldRuleExists($ruleToDelete);
+            $this->ruleWriter->deleteRule($ruleToDelete);
+            $this->ruleWriter->createRule($ruleToAdd);
             $this->ruleWriter->commitTransaction();
         } catch (\Exception $e) {
             $this->ruleWriter->rollbackTransaction();
@@ -67,84 +64,52 @@ class AdminUpdatesRule
         array $newCustomerGroupIds,
         array $newPostCodes
     ) {
-        $this->updateRule(RuleToUpdate::createFromScalars(
-            $oldIso2Country,
-            $oldCustomerGroupIds,
-            $newIso2Country,
-            $newCustomerGroupIds,
-            $newPostCodes
-        ));
+        $this->updateRule(
+            RuleToDelete::createFromScalars($oldCustomerGroupIds, $oldIso2Country),
+            RuleToAdd::createFromScalars($newCustomerGroupIds, $newIso2Country, $newPostCodes)
+        );
     }
 
     /**
-     * @param RuleToUpdate $ruleToUpdate
+     * @param RuleToDelete $ruleToDelete
      * @throws RuleDoesNotExistException
      */
-    private function validateOldRuleExists(RuleToUpdate $ruleToUpdate)
+    private function validateOldRuleExists(RuleToDelete $ruleToDelete)
     {
-        $result = $this->fetchExistingRule($ruleToUpdate);
+        $ruleSpec = $this->createRuleSpecByCountryAndGroupIds($ruleToDelete);
+        $result = $this->fetchExistingRule($ruleSpec);
         if ($result instanceof RuleNotFound) {
-            throw $this->createRuleDoesNotExistException($ruleToUpdate);
+            throw $this->createRuleDoesNotExistException($ruleToDelete);
         }
     }
 
+    private function createRuleSpecByCountryAndGroupIds(RuleToDelete $ruleToDelete)
+    {
+        return new RuleSpecByCountryAndGroupIds(
+            $ruleToDelete->getCountry(),
+            $ruleToDelete->getCustomerGroupIds()
+        );
+    }
+
     /**
-     * @param RuleToUpdate $ruleToUpdate
+     * @param RuleSpecByCountryAndGroupIds $ruleSpec
      * @return RuleResult
      */
-    private function fetchExistingRule(RuleToUpdate $ruleToUpdate)
+    private function fetchExistingRule(RuleSpecByCountryAndGroupIds $ruleSpec)
     {
-        $ruleSpec = $this->createRuleSpecByCountryAndGroupIds(
-            $ruleToUpdate->getOldCountry(),
-            $ruleToUpdate->getOldCustomerGroupIds()
-        );
         return $this->ruleReader->findByCountryAndGroupIds($ruleSpec);
     }
 
     /**
-     * @param RuleToUpdate $ruleToUpdate
+     * @param RuleToDelete $ruleToDelete
      * @return RuleDoesNotExistException
      */
-    private function createRuleDoesNotExistException(RuleToUpdate $ruleToUpdate)
+    private function createRuleDoesNotExistException(RuleToDelete $ruleToDelete)
     {
         return new RuleDoesNotExistException(sprintf(
             'Update failure: there is no rule for the country "%s" and the customer group ID(s) "%s"',
-            $ruleToUpdate->getOldCountryValue(),
-            implode(', ', $ruleToUpdate->getOldCustomerGroupIdValues())
+            $ruleToDelete->getCountryValue(),
+            implode(', ', $ruleToDelete->getCustomerGroupIdValues())
         ));
-    }
-
-    private function createRuleSpecByCountryAndGroupIds(Country $country, CustomerGroupIdList $customerGroupIds)
-    {
-        return new RuleSpecByCountryAndGroupIds($country, $customerGroupIds);
-    }
-
-    private function deleteOldRule(RuleToUpdate $ruleToUpdate)
-    {
-        $ruleToDelete = $this->createRuleToDelete(
-            $ruleToUpdate->getOldCountry(),
-            $ruleToUpdate->getOldCustomerGroupIds()
-        );
-        $this->ruleWriter->deleteRule($ruleToDelete);
-    }
-
-    private function createRuleToDelete(Country $country, CustomerGroupIdList $customerGroupIds)
-    {
-        return new RuleToDelete($customerGroupIds, $country);
-    }
-
-    private function insertNewRule(RuleToUpdate $ruleToUpdate)
-    {
-        $ruleToAdd = $this->createRuleToAdd(
-            $ruleToUpdate->getNewCountry(),
-            $ruleToUpdate->getNewCustomerGroupIds(),
-            $ruleToUpdate->getNewPostCodes()
-        );
-        $this->ruleWriter->createRule($ruleToAdd);
-    }
-
-    private function createRuleToAdd(Country $country, CustomerGroupIdList $customerGroupIds, PostCodeList $postCodes)
-    {
-        return new RuleToAdd($customerGroupIds, $country, $postCodes);
     }
 }

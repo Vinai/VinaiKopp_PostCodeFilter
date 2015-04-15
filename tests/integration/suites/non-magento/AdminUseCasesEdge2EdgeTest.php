@@ -4,7 +4,6 @@ namespace VinaiKopp\PostCodeFilter;
 
 use VinaiKopp\PostCodeFilter\Command\RuleToAdd;
 use VinaiKopp\PostCodeFilter\Command\RuleToDelete;
-use VinaiKopp\PostCodeFilter\Command\RuleToUpdate;
 use VinaiKopp\PostCodeFilter\Query\RuleSpecByCountryAndGroupIds;
 use VinaiKopp\PostCodeFilter\Query\RuleFound;
 use VinaiKopp\PostCodeFilter\Query\RuleNotFound;
@@ -93,17 +92,12 @@ class AdminUseCasesEdge2EdgeTest extends \PHPUnit_Framework_TestCase
         $ruleRepository = new RuleRepository($storage);
         $updateRuleUseCase = new AdminUpdatesRule($ruleRepository, $ruleRepository);
         
-        $ruleToUpdate = new RuleToUpdate(
-            $this->country,
-            $this->customerGroupIds,
-            $this->newCountry,
-            $this->newCustomerGroupIds,
-            $this->newPostCodes
-        );
+        $ruleToDelete = new RuleToDelete($this->customerGroupIds, $this->country);
+        $ruleToAdd = new RuleToAdd($this->newCustomerGroupIds, $this->newCountry, $this->newPostCodes);
 
         $this->assertRuleInStorage($storage, $this->customerGroupIds, $this->country);
         
-        $updateRuleUseCase->updateRule($ruleToUpdate);
+        $updateRuleUseCase->updateRule($ruleToDelete, $ruleToAdd);
 
         $this->assertRuleNotInStorage($storage, $this->customerGroupIds, $this->country);
         $this->assertRuleInStorage($storage, $this->newCustomerGroupIds, $this->newCountry);

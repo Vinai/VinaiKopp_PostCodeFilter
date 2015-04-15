@@ -4,19 +4,19 @@
 namespace VinaiKopp\PostCodeFilter\UseCases;
 
 
-use VinaiKopp\PostCodeFilter\Command\RuleToUpdate;
+use VinaiKopp\PostCodeFilter\Command\RuleToAdd;
+use VinaiKopp\PostCodeFilter\Command\RuleToDelete;
 use VinaiKopp\PostCodeFilter\Command\RuleWriter;
 use VinaiKopp\PostCodeFilter\Query\RuleNotFound;
 use VinaiKopp\PostCodeFilter\Query\RuleReader;
+use VinaiKopp\PostCodeFilter\Query\RuleSpecByCountryAndGroupIds;
 use VinaiKopp\PostCodeFilter\RuleComponents\Country;
 use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList;
-use VinaiKopp\PostCodeFilter\RuleComponents\PostCodeList;
 
 /**
  * @covers \VinaiKopp\PostCodeFilter\UseCases\AdminUpdatesRule
  * @uses   \VinaiKopp\PostCodeFilter\Command\RuleToAdd
  * @uses   \VinaiKopp\PostCodeFilter\Command\RuleToDelete
- * @uses   \VinaiKopp\PostCodeFilter\Command\RuleToUpdate
  * @uses   \VinaiKopp\PostCodeFilter\Query\RuleSpecByCountryAndGroupIds
  * @uses   \VinaiKopp\PostCodeFilter\RuleComponents\Country
  * @uses   \VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupId
@@ -41,6 +41,29 @@ class AdminUpdatesRuleTest extends \PHPUnit_Framework_TestCase
      */
     private $mockRuleWriter;
 
+    /**
+     * @return RuleSpecByCountryAndGroupIds|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getMockRuleToDelete()
+    {
+        $testGroupIds = [1, 2, 3];
+        $mockRule = $this->getMock(RuleToDelete::class, [], [], '', false);
+        $mockRule->method('getCountry')
+            ->willReturn($this->getMock(Country::class, [], [], '', false));
+        $mockRule->method('getCustomerGroupIds')
+            ->willReturn($this->getMock(CustomerGroupIdList::class, [], [], '', false));
+        $mockRule->method('getCustomerGroupIdValues')->willReturn($testGroupIds);
+        return $mockRule;
+    }
+
+    /**
+     * @return RuleToAdd|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getMockRuleToAdd()
+    {
+        return $this->getMock(RuleToAdd::class, [], [], '', false);
+    }
+
     protected function setUp()
     {
         $this->mockRuleWriter = $this->getMock(RuleWriter::class);
@@ -55,7 +78,7 @@ class AdminUpdatesRuleTest extends \PHPUnit_Framework_TestCase
     {
         $this->mockRuleWriter->expects($this->once())->method('beginTransaction');
         $this->mockRuleWriter->expects($this->once())->method('commitTransaction');
-        $this->useCase->updateRule($this->getMockRuleToUpdate());
+        $this->useCase->updateRule($this->getMockRuleToDelete(), $this->getMockRuleToAdd());
     }
 
     /**
@@ -66,7 +89,7 @@ class AdminUpdatesRuleTest extends \PHPUnit_Framework_TestCase
     {
         $this->mockRuleReader->expects($this->once())->method('findByCountryAndGroupIds')
             ->willReturn($this->getMock(RuleNotFound::class, [], [], '', false));
-        $this->useCase->updateRule($this->getMockRuleToUpdate());
+        $this->useCase->updateRule($this->getMockRuleToDelete(), $this->getMockRuleToAdd());
     }
 
     /**
@@ -80,7 +103,7 @@ class AdminUpdatesRuleTest extends \PHPUnit_Framework_TestCase
         $this->mockRuleWriter->expects($this->once())->method('rollbackTransaction');
         
         try {
-            $this->useCase->updateRule($this->getMockRuleToUpdate());
+            $this->useCase->updateRule($this->getMockRuleToDelete(), $this->getMockRuleToAdd());
         } catch (\Exception $e) {
             $this->assertSame($testException, $e);
         }
@@ -91,8 +114,9 @@ class AdminUpdatesRuleTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldDeleteTheOldRule()
     {
-        $this->mockRuleWriter->expects($this->once())->method('deleteRule');
-        $this->useCase->updateRule($this->getMockRuleToUpdate());
+        $ruleSpecToDelete = $this->getMockRuleToDelete();
+        $this->mockRuleWriter->expects($this->once())->method('deleteRule')->with($ruleSpecToDelete);
+        $this->useCase->updateRule($ruleSpecToDelete, $this->getMockRuleToAdd());
     }
 
     /**
@@ -100,8 +124,9 @@ class AdminUpdatesRuleTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldAddTheNewRule()
     {
-        $this->mockRuleWriter->expects($this->once())->method('createRule');
-        $this->useCase->updateRule($this->getMockRuleToUpdate());
+        $mockRuleToAdd = $this->getMockRuleToAdd();
+        $this->mockRuleWriter->expects($this->once())->method('createRule')->with($mockRuleToAdd);
+        $this->useCase->updateRule($this->getMockRuleToDelete(), $mockRuleToAdd);
     }
 
     /**
@@ -122,24 +147,5 @@ class AdminUpdatesRuleTest extends \PHPUnit_Framework_TestCase
             $newCustomerGroupIds,
             $newPostCodes
         );
-    }
-
-    /**
-     * @return RuleToUpdate|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getMockRuleToUpdate()
-    {
-        $testGroupIds = [0, 1, 2];
-        $mockRuleToUpdate = $this->getMock(RuleToUpdate::class, [], [], '', false);
-        $mockRuleToUpdate->method('getOldCountry')->willReturn(Country::fromIso2Code('DE'));
-        $mockRuleToUpdate->method('getOldCustomerGroupIds')
-            ->willReturn($this->getMock(CustomerGroupIdList::class, [], [], '', false));
-        $mockRuleToUpdate->method('getOldCustomerGroupIdValues')->willReturn($testGroupIds);
-        $mockRuleToUpdate->method('getNewCountry')->willReturn(Country::fromIso2Code('NZ'));
-        $mockRuleToUpdate->method('getNewCustomerGroupIds')
-            ->willReturn($this->getMock(CustomerGroupIdList::class, [], [], '', false));
-        $mockRuleToUpdate->method('getNewPostCodes')
-            ->willReturn($this->getMock(PostCodeList::class, [], [], '', false));
-        return $mockRuleToUpdate;
     }
 }

@@ -2,13 +2,8 @@
 
 namespace VinaiKopp\PostCodeFilter;
 
-use VinaiKopp\PostCodeFilter\Command\RuleToAdd;
-use VinaiKopp\PostCodeFilter\Command\RuleToDelete;
-use VinaiKopp\PostCodeFilter\Command\RuleToUpdate;
-use VinaiKopp\PostCodeFilter\Command\RuleToUpdateTest;
 use VinaiKopp\PostCodeFilter\Query\RuleSpecByCountryAndGroupIds;
 use VinaiKopp\PostCodeFilter\UseCases\CustomerChecksPostCode;
-use VinaiKopp\PostCodeFilter\UseCases\CustomerChecksPostCodeTest;
 
 /**
  * @covers \VinaiKopp_PostCodeFilter_Helper_Data
