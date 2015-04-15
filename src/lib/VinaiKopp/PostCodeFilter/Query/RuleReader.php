@@ -6,18 +6,18 @@ interface RuleReader
 {
     /**
      * @param RuleSpecByCountryAndGroupId $ruleSpec
-     * @return RuleResult
+     * @return Rule
      */
     public function findByCountryAndGroupId(RuleSpecByCountryAndGroupId $ruleSpec);
 
     /**
      * @param RuleSpecByCountryAndGroupIds $ruleSpec
-     * @return RuleResult
+     * @return Rule
      */
     public function findByCountryAndGroupIds(RuleSpecByCountryAndGroupIds $ruleSpec);
 
     /**
-     * @return RuleResult[]
+     * @return Rule[]
      */
     public function findAll();
 }

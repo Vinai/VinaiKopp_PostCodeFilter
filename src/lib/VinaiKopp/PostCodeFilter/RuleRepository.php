@@ -11,7 +11,7 @@ use VinaiKopp\PostCodeFilter\Query\RuleNotFound;
 use VinaiKopp\PostCodeFilter\Query\RuleSpecByCountryAndGroupId;
 use VinaiKopp\PostCodeFilter\Query\RuleSpecByCountryAndGroupIds;
 use VinaiKopp\PostCodeFilter\Query\RuleReader;
-use VinaiKopp\PostCodeFilter\Query\RuleResult;
+use VinaiKopp\PostCodeFilter\Query\Rule;
 use VinaiKopp\PostCodeFilter\RuleComponents\Country;
 use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupId;
 use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList;
@@ -31,7 +31,7 @@ class RuleRepository implements RuleWriter, RuleReader
 
     /**
      * @param RuleSpecByCountryAndGroupId $ruleSpec
-     * @return RuleResult
+     * @return Rule
      */
     public function findByCountryAndGroupId(RuleSpecByCountryAndGroupId $ruleSpec)
     {
@@ -46,7 +46,7 @@ class RuleRepository implements RuleWriter, RuleReader
 
     /**
      * @param RuleSpecByCountryAndGroupIds $ruleSpec
-     * @return RuleResult
+     * @return Rule
      */
     public function findByCountryAndGroupIds(RuleSpecByCountryAndGroupIds $ruleSpec)
     {
@@ -60,7 +60,7 @@ class RuleRepository implements RuleWriter, RuleReader
     }
 
     /**
-     * @return RuleResult[]
+     * @return Rule[]
      */
     public function findAll()
     {

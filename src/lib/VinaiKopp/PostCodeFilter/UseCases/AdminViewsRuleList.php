@@ -3,7 +3,7 @@
 namespace VinaiKopp\PostCodeFilter\UseCases;
 
 use VinaiKopp\PostCodeFilter\Query\RuleReader;
-use VinaiKopp\PostCodeFilter\Query\RuleResult;
+use VinaiKopp\PostCodeFilter\Query\Rule;
 
 class AdminViewsRuleList
 {
@@ -18,7 +18,7 @@ class AdminViewsRuleList
     }
 
     /**
-     * @return RuleResult[]
+     * @return Rule[]
      */
     public function fetchAllRules()
     {

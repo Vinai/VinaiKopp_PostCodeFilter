@@ -8,7 +8,7 @@ use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList;
 use VinaiKopp\PostCodeFilter\RuleComponents\PostCode;
 use VinaiKopp\PostCodeFilter\RuleComponents\PostCodeList;
 
-class RuleFound implements RuleResult
+class RuleFound implements Rule
 {
     /**
      * @var string[]

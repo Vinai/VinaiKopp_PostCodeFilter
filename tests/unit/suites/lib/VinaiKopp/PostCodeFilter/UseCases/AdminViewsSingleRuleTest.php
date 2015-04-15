@@ -3,7 +3,7 @@
 namespace VinaiKopp\PostCodeFilter\UseCases;
 
 use VinaiKopp\PostCodeFilter\Query\RuleReader;
-use VinaiKopp\PostCodeFilter\Query\RuleResult;
+use VinaiKopp\PostCodeFilter\Query\Rule;
 
 /**
  * @covers \VinaiKopp\PostCodeFilter\UseCases\AdminViewsSingleRule
@@ -35,7 +35,7 @@ class AdminViewsSingleRuleTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnASingeRule()
     {
-        $stubResult = $this->getMock(RuleResult::class);
+        $stubResult = $this->getMock(Rule::class);
         $this->mockRuleReader->expects($this->once())->method('findByCountryAndGroupIds')->willReturn($stubResult);
         $this->assertEquals($stubResult, $this->useCase->fetchRule('DE', ['134', '256']));
     }

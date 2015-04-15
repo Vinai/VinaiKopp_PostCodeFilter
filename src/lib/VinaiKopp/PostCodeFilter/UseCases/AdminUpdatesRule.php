@@ -9,7 +9,7 @@ use VinaiKopp\PostCodeFilter\Exceptions\RuleDoesNotExistException;
 use VinaiKopp\PostCodeFilter\Query\RuleSpecByCountryAndGroupIds;
 use VinaiKopp\PostCodeFilter\Query\RuleNotFound;
 use VinaiKopp\PostCodeFilter\Query\RuleReader;
-use VinaiKopp\PostCodeFilter\Query\RuleResult;
+use VinaiKopp\PostCodeFilter\Query\Rule;
 
 class AdminUpdatesRule
 {
@@ -95,7 +95,7 @@ class AdminUpdatesRule
 
     /**
      * @param RuleSpecByCountryAndGroupIds $ruleSpec
-     * @return RuleResult
+     * @return Rule
      */
     private function fetchExistingRule(RuleSpecByCountryAndGroupIds $ruleSpec)
     {

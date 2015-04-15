@@ -3,7 +3,7 @@
 namespace VinaiKopp\PostCodeFilter\UseCases;
 
 use VinaiKopp\PostCodeFilter\Query\RuleReader;
-use VinaiKopp\PostCodeFilter\Query\RuleResult;
+use VinaiKopp\PostCodeFilter\Query\Rule;
 
 /**
  * @covers \VinaiKopp\PostCodeFilter\UseCases\CustomerChecksPostCode
@@ -39,13 +39,13 @@ class CustomerChecksPostCodeTest extends \PHPUnit_Framework_TestCase
     private $mockRuleReader;
 
     /**
-     * @var RuleResult|\PHPUnit_Framework_MockObject_MockObject
+     * @var Rule|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockRule;
 
     protected function setUp()
     {
-        $this->mockRule = $this->getMock(RuleResult::class);
+        $this->mockRule = $this->getMock(Rule::class);
         $this->mockRuleReader = $this->getMock(RuleReader::class);
         $this->mockRuleReader->method('findByCountryAndGroupId')->willReturn($this->mockRule);
         $this->useCase = new CustomerChecksPostCode($this->mockRuleReader);

@@ -42,7 +42,7 @@ class RuleFoundTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldBeARuleResult()
     {
-        $this->assertInstanceOf(RuleResult::class, $this->rule);
+        $this->assertInstanceOf(Rule::class, $this->rule);
     }
 
     /**

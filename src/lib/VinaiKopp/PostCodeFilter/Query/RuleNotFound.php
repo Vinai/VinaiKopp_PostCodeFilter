@@ -6,7 +6,7 @@ use VinaiKopp\PostCodeFilter\RuleComponents\Country;
 use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList;
 use VinaiKopp\PostCodeFilter\RuleComponents\PostCodeList;
 
-class RuleNotFound implements RuleResult
+class RuleNotFound implements Rule
 {
     /**
      * @var Country

@@ -3,7 +3,7 @@
 namespace VinaiKopp\PostCodeFilter\UseCases;
 
 use VinaiKopp\PostCodeFilter\Query\RuleReader;
-use VinaiKopp\PostCodeFilter\Query\RuleResult;
+use VinaiKopp\PostCodeFilter\Query\Rule;
 
 /**
  * @covers \VinaiKopp\PostCodeFilter\UseCases\AdminViewsRuleList
@@ -31,7 +31,7 @@ class AdminViewsRuleListTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldFetchAllRulesFromTheReader()
     {
-        $expected = [$this->getMock(RuleResult::class)];
+        $expected = [$this->getMock(Rule::class)];
         $this->mockRuleReader->expects($this->once())->method('findAll')->willReturn($expected);
         $this->assertSame($expected, $this->useCase->fetchAllRules());
     }

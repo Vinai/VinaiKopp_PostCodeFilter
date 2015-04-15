@@ -10,7 +10,7 @@ use VinaiKopp\PostCodeFilter\Query\RuleNotFound;
 use VinaiKopp\PostCodeFilter\Query\RuleSpecByCountryAndGroupId;
 use VinaiKopp\PostCodeFilter\Query\RuleSpecByCountryAndGroupIds;
 use VinaiKopp\PostCodeFilter\Query\RuleReader;
-use VinaiKopp\PostCodeFilter\Query\RuleResult;
+use VinaiKopp\PostCodeFilter\Query\Rule;
 use VinaiKopp\PostCodeFilter\RuleComponents\Country;
 use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupId;
 
@@ -79,7 +79,7 @@ class RuleRepositoryTest extends \PHPUnit_Framework_TestCase
     public function itShouldReturnARuleResultFromASpec()
     {
         $result = $this->repository->findByCountryAndGroupId($this->createMockRuleSpecByCountryAndGroupId());
-        $this->assertInstanceOf(RuleResult::class, $result);
+        $this->assertInstanceOf(Rule::class, $result);
     }
 
     /**

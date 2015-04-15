@@ -1,6 +1,7 @@
 <?php
 
-use VinaiKopp\PostCodeFilter\Query\RuleResult;
+
+use VinaiKopp\PostCodeFilter\Query\Rule;
 
 class VinaiKopp_PostCodeFilter_Block_Adminhtml_Postcodefilter_Edit_Form
     extends VinaiKopp_PostCodeFilter_Block_Adminhtml_Postcodefilter_New_Form
@@ -33,7 +34,7 @@ class VinaiKopp_PostCodeFilter_Block_Adminhtml_Postcodefilter_Edit_Form
     }
 
     /**
-     * @return RuleResult
+     * @return Rule
      */
     private function getRule()
     {

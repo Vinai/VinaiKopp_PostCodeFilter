@@ -1,6 +1,7 @@
 <?php
 
-use VinaiKopp\PostCodeFilter\Query\RuleResult;
+
+use VinaiKopp\PostCodeFilter\Query\Rule;
 use VinaiKopp\PostCodeFilter\UseCases\AdminViewsRuleList;
 
 class VinaiKopp_PostCodeFilter_Block_Adminhtml_Postcodefilter_Grid
@@ -101,10 +102,10 @@ class VinaiKopp_PostCodeFilter_Block_Adminhtml_Postcodefilter_Grid
     }
 
     /**
-     * @param RuleResult $rule
+     * @param Rule $rule
      * @return Varien_Object
      */
-    private function convertRuleToVarienObject(RuleResult $rule)
+    private function convertRuleToVarienObject(Rule $rule)
     {
         return new Varien_Object([
             'country' => $rule->getCountryValue(),
@@ -114,7 +115,7 @@ class VinaiKopp_PostCodeFilter_Block_Adminhtml_Postcodefilter_Grid
     }
 
     /**
-     * @return RuleResult[]
+     * @return Rule[]
      */
     private function getPostCodeFilterRules()
     {

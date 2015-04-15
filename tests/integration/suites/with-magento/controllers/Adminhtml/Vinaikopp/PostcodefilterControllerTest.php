@@ -2,7 +2,7 @@
 
 namespace VinaiKopp\PostCodeFilter;
 
-use VinaiKopp\PostCodeFilter\Query\RuleResult;
+use VinaiKopp\PostCodeFilter\Query\Rule;
 use VinaiKopp\PostCodeFilter\UseCases\AdminAddsRule;
 use VinaiKopp\PostCodeFilter\UseCases\AdminDeletesRule;
 use VinaiKopp\PostCodeFilter\UseCases\AdminUpdatesRule;
@@ -110,7 +110,7 @@ class PostcodefilterControllerTest extends ControllerTestCase
      */
     public function itShouldInstantiateTheFormContainerBlockForTheEditAction()
     {
-        $stubRule = $this->getMock(RuleResult::class);
+        $stubRule = $this->getMock(Rule::class);
         $stubRule->method('getCustomerGroupIdValues')->willReturn([4]);
         $stubRule->method('getCountryValue')->willReturn('QQ');
         $stubRule->method('getPostCodeValues')->willReturn(['A', 'B']);
