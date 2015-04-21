@@ -41,7 +41,7 @@ class VinaiKopp_PostCodeFilter_Block_Adminhtml_Postcodefilter_Grid
             'index' => 'customer_groups',
             'type' => 'options',
             'options' => $this->getCustomerGroupsOptions(),
-            'sortable' => false,
+            'sortable' => true,
         ]);
         $this->addColumn('post_codes', [
             'header' => $this->__('Allowed Post Codes'),
@@ -50,7 +50,7 @@ class VinaiKopp_PostCodeFilter_Block_Adminhtml_Postcodefilter_Grid
             'options' => ['required-dummy-option'],
             'show_missing_option_values' => true,
             'filter' => false,
-            'sortable' => false,
+            'sortable' => true,
         ]);
         $this->addColumn('action',
             array(

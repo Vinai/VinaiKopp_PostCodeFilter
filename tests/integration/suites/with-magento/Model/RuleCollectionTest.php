@@ -52,14 +52,25 @@ class RuleCollectionTest extends IntegrationTestCase
     }
 
     /**
+     * @param string[] $postCodes
+     * @return \PHPUnit_Framework_MockObject_MockObject|Rule
+     */
+    private function getMockRuleWithPostCodes(array $postCodes)
+    {
+        $stubRule = $this->getMock(Rule::class, [], [], '', false);
+        $stubRule->method('getPostCodeValues')->willReturn($postCodes);
+        return $stubRule;
+    }
+
+    /**
      * @param string $fieldName
      * @param string[] $expectedItemFieldValues
      */
     private function assertCollectionItemsFieldsMatch($fieldName, array $expectedItemFieldValues)
     {
         $zeroBasedItemArray = array_values($this->collection->getItems());
-        $valuesInCollectionItems = array_map(function (\Varien_Object $country) use ($fieldName) {
-            return $country->getData($fieldName);
+        $valuesInCollectionItems = array_map(function (\Varien_Object $item) use ($fieldName) {
+            return $item->getData($fieldName);
         }, $zeroBasedItemArray);
         $this->assertEquals($expectedItemFieldValues, $valuesInCollectionItems);
     }
@@ -195,6 +206,58 @@ class RuleCollectionTest extends IntegrationTestCase
             'matches-some' => ['1', [[0, 1, 2], [0, 1]]],
             'matches-one' => ['2', [[0, 1, 2]]],
             'no-match' => ['3', []],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider sortByCountryDataProvider
+     * @param string $direction
+     * @param string[] $expectedItemCountries
+     */
+    public function itShouldSortByCountry($direction, $expectedItemCountries)
+    {
+        $this->mockUseCase->method('fetchAllRules')->willReturn([
+            $this->getMockRuleWithCountry('BB'),
+            $this->getMockRuleWithCountry('CC'),
+            $this->getMockRuleWithCountry('AA'),
+            $this->getMockRuleWithCountry('BB'),
+        ]);
+        $this->collection->setOrder('country', $direction);
+        $this->assertCollectionItemsFieldsMatch('country', $expectedItemCountries);
+    }
+
+    public function sortByCountryDataProvider()
+    {
+        return [
+            'asc' => ['asc', ['AA', 'BB', 'BB', 'CC']],
+            'desc' => ['desc', ['CC', 'BB', 'BB', 'AA']],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider sortByCustomerGroupDataProvider
+     */
+    public function itShouldSortByCustomerGroupId($direction, $expectedItemGroupIds)
+    {
+        $this->mockUseCase->method('fetchAllRules')->willReturn([
+            $this->getMockRuleWithCustomerGroupIds([1, 2]),
+            $this->getMockRuleWithCustomerGroupIds([1, 3]),
+            $this->getMockRuleWithCustomerGroupIds([0, 1, 2]),
+            $this->getMockRuleWithCustomerGroupIds([1, 3]),
+            $this->getMockRuleWithCustomerGroupIds([2]),
+            $this->getMockRuleWithCustomerGroupIds([2, 3]),
+        ]);
+        $this->collection->setOrder('customer_groups', $direction);
+        $this->assertCollectionItemsFieldsMatch('customer_groups', $expectedItemGroupIds);
+    }
+
+    public function sortByCustomerGroupDataProvider()
+    {
+        return [
+            'asc' => ['asc', [[0, 1, 2], [1, 2], [1, 3], [1, 3], [2], [2, 3]]],
+            'desc' => ['desc', [[2, 3], [2], [1, 3], [1, 3], [1, 2], [0, 1, 2]]]
         ];
     }
 }

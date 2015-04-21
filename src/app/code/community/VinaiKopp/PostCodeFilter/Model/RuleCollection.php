@@ -5,6 +5,9 @@ use VinaiKopp\PostCodeFilter\UseCases\AdminViewsRuleList;
 
 class VinaiKopp_PostCodeFilter_Model_RuleCollection extends Varien_Data_Collection_Db
 {
+    const SORT_RESULT_A_LESS_THEN_B = -1;
+    const SORT_RESULT_A_MORE_THEN_B = 1;
+    
     private $filters = [];
 
     /**
@@ -36,28 +39,29 @@ class VinaiKopp_PostCodeFilter_Model_RuleCollection extends Varien_Data_Collecti
             array_map([$this, 'convertRuleToVarienObject'], $rules),
             [$this, 'applyFilters']
         );
-        //uasort($this->_items, [$this, 'applySorting']);
+        if ($this->_orders) {
+            uasort($this->_items, [$this, 'applySorting']);
+        }
         $this->_setIsLoaded(true);
         return $this;
     }
 
     private function applySorting(Varien_Object $a, Varien_Object $b)
     {
+        $result = 0;
         foreach ($this->_orders as $field => $direction) {
             $valueA = $a->getData($field);
             $valueB = $b->getData($field);
-            if (!is_string($valueA) || !is_string($valueB)) {
-                continue;
+            if (is_string($valueA) && is_string($valueB)) {
+                $result = $this->compareStringValues($valueA, $valueB, $direction);
+            } elseif (is_array($valueA) && is_array($valueB)) {
+                $result = $this->compareArrays($valueA, $valueB, $direction);
             }
-            $result = strnatcasecmp($valueA, $valueB);
-            if (0 === $result) {
-                continue;
+            if (0 !== $result) {
+                break;
             }
-            return self::SORT_ORDER_ASC == $direction ?
-                $result :
-                $result * -1;
         }
-        return 0;
+        return $result;
     }
 
     public function setUseCase(AdminViewsRuleList $useCase)
@@ -131,5 +135,47 @@ class VinaiKopp_PostCodeFilter_Model_RuleCollection extends Varien_Data_Collecti
         $compareValue = trim($quotedLikeExpression, "'");
         $pattern = str_replace(['%', '/'], ['.*', '\\/'], $compareValue);
         return '/^' . $pattern . '$/';
+    }
+
+    /**
+     * @param string $valueA
+     * @param string $valueB
+     * @param string $direction
+     * @return int
+     */
+    private function compareStringValues($valueA, $valueB, $direction)
+    {
+        $result = strnatcasecmp($valueA, $valueB);
+        return self::SORT_ORDER_ASC == $direction ?
+            $result :
+            $result * -1;
+    }
+
+    private function compareArrays(array $valueA, array $valueB, $direction)
+    {
+        $factor = self::SORT_ORDER_ASC == $direction ?
+            1 :
+            -1;
+        if (!$valueA) {
+            return self::SORT_RESULT_A_LESS_THEN_B * $factor;
+        }
+        if (!$valueB) {
+            return self::SORT_RESULT_A_MORE_THEN_B * $factor;
+        }
+        $arrayA = array_values($valueA);
+        $arrayB = array_values($valueB);
+        foreach ($arrayA as $i => $a) {
+            if (!isset($arrayB[$i])) {
+                return self::SORT_RESULT_A_MORE_THEN_B * $factor;
+            }
+            $result = $this->compareStringValues($a, $arrayB[$i], $direction);
+            if ($result !== 0) {
+                return $result;
+            }
+        }
+        if (count($arrayB) > count($arrayA)) {
+            return self::SORT_RESULT_A_LESS_THEN_B * $factor;
+        }
+        return 0;
     }
 }
