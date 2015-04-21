@@ -6,7 +6,7 @@ use VinaiKopp\PostCodeFilter\Command\RuleToAdd;
 use VinaiKopp\PostCodeFilter\RuleComponents\Country;
 use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList;
 use VinaiKopp\PostCodeFilter\RuleComponents\PostCodeList;
-use VinaiKopp\PostCodeFilter\UseCases\CustomerChecksPostCode;
+use VinaiKopp\PostCodeFilter\UseCases\CustomerSpecifiesShippingAddress;
 
 /**
  * @coversNothing
@@ -26,7 +26,7 @@ class CustomerUseCaseEdge2EdgeTest extends \PHPUnit_Framework_TestCase
     private $resellerGroupId = 6;
 
     /**
-     * @var CustomerChecksPostCode
+     * @var CustomerSpecifiesShippingAddress
      */
     private $customerUseCase;
 
@@ -39,7 +39,7 @@ class CustomerUseCaseEdge2EdgeTest extends \PHPUnit_Framework_TestCase
             Country::fromIso2Code($this->country),
             PostCodeList::fromArray([$this->allowedPostCode])
         ));
-        $this->customerUseCase = new CustomerChecksPostCode($repository);
+        $this->customerUseCase = new CustomerSpecifiesShippingAddress($repository);
     }
     
     public function allowedCustomerGroupIdProvider()
@@ -57,7 +57,7 @@ class CustomerUseCaseEdge2EdgeTest extends \PHPUnit_Framework_TestCase
      */
     public function testCustomerWithAllowedPostCodeMayOrder($groupId)
     {
-        $this->assertTrue($this->customerUseCase->mayOrder($groupId, $this->country, $this->allowedPostCode));
+        $this->assertTrue($this->customerUseCase->isAllowed($groupId, $this->country, $this->allowedPostCode));
     }
     
     /**
@@ -65,8 +65,8 @@ class CustomerUseCaseEdge2EdgeTest extends \PHPUnit_Framework_TestCase
      */
     public function testCustomerWithoutAllowedPostCodeMayNotOrder()
     {
-        $mayOrder = $this->customerUseCase->mayOrder($this->generalGroupId, $this->country, $this->forbiddenPostCode);
-        $this->assertFalse($mayOrder);
+        $isAllowed = $this->customerUseCase->isAllowed($this->generalGroupId, $this->country, $this->forbiddenPostCode);
+        $this->assertFalse($isAllowed);
     }
 
     /**
@@ -74,6 +74,6 @@ class CustomerUseCaseEdge2EdgeTest extends \PHPUnit_Framework_TestCase
      */
     public function testResellerMayOrder()
     {
-        $this->assertTrue($this->customerUseCase->mayOrder($this->resellerGroupId, $this->country, 123));
+        $this->assertTrue($this->customerUseCase->isAllowed($this->resellerGroupId, $this->country, 123));
     }
 }

@@ -1,21 +1,21 @@
 <?php
 
-use VinaiKopp\PostCodeFilter\UseCases\CustomerChecksPostCode;
+use VinaiKopp\PostCodeFilter\UseCases\CustomerSpecifiesShippingAddress;
 
 class VinaiKopp_PostCodeFilter_Frontend_CheckController extends Mage_Core_Controller_Front_Action
 {
     /**
-     * @var CustomerChecksPostCode
+     * @var CustomerSpecifiesShippingAddress
      */
     private $checkPostCodeUseCase;
 
-    public function setCheckPostCodeUseCase(CustomerChecksPostCode $checkPostCodeUseCase)
+    public function setCheckPostCodeUseCase(CustomerSpecifiesShippingAddress $checkPostCodeUseCase)
     {
         $this->checkPostCodeUseCase = $checkPostCodeUseCase;
     }
 
     /**
-     * @return CustomerChecksPostCode
+     * @return CustomerSpecifiesShippingAddress
      */
     private function getCheckPostCodeUseCase()
     {
@@ -123,6 +123,6 @@ class VinaiKopp_PostCodeFilter_Frontend_CheckController extends Mage_Core_Contro
      */
     private function mayOrder($customerGroupId, $country, $postCode)
     {
-        return $this->getCheckPostCodeUseCase()->mayOrder($customerGroupId, $country, $postCode);
+        return $this->getCheckPostCodeUseCase()->isAllowed($customerGroupId, $country, $postCode);
     }
 }

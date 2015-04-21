@@ -5,7 +5,7 @@ use VinaiKopp\PostCodeFilter\RuleComponents\Country;
 use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList;
 use VinaiKopp\PostCodeFilter\RuleRepository;
 use VinaiKopp\PostCodeFilter\RuleStorage;
-use VinaiKopp\PostCodeFilter\UseCases\CustomerChecksPostCode;
+use VinaiKopp\PostCodeFilter\UseCases\CustomerSpecifiesShippingAddress;
 
 class VinaiKopp_PostCodeFilter_Helper_Data extends Mage_Core_Helper_Abstract
 {
@@ -50,12 +50,12 @@ class VinaiKopp_PostCodeFilter_Helper_Data extends Mage_Core_Helper_Abstract
     }
 
     /**
-     * @return CustomerChecksPostCode
+     * @return CustomerSpecifiesShippingAddress
      */
     public function createCustomerChecksPostCodeUseCase()
     {
         $this->registerPostCodeFilterAutoloader();
-        return new CustomerChecksPostCode($this->getRuleReader());
+        return new CustomerSpecifiesShippingAddress($this->getRuleReader());
     }
 
     private function registerPostCodeFilterAutoloader()

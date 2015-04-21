@@ -2,7 +2,7 @@
 
 namespace VinaiKopp\PostCodeFilter;
 
-use VinaiKopp\PostCodeFilter\UseCases\CustomerChecksPostCode;
+use VinaiKopp\PostCodeFilter\UseCases\CustomerSpecifiesShippingAddress;
 
 /**
  * @covers \VinaiKopp_PostCodeFilter_Frontend_CheckController 
@@ -15,7 +15,7 @@ class CheckControllerTest extends ControllerTestCase
     private $controller;
 
     /**
-     * @var CustomerChecksPostCode|\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerSpecifiesShippingAddress|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockCheckPostCodeUseCase;
 
@@ -23,7 +23,7 @@ class CheckControllerTest extends ControllerTestCase
     {
         parent::setUp();
         $this->controller = $this->createControllerInstance(\VinaiKopp_PostCodeFilter_Frontend_CheckController::class);
-        $this->mockCheckPostCodeUseCase = $this->getMock(CustomerChecksPostCode::class, [], [], '', false);
+        $this->mockCheckPostCodeUseCase = $this->getMock(CustomerSpecifiesShippingAddress::class, [], [], '', false);
         $this->controller->setCheckPostCodeUseCase($this->mockCheckPostCodeUseCase);
     }
 
@@ -74,14 +74,14 @@ class CheckControllerTest extends ControllerTestCase
     /**
      * @test
      * @dataProvider useCaseResponseDataProvider
-     * @param bool $mayOrder
+     * @param bool $isAllowed
      * @param string $postCode
      * @param string $country
      * @param int|string $customerGroupId
      * @param string $message
      */
     public function itShouldSetTheReturnJsonResponse(
-        $mayOrder,
+        $isAllowed,
         $postCode,
         $country,
         $customerGroupId,
@@ -93,13 +93,13 @@ class CheckControllerTest extends ControllerTestCase
             ['customer_group_id', null, $customerGroupId]
         ]);
 
-        $this->mockCheckPostCodeUseCase->expects($this->once())->method('mayOrder')
+        $this->mockCheckPostCodeUseCase->expects($this->once())->method('isAllowed')
             ->with($customerGroupId, $country, $postCode)
-            ->willReturn($mayOrder);
+            ->willReturn($isAllowed);
         $expectedResponse = json_encode([
             'country' => $country,
             'postcode' => $postCode,
-            'may_order' => $mayOrder,
+            'may_order' => $isAllowed,
             'message' => $message
         ]);
         $this->getMockResponse()->expects($this->once())->method('setBody')->with($expectedResponse);
@@ -123,7 +123,7 @@ class CheckControllerTest extends ControllerTestCase
     public function itShouldHandleExceptionsGracefully()
     {
         $testException = new \Exception('Test Exception');
-        $this->mockCheckPostCodeUseCase->method('mayOrder')
+        $this->mockCheckPostCodeUseCase->method('isAllowed')
             ->willThrowException($testException);
         $expectedResponse = json_encode([
             'error' => $testException->getMessage(),

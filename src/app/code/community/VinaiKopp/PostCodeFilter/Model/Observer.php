@@ -1,12 +1,12 @@
 <?php
 
 use \Varien_Event_Observer as Event;
-use VinaiKopp\PostCodeFilter\UseCases\CustomerChecksPostCode;
+use VinaiKopp\PostCodeFilter\UseCases\CustomerSpecifiesShippingAddress;
 
 class VinaiKopp_PostCodeFilter_Model_Observer
 {
     /**
-     * @var CustomerChecksPostCode
+     * @var CustomerSpecifiesShippingAddress
      */
     private $checkPostCodeUseCase;
 
@@ -61,7 +61,7 @@ class VinaiKopp_PostCodeFilter_Model_Observer
      */
     private function quoteMayBeOrdered(Mage_Sales_Model_Quote $quote, Mage_Sales_Model_Quote_Address $shippingAddress)
     {
-        return $this->getCustomerChecksPostCodeUseCase()->mayOrder(
+        return $this->getCustomerChecksPostCodeUseCase()->isAllowed(
             (int)$quote->getCustomerGroupId(),
             $shippingAddress->getCountry(),
             $shippingAddress->getPostcode()
@@ -80,13 +80,13 @@ class VinaiKopp_PostCodeFilter_Model_Observer
 
     // @codeCoverageIgnoreEnd
 
-    public function setCustomerChecksPostCodeUseCase(CustomerChecksPostCode $customerChecksPostCode)
+    public function setCustomerChecksPostCodeUseCase(CustomerSpecifiesShippingAddress $customerChecksPostCode)
     {
         $this->checkPostCodeUseCase = $customerChecksPostCode;
     }
 
     /**
-     * @return CustomerChecksPostCode
+     * @return CustomerSpecifiesShippingAddress
      */
     private function getCustomerChecksPostCodeUseCase()
     {

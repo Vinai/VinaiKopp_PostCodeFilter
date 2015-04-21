@@ -3,7 +3,7 @@
 namespace VinaiKopp\PostCodeFilter;
 
 use VinaiKopp\PostCodeFilter\Query\RuleSpecByCountryAndGroupIds;
-use VinaiKopp\PostCodeFilter\UseCases\CustomerChecksPostCode;
+use VinaiKopp\PostCodeFilter\UseCases\CustomerSpecifiesShippingAddress;
 
 /**
  * @covers \VinaiKopp_PostCodeFilter_Helper_Data
@@ -60,6 +60,6 @@ class DataTest extends IntegrationTestCase
      */
     public function itShouldReturnTheCustomerChecksPostCodeUseCase()
     {
-        $this->assertInstanceOf(CustomerChecksPostCode::class, $this->helper->createCustomerChecksPostCodeUseCase());
+        $this->assertInstanceOf(CustomerSpecifiesShippingAddress::class, $this->helper->createCustomerChecksPostCodeUseCase());
     }
 }

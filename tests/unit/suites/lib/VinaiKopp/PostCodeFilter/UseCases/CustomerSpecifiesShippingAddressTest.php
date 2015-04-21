@@ -6,15 +6,15 @@ use VinaiKopp\PostCodeFilter\Query\RuleReader;
 use VinaiKopp\PostCodeFilter\Query\Rule;
 
 /**
- * @covers \VinaiKopp\PostCodeFilter\UseCases\CustomerChecksPostCode
+ * @covers \VinaiKopp\PostCodeFilter\UseCases\CustomerPlacesOrder
  * @uses   \VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupId
  * @uses   \VinaiKopp\PostCodeFilter\RuleComponents\Country
  * @uses   \VinaiKopp\PostCodeFilter\Query\RuleSpecByCountryAndGroupId
  */
-class CustomerChecksPostCodeTest extends \PHPUnit_Framework_TestCase
+class CustomerSpecifiesShippingAddressTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var CustomerChecksPostCode
+     * @var CustomerSpecifiesShippingAddress
      */
     private $useCase;
 
@@ -48,7 +48,7 @@ class CustomerChecksPostCodeTest extends \PHPUnit_Framework_TestCase
         $this->mockRule = $this->getMock(Rule::class);
         $this->mockRuleReader = $this->getMock(RuleReader::class);
         $this->mockRuleReader->method('findByCountryAndGroupId')->willReturn($this->mockRule);
-        $this->useCase = new CustomerChecksPostCode($this->mockRuleReader);
+        $this->useCase = new CustomerSpecifiesShippingAddress($this->mockRuleReader);
     }
     
     /**
@@ -57,7 +57,7 @@ class CustomerChecksPostCodeTest extends \PHPUnit_Framework_TestCase
     public function itShouldReturnFalseIfTheCustomerMayNotOrder()
     {
         $this->mockRule->expects($this->once())->method('isPostCodeAllowed')->with($this->postCode)->willReturn(false);
-        $this->assertFalse($this->useCase->mayOrder($this->customerGroupId, $this->country, $this->postCode));
+        $this->assertFalse($this->useCase->isAllowed($this->customerGroupId, $this->country, $this->postCode));
     }
 
     /**
@@ -66,6 +66,6 @@ class CustomerChecksPostCodeTest extends \PHPUnit_Framework_TestCase
     public function itShouldReturnTrueIfTheCustomerMayOrder()
     {
         $this->mockRule->expects($this->once())->method('isPostCodeAllowed')->with($this->postCode)->willReturn(true);
-        $this->useCase->mayOrder($this->customerGroupId, $this->country, $this->postCode);
+        $this->useCase->isAllowed($this->customerGroupId, $this->country, $this->postCode);
     }
 }

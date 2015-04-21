@@ -7,7 +7,7 @@ use VinaiKopp\PostCodeFilter\Query\RuleReader;
 use VinaiKopp\PostCodeFilter\RuleComponents\Country;
 use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupId;
 
-class CustomerChecksPostCode
+class CustomerSpecifiesShippingAddress
 {
     /**
      * @var RuleReader
@@ -25,7 +25,7 @@ class CustomerChecksPostCode
      * @param string $postCode
      * @return bool
      */
-    public function mayOrder($customerGroupId, $iso2country, $postCode)
+    public function isAllowed($customerGroupId, $iso2country, $postCode)
     {
         $spec = new RuleSpecByCountryAndGroupId(
             CustomerGroupId::fromInt($customerGroupId),
