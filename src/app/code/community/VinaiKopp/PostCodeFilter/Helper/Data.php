@@ -1,6 +1,6 @@
 <?php
 
-use VinaiKopp\PostCodeFilter\Query\RuleSpecByCountryAndGroupIds;
+use VinaiKopp\PostCodeFilter\ReadModel\RuleSpecByCountryAndGroupIds;
 use VinaiKopp\PostCodeFilter\RuleComponents\Country;
 use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList;
 use VinaiKopp\PostCodeFilter\RuleRepository;

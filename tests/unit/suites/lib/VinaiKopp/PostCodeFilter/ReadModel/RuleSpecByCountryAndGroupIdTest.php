@@ -1,12 +1,12 @@
 <?php
 
-namespace VinaiKopp\PostCodeFilter\Query;
+namespace VinaiKopp\PostCodeFilter\ReadModel;
 
 use VinaiKopp\PostCodeFilter\RuleComponents\Country;
 use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupId;
 
 /**
- * @covers \VinaiKopp\PostCodeFilter\Query\RuleSpecByCountryAndGroupId
+ * @covers \VinaiKopp\PostCodeFilter\ReadModel\RuleSpecByCountryAndGroupId
  */
 class RuleSpecByCountryAndGroupIdTest extends \PHPUnit_Framework_TestCase
 {

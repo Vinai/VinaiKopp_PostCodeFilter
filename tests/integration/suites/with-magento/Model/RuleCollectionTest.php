@@ -2,7 +2,7 @@
 
 namespace VinaiKopp\PostCodeFilter;
 
-use VinaiKopp\PostCodeFilter\Query\Rule;
+use VinaiKopp\PostCodeFilter\ReadModel\Rule;
 use VinaiKopp\PostCodeFilter\UseCases\AdminViewsRuleList;
 
 /**

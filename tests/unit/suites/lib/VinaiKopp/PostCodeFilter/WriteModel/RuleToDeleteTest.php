@@ -1,12 +1,12 @@
 <?php
 
-namespace VinaiKopp\PostCodeFilter\Command;
+namespace VinaiKopp\PostCodeFilter\WriteModel;
 
 use VinaiKopp\PostCodeFilter\RuleComponents\Country;
 use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList;
 
 /**
- * @covers \VinaiKopp\PostCodeFilter\Command\RuleToDelete
+ * @covers \VinaiKopp\PostCodeFilter\WriteModel\RuleToDelete
  * @uses   \VinaiKopp\PostCodeFilter\RuleComponents\Country
  * @uses   \VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupId
  * @uses   \VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList

@@ -1,6 +1,6 @@
 <?php
 
-namespace VinaiKopp\PostCodeFilter\Query;
+namespace VinaiKopp\PostCodeFilter\ReadModel;
 
 interface RuleReader
 {

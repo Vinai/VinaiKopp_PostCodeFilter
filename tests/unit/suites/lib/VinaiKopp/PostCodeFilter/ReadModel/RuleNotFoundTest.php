@@ -1,13 +1,13 @@
 <?php
 
-namespace VinaiKopp\PostCodeFilter\Query;
+namespace VinaiKopp\PostCodeFilter\ReadModel;
 
 use VinaiKopp\PostCodeFilter\RuleComponents\Country;
 use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList;
 use VinaiKopp\PostCodeFilter\RuleComponents\PostCodeList;
 
 /**
- * @covers \VinaiKopp\PostCodeFilter\Query\RuleNotFound
+ * @covers \VinaiKopp\PostCodeFilter\ReadModel\RuleNotFound
  * @uses   \VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList
  * @uses   \VinaiKopp\PostCodeFilter\RuleComponents\PostCodeList
  */

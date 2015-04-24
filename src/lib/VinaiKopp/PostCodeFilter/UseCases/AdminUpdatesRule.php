@@ -2,14 +2,14 @@
 
 namespace VinaiKopp\PostCodeFilter\UseCases;
 
-use VinaiKopp\PostCodeFilter\Command\RuleToAdd;
-use VinaiKopp\PostCodeFilter\Command\RuleToDelete;
-use VinaiKopp\PostCodeFilter\Command\RuleWriter;
+use VinaiKopp\PostCodeFilter\WriteModel\RuleToAdd;
+use VinaiKopp\PostCodeFilter\WriteModel\RuleToDelete;
+use VinaiKopp\PostCodeFilter\WriteModel\RuleWriter;
 use VinaiKopp\PostCodeFilter\Exceptions\RuleDoesNotExistException;
-use VinaiKopp\PostCodeFilter\Query\RuleSpecByCountryAndGroupIds;
-use VinaiKopp\PostCodeFilter\Query\RuleNotFound;
-use VinaiKopp\PostCodeFilter\Query\RuleReader;
-use VinaiKopp\PostCodeFilter\Query\Rule;
+use VinaiKopp\PostCodeFilter\ReadModel\RuleSpecByCountryAndGroupIds;
+use VinaiKopp\PostCodeFilter\ReadModel\RuleNotFound;
+use VinaiKopp\PostCodeFilter\ReadModel\RuleReader;
+use VinaiKopp\PostCodeFilter\ReadModel\Rule;
 
 class AdminUpdatesRule
 {

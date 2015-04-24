@@ -2,22 +2,22 @@
 
 namespace VinaiKopp\PostCodeFilter;
 
-use VinaiKopp\PostCodeFilter\Command\RuleToAdd;
-use VinaiKopp\PostCodeFilter\Command\RuleToDelete;
-use VinaiKopp\PostCodeFilter\Command\RuleWriter;
-use VinaiKopp\PostCodeFilter\Query\RuleFound;
-use VinaiKopp\PostCodeFilter\Query\RuleNotFound;
-use VinaiKopp\PostCodeFilter\Query\RuleSpecByCountryAndGroupId;
-use VinaiKopp\PostCodeFilter\Query\RuleSpecByCountryAndGroupIds;
-use VinaiKopp\PostCodeFilter\Query\RuleReader;
-use VinaiKopp\PostCodeFilter\Query\Rule;
+use VinaiKopp\PostCodeFilter\WriteModel\RuleToAdd;
+use VinaiKopp\PostCodeFilter\WriteModel\RuleToDelete;
+use VinaiKopp\PostCodeFilter\WriteModel\RuleWriter;
+use VinaiKopp\PostCodeFilter\ReadModel\RuleFound;
+use VinaiKopp\PostCodeFilter\ReadModel\RuleNotFound;
+use VinaiKopp\PostCodeFilter\ReadModel\RuleSpecByCountryAndGroupId;
+use VinaiKopp\PostCodeFilter\ReadModel\RuleSpecByCountryAndGroupIds;
+use VinaiKopp\PostCodeFilter\ReadModel\RuleReader;
+use VinaiKopp\PostCodeFilter\ReadModel\Rule;
 use VinaiKopp\PostCodeFilter\RuleComponents\Country;
 use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupId;
 
 /**
  * @covers \VinaiKopp\PostCodeFilter\RuleRepository
- * @uses   \VinaiKopp\PostCodeFilter\Query\RuleNotFound
- * @uses   \VinaiKopp\PostCodeFilter\Query\RuleFound
+ * @uses   \VinaiKopp\PostCodeFilter\ReadModel\RuleNotFound
+ * @uses   \VinaiKopp\PostCodeFilter\ReadModel\RuleFound
  * @uses   \VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupId
  * @uses   \VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList
  * @uses   \VinaiKopp\PostCodeFilter\RuleComponents\Country
@@ -97,7 +97,10 @@ class RuleRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function storageFoundNoMatchesReturnValueProvider()
     {
-        return ['empty array' => [[]], 'null' => [null]];
+        return [
+            'empty array' => [[]],
+            'null' => [null]
+        ];
     }
 
     /**

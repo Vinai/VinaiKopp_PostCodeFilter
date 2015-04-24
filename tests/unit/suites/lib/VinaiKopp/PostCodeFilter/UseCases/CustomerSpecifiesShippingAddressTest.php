@@ -2,14 +2,14 @@
 
 namespace VinaiKopp\PostCodeFilter\UseCases;
 
-use VinaiKopp\PostCodeFilter\Query\RuleReader;
-use VinaiKopp\PostCodeFilter\Query\Rule;
+use VinaiKopp\PostCodeFilter\ReadModel\RuleReader;
+use VinaiKopp\PostCodeFilter\ReadModel\Rule;
 
 /**
- * @covers \VinaiKopp\PostCodeFilter\UseCases\CustomerPlacesOrder
+ * @covers \VinaiKopp\PostCodeFilter\UseCases\CustomerSpecifiesShippingAddress
  * @uses   \VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupId
  * @uses   \VinaiKopp\PostCodeFilter\RuleComponents\Country
- * @uses   \VinaiKopp\PostCodeFilter\Query\RuleSpecByCountryAndGroupId
+ * @uses   \VinaiKopp\PostCodeFilter\ReadModel\RuleSpecByCountryAndGroupId
  */
 class CustomerSpecifiesShippingAddressTest extends \PHPUnit_Framework_TestCase
 {

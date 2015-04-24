@@ -2,7 +2,7 @@
 
 namespace VinaiKopp\PostCodeFilter;
 
-use VinaiKopp\PostCodeFilter\Query\RuleSpecByCountryAndGroupIds;
+use VinaiKopp\PostCodeFilter\ReadModel\RuleSpecByCountryAndGroupIds;
 use VinaiKopp\PostCodeFilter\UseCases\CustomerSpecifiesShippingAddress;
 
 /**

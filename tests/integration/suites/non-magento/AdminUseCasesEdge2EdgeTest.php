@@ -2,11 +2,11 @@
 
 namespace VinaiKopp\PostCodeFilter;
 
-use VinaiKopp\PostCodeFilter\Command\RuleToAdd;
-use VinaiKopp\PostCodeFilter\Command\RuleToDelete;
-use VinaiKopp\PostCodeFilter\Query\RuleSpecByCountryAndGroupIds;
-use VinaiKopp\PostCodeFilter\Query\RuleFound;
-use VinaiKopp\PostCodeFilter\Query\RuleNotFound;
+use VinaiKopp\PostCodeFilter\WriteModel\RuleToAdd;
+use VinaiKopp\PostCodeFilter\WriteModel\RuleToDelete;
+use VinaiKopp\PostCodeFilter\ReadModel\RuleSpecByCountryAndGroupIds;
+use VinaiKopp\PostCodeFilter\ReadModel\RuleFound;
+use VinaiKopp\PostCodeFilter\ReadModel\RuleNotFound;
 use VinaiKopp\PostCodeFilter\RuleComponents\Country;
 use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList;
 use VinaiKopp\PostCodeFilter\RuleComponents\PostCodeList;

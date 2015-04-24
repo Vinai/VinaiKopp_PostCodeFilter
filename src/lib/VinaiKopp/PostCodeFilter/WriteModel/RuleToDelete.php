@@ -1,47 +1,38 @@
 <?php
 
-namespace VinaiKopp\PostCodeFilter\Command;
+namespace VinaiKopp\PostCodeFilter\WriteModel;
 
 use VinaiKopp\PostCodeFilter\RuleComponents\Country;
 use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList;
-use VinaiKopp\PostCodeFilter\RuleComponents\PostCodeList;
 
-class RuleToAdd
+class RuleToDelete
 {
     /**
      * @var CustomerGroupIdList
      */
     private $customerGroupIds;
-
+    
     /**
-     * @var string
+     * @var Country
      */
     private $country;
 
-    /**
-     * @var PostCodeList
-     */
-    private $postCodes;
-
-    public function __construct(CustomerGroupIdList $customerGroupIds, Country $country, PostCodeList $postCodes)
+    public function __construct(CustomerGroupIdList $customerGroupIds, Country $country)
     {
         $this->customerGroupIds = $customerGroupIds;
         $this->country = $country;
-        $this->postCodes = $postCodes;
     }
 
     /**
      * @param int[] $customerGroupIds
-     * @param string $iso2Country
-     * @param string[] $postCodes
-     * @return RuleToAdd
+     * @param string $iso2country
+     * @return RuleToDelete
      */
-    public static function createFromScalars(array $customerGroupIds, $iso2Country, array $postCodes)
+    public static function createFromScalars(array $customerGroupIds, $iso2country)
     {
         return new self(
             CustomerGroupIdList::fromArray($customerGroupIds),
-            Country::fromIso2Code($iso2Country),
-            PostCodeList::fromArray($postCodes)
+            Country::fromIso2Code($iso2country)
         );
     }
 
@@ -75,13 +66,5 @@ class RuleToAdd
     public function getCountryValue()
     {
         return $this->country->getValue();
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getPostCodeValues()
-    {
-        return $this->postCodes->getValues();
     }
 }

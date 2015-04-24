@@ -2,12 +2,12 @@
 
 namespace VinaiKopp\PostCodeFilter\UseCases;
 
-use VinaiKopp\PostCodeFilter\Command\RuleToAdd;
-use VinaiKopp\PostCodeFilter\Command\RuleWriter;
+use VinaiKopp\PostCodeFilter\WriteModel\RuleToAdd;
+use VinaiKopp\PostCodeFilter\WriteModel\RuleWriter;
 use VinaiKopp\PostCodeFilter\Exceptions\RuleForGroupAndCountryAlreadyExistsException;
-use VinaiKopp\PostCodeFilter\Query\RuleSpecByCountryAndGroupIds;
-use VinaiKopp\PostCodeFilter\Query\RuleFound;
-use VinaiKopp\PostCodeFilter\Query\RuleReader;
+use VinaiKopp\PostCodeFilter\ReadModel\RuleSpecByCountryAndGroupIds;
+use VinaiKopp\PostCodeFilter\ReadModel\RuleFound;
+use VinaiKopp\PostCodeFilter\ReadModel\RuleReader;
 
 class AdminAddsRule
 {

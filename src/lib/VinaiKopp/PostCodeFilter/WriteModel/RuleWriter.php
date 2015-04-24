@@ -1,6 +1,6 @@
 <?php
 
-namespace VinaiKopp\PostCodeFilter\Command;
+namespace VinaiKopp\PostCodeFilter\WriteModel;
 
 interface RuleWriter
 {

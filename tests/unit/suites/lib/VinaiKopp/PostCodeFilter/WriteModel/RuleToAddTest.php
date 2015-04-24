@@ -1,6 +1,6 @@
 <?php
 
-namespace VinaiKopp\PostCodeFilter\Command;
+namespace VinaiKopp\PostCodeFilter\WriteModel;
 
 use VinaiKopp\PostCodeFilter\RuleComponents\Country;
 use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList;
@@ -8,7 +8,7 @@ use VinaiKopp\PostCodeFilter\RuleComponents\PostCode;
 use VinaiKopp\PostCodeFilter\RuleComponents\PostCodeList;
 
 /**
- * @covers \VinaiKopp\PostCodeFilter\Command\RuleToAdd
+ * @covers \VinaiKopp\PostCodeFilter\WriteModel\RuleToAdd
  * @uses   \VinaiKopp\PostCodeFilter\RuleComponents\Country
  * @uses   \VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupId
  * @uses   \VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList

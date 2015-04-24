@@ -1,6 +1,6 @@
 <?php
 
-namespace VinaiKopp\PostCodeFilter\Query;
+namespace VinaiKopp\PostCodeFilter\ReadModel;
 
 use VinaiKopp\PostCodeFilter\RuleComponents\Country;
 use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList;
@@ -8,7 +8,7 @@ use VinaiKopp\PostCodeFilter\RuleComponents\PostCode;
 use VinaiKopp\PostCodeFilter\RuleComponents\PostCodeList;
 
 /**
- * @covers \VinaiKopp\PostCodeFilter\Query\RuleFound
+ * @covers \VinaiKopp\PostCodeFilter\ReadModel\RuleFound
  * @uses   \VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupId
  * @uses   \VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList
  * @uses   \VinaiKopp\PostCodeFilter\RuleComponents\Country

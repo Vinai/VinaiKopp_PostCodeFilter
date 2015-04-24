@@ -2,9 +2,9 @@
 
 namespace VinaiKopp\PostCodeFilter\UseCases;
 
-use VinaiKopp\PostCodeFilter\Query\RuleSpecByCountryAndGroupIds;
-use VinaiKopp\PostCodeFilter\Query\RuleReader;
-use VinaiKopp\PostCodeFilter\Query\Rule;
+use VinaiKopp\PostCodeFilter\ReadModel\RuleSpecByCountryAndGroupIds;
+use VinaiKopp\PostCodeFilter\ReadModel\RuleReader;
+use VinaiKopp\PostCodeFilter\ReadModel\Rule;
 use VinaiKopp\PostCodeFilter\RuleComponents\Country;
 use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList;
 

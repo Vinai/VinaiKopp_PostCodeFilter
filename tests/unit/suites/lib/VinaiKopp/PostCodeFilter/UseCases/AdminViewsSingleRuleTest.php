@@ -2,12 +2,12 @@
 
 namespace VinaiKopp\PostCodeFilter\UseCases;
 
-use VinaiKopp\PostCodeFilter\Query\RuleReader;
-use VinaiKopp\PostCodeFilter\Query\Rule;
+use VinaiKopp\PostCodeFilter\ReadModel\RuleReader;
+use VinaiKopp\PostCodeFilter\ReadModel\Rule;
 
 /**
  * @covers \VinaiKopp\PostCodeFilter\UseCases\AdminViewsSingleRule
- * @uses   \VinaiKopp\PostCodeFilter\Query\RuleSpecByCountryAndGroupIds
+ * @uses   \VinaiKopp\PostCodeFilter\ReadModel\RuleSpecByCountryAndGroupIds
  * @uses   \VinaiKopp\PostCodeFilter\RuleComponents\Country
  * @uses   \VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupId
  * @uses   \VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList

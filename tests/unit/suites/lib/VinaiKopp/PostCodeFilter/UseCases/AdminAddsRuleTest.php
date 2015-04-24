@@ -2,18 +2,18 @@
 
 namespace VinaiKopp\PostCodeFilter\UseCases;
 
-use VinaiKopp\PostCodeFilter\Query\RuleFound;
-use VinaiKopp\PostCodeFilter\Query\RuleReader;
+use VinaiKopp\PostCodeFilter\ReadModel\RuleFound;
+use VinaiKopp\PostCodeFilter\ReadModel\RuleReader;
 use VinaiKopp\PostCodeFilter\RuleComponents\Country;
-use VinaiKopp\PostCodeFilter\Command\RuleToAdd;
-use VinaiKopp\PostCodeFilter\Command\RuleWriter;
+use VinaiKopp\PostCodeFilter\WriteModel\RuleToAdd;
+use VinaiKopp\PostCodeFilter\WriteModel\RuleWriter;
 use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList;
 
 /**
  * @covers \VinaiKopp\PostCodeFilter\UseCases\AdminAddsRule
- * @uses   \VinaiKopp\PostCodeFilter\Query\RuleFound
- * @uses   \VinaiKopp\PostCodeFilter\Query\RuleSpecByCountryAndGroupIds
- * @uses   \VinaiKopp\PostCodeFilter\Command\RuleToAdd
+ * @uses   \VinaiKopp\PostCodeFilter\ReadModel\RuleFound
+ * @uses   \VinaiKopp\PostCodeFilter\ReadModel\RuleSpecByCountryAndGroupIds
+ * @uses   \VinaiKopp\PostCodeFilter\WriteModel\RuleToAdd
  * @uses   \VinaiKopp\PostCodeFilter\RuleComponents\Country
  * @uses   \VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupId
  * @uses   \VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList

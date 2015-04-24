@@ -2,16 +2,16 @@
 
 namespace VinaiKopp\PostCodeFilter;
 
-use VinaiKopp\PostCodeFilter\Command\RuleToAdd;
-use VinaiKopp\PostCodeFilter\Command\RuleToDelete;
-use VinaiKopp\PostCodeFilter\Command\RuleWriter;
+use VinaiKopp\PostCodeFilter\WriteModel\RuleToAdd;
+use VinaiKopp\PostCodeFilter\WriteModel\RuleToDelete;
+use VinaiKopp\PostCodeFilter\WriteModel\RuleWriter;
 use VinaiKopp\PostCodeFilter\Exceptions\NonMatchingRecordInResultException;
-use VinaiKopp\PostCodeFilter\Query\RuleFound;
-use VinaiKopp\PostCodeFilter\Query\RuleNotFound;
-use VinaiKopp\PostCodeFilter\Query\RuleSpecByCountryAndGroupId;
-use VinaiKopp\PostCodeFilter\Query\RuleSpecByCountryAndGroupIds;
-use VinaiKopp\PostCodeFilter\Query\RuleReader;
-use VinaiKopp\PostCodeFilter\Query\Rule;
+use VinaiKopp\PostCodeFilter\ReadModel\RuleFound;
+use VinaiKopp\PostCodeFilter\ReadModel\RuleNotFound;
+use VinaiKopp\PostCodeFilter\ReadModel\RuleSpecByCountryAndGroupId;
+use VinaiKopp\PostCodeFilter\ReadModel\RuleSpecByCountryAndGroupIds;
+use VinaiKopp\PostCodeFilter\ReadModel\RuleReader;
+use VinaiKopp\PostCodeFilter\ReadModel\Rule;
 use VinaiKopp\PostCodeFilter\RuleComponents\Country;
 use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupId;
 use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList;
@@ -41,7 +41,7 @@ class RuleRepository implements RuleWriter, RuleReader
         if (empty($postCodes)) {
             return new RuleNotFound($ruleSpec->getCountry());
         }
-        return $this->createRuleFound([$ruleSpec->getCustomerGroupIdValue()], $ruleSpec->getCountryValue(), $postCodes);
+        return $this->createRuleFoundInstance([$ruleSpec->getCustomerGroupIdValue()], $ruleSpec->getCountryValue(), $postCodes);
     }
 
     /**
@@ -64,7 +64,7 @@ class RuleRepository implements RuleWriter, RuleReader
      */
     public function findAll()
     {
-        return $this->createRulesFromRecords($this->storage->findAllRules());
+        return $this->convertRecordsToRuleInstances($this->storage->findAllRules());
     }
 
     public function createRule(RuleToAdd $ruleToAdd)
@@ -89,11 +89,11 @@ class RuleRepository implements RuleWriter, RuleReader
      * @param array[] $records
      * @return RuleFound[]
      */
-    private function createRulesFromRecords(array $records)
+    private function convertRecordsToRuleInstances(array $records)
     {
         $combinedRecords = $this->mergeMatchingCountryAndPostcodes($records);
         return array_map(function (array $record) {
-            return $this->createRuleFound($record['customer_group_ids'], $record['country'], $record['post_codes']);
+            return $this->createRuleFoundInstance($record['customer_group_ids'], $record['country'], $record['post_codes']);
         }, $combinedRecords);
     }
 
@@ -130,7 +130,7 @@ class RuleRepository implements RuleWriter, RuleReader
      * @param string[]|int[] $postCodes
      * @return RuleFound
      */
-    private function createRuleFound(array $customerGroupIds, $country, array $postCodes)
+    private function createRuleFoundInstance(array $customerGroupIds, $country, array $postCodes)
     {
         return new RuleFound(
             CustomerGroupIdList::fromArray($customerGroupIds),
@@ -154,7 +154,7 @@ class RuleRepository implements RuleWriter, RuleReader
             $customerGroupIds[] = $record['customer_group_id'];
             $postCodes = $record['post_codes'];
         }
-        return $this->createRuleFound($customerGroupIds, $ruleSpec->getCountryValue(), $postCodes);
+        return $this->createRuleFoundInstance($customerGroupIds, $ruleSpec->getCountryValue(), $postCodes);
     }
 
     /**
