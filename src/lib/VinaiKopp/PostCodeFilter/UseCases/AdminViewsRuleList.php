@@ -7,6 +7,9 @@ use VinaiKopp\PostCodeFilter\ReadModel\Rule;
 
 class AdminViewsRuleList
 {
+    const SORT_DESCENDING = 'DESC';
+    const SORT_ASCENDING = 'ASC';
+    
     /**
      * @var RuleReader
      */
@@ -17,6 +20,11 @@ class AdminViewsRuleList
      */
     private $filters = [];
 
+    /**
+     * @var callable
+     */
+    private $sortOrder;
+
     public function __construct(RuleReader $ruleReader)
     {
         $this->ruleReader = $ruleReader;
@@ -25,10 +33,10 @@ class AdminViewsRuleList
     /**
      * @return Rule[]
      */
-    public function fetchAllRules()
+    public function fetchRules()
     {
         $allRules = $this->ruleReader->findAll();
-        return $this->applyFilters($allRules);
+        return $this->applySorting($this->applyFilters($allRules));
     }
 
     /**
@@ -76,5 +84,83 @@ class AdminViewsRuleList
         return array_reduce($this->filters, function (array $remainingRules, \Closure $filterToApply) {
             return array_filter($remainingRules, $filterToApply);
         }, $unfilteredRules);
+    }
+
+    /**
+     * @param string $ascOrDesc
+     */
+    public function sortByCountry($ascOrDesc)
+    {
+        $factor = $this->getSortDirectionFactor($ascOrDesc);
+        $this->sortOrder = function(Rule $ruleA, Rule $ruleB) use ($factor) {
+            return strnatcasecmp($ruleA->getCountryValue(), $ruleB->getCountryValue()) * $factor;
+        };
+    }
+
+    /**
+     * @param string $ascOrDesc
+     */
+    public function sortByCustomerGroupId($ascOrDesc)
+    {
+        $factor = $this->getSortDirectionFactor($ascOrDesc);
+        $this->sortOrder = function(Rule $ruleA, Rule $ruleB) use ($factor) {
+            $result = $this->compareArrays($ruleA->getCustomerGroupIdValues(), $ruleB->getCustomerGroupIdValues());
+            return $result * $factor;
+        };
+    }
+
+    /**
+     * @param string $ascOrDesc
+     */
+    public function sortByPostCode($ascOrDesc)
+    {
+        $factor = $this->getSortDirectionFactor($ascOrDesc);
+        $this->sortOrder = function(Rule $ruleA, Rule $ruleB) use ($factor) {
+            $result = $this->compareArrays($ruleA->getPostCodeValues(), $ruleB->getPostCodeValues());
+            return $result * $factor;
+        };
+    }
+
+    /**
+     * @param Rule[] $unsortedRules
+     * @return Rule[]
+     */
+    private function applySorting(array $unsortedRules)
+    {
+        $rulesToSort = $unsortedRules;
+        if ($this->sortOrder) {
+            uasort($rulesToSort, $this->sortOrder);
+        }
+        return $rulesToSort;
+    }
+
+    /**
+     * @param string $ascOrDesc
+     * @return int
+     */
+    private function getSortDirectionFactor($ascOrDesc)
+    {
+        return strtoupper($ascOrDesc) === self::SORT_DESCENDING
+            ? -1
+            : 1;
+    }
+
+    private function compareArrays(array $valueA, array $valueB)
+    {
+        $arrayA = array_values($valueA);
+        $arrayB = array_values($valueB);
+        foreach ($arrayA as $i => $a) {
+            if (!isset($arrayB[$i])) {
+                return 1;
+            }
+            $result = strnatcasecmp($a, $arrayB[$i]);
+            if ($result !== 0) {
+                return $result;
+            }
+        }
+        if (count($arrayB) > count($arrayA)) {
+            return -1;
+        }
+        return 0;
     }
 }

@@ -84,7 +84,7 @@ class RuleCollectionTest extends IntegrationTestCase
      */
     public function itShouldAddAnItemForEachRuleReturnedByTheStorage()
     {
-        $this->mockUseCase->expects($this->atLeastOnce())->method('fetchAllRules')->willReturn(
+        $this->mockUseCase->expects($this->atLeastOnce())->method('fetchRules')->willReturn(
             [$this->getMock(Rule::class)]
         );
         $this->collection->load();
@@ -97,7 +97,7 @@ class RuleCollectionTest extends IntegrationTestCase
      */
     public function itShouldBeLoadedAfterLoadWasCalled()
     {
-        $this->mockUseCase->method('fetchAllRules')->willReturn([]);
+        $this->mockUseCase->method('fetchRules')->willReturn([]);
         $this->collection->load();
         $this->assertTrue($this->collection->isLoaded());
     }
@@ -107,7 +107,7 @@ class RuleCollectionTest extends IntegrationTestCase
      */
     public function itShouldReturnTheNumberOfItemsLoaded()
     {
-        $this->mockUseCase->method('fetchAllRules')->willReturn([
+        $this->mockUseCase->method('fetchRules')->willReturn([
             $this->getMockRuleWithCountry('XX')
         ]);
         $this->assertSame(1, $this->collection->getSize());
@@ -119,7 +119,7 @@ class RuleCollectionTest extends IntegrationTestCase
      */
     public function itShouldThrowAnExceptionForUnsupportedFilterOperators()
     {
-        $this->mockUseCase->method('fetchAllRules')->willReturn([
+        $this->mockUseCase->method('fetchRules')->willReturn([
             $this->getMockRuleWithCountry('BB'),
             $this->getMockRuleWithCountry('AA'),
             $this->getMockRuleWithCountry('CC'),
@@ -134,7 +134,7 @@ class RuleCollectionTest extends IntegrationTestCase
     public function itShouldSetCountryFiltersOnTheUseCase()
     {
         $filterValue = 'filter value';
-        $this->mockUseCase->method('fetchAllRules')->willReturn([]);
+        $this->mockUseCase->method('fetchRules')->willReturn([]);
         $this->mockUseCase->expects($this->once())->method('setCountryFilter')->with($filterValue);
         
         $filterBlock = new \Mage_Adminhtml_Block_Widget_Grid_Column_Filter_Text();
@@ -149,7 +149,7 @@ class RuleCollectionTest extends IntegrationTestCase
     public function itShouldSetCustomerGroupIdFiltersOnTheUseCase()
     {
         $filterValue = '3';
-        $this->mockUseCase->method('fetchAllRules')->willReturn([]);
+        $this->mockUseCase->method('fetchRules')->willReturn([]);
         $this->mockUseCase->expects($this->once())->method('setCustomerGroupIdFilter')->with($filterValue);
         
         $filterBlock = new \Mage_Adminhtml_Block_Widget_Grid_Column_Filter_Select();
@@ -164,7 +164,7 @@ class RuleCollectionTest extends IntegrationTestCase
     public function itShouldSetPostCodeFiltersOnTheUseCase()
     {
         $filterValue = 'ABC';
-        $this->mockUseCase->method('fetchAllRules')->willReturn([]);
+        $this->mockUseCase->method('fetchRules')->willReturn([]);
         $this->mockUseCase->expects($this->once())->method('setPostCodeFilter')->with($filterValue);
 
         $filterBlock = new \Mage_Adminhtml_Block_Widget_Grid_Column_Filter_Text();
@@ -175,53 +175,24 @@ class RuleCollectionTest extends IntegrationTestCase
     
     /**
      * @test
-     * @dataProvider sortByCountryDataProvider
-     * @param string $direction
-     * @param string[] $expectedItemCountries
+     * @dataProvider sortDirectionDataProvider
      */
-    public function itShouldSortByCountry($direction, $expectedItemCountries)
+    public function itShouldCallTheSortByCountryMethodOnTheUseCase($sortMethod, $collectionField, $direction)
     {
-        $this->mockUseCase->method('fetchAllRules')->willReturn([
-            $this->getMockRuleWithCountry('BB'),
-            $this->getMockRuleWithCountry('CC'),
-            $this->getMockRuleWithCountry('AA'),
-            $this->getMockRuleWithCountry('BB'),
-        ]);
-        $this->collection->setOrder('country', $direction);
-        $this->assertCollectionItemsFieldsMatch('country', $expectedItemCountries);
+        $this->mockUseCase->method('fetchRules')->willReturn([]);
+        $this->mockUseCase->expects($this->once())->method($sortMethod)->with($direction);
+        $this->collection->setOrder($collectionField, $direction);
     }
 
-    public function sortByCountryDataProvider()
+    public function sortDirectionDataProvider()
     {
         return [
-            'asc' => ['asc', ['AA', 'BB', 'BB', 'CC']],
-            'desc' => ['desc', ['CC', 'BB', 'BB', 'AA']],
-        ];
-    }
-
-    /**
-     * @test
-     * @dataProvider sortByCustomerGroupDataProvider
-     */
-    public function itShouldSortByCustomerGroupId($direction, $expectedItemGroupIds)
-    {
-        $this->mockUseCase->method('fetchAllRules')->willReturn([
-            $this->getMockRuleWithCustomerGroupIds([1, 2]),
-            $this->getMockRuleWithCustomerGroupIds([1, 3]),
-            $this->getMockRuleWithCustomerGroupIds([0, 1, 2]),
-            $this->getMockRuleWithCustomerGroupIds([1, 3]),
-            $this->getMockRuleWithCustomerGroupIds([2]),
-            $this->getMockRuleWithCustomerGroupIds([2, 3]),
-        ]);
-        $this->collection->setOrder('customer_groups', $direction);
-        $this->assertCollectionItemsFieldsMatch('customer_groups', $expectedItemGroupIds);
-    }
-
-    public function sortByCustomerGroupDataProvider()
-    {
-        return [
-            'asc' => ['asc', [[0, 1, 2], [1, 2], [1, 3], [1, 3], [2], [2, 3]]],
-            'desc' => ['desc', [[2, 3], [2], [1, 3], [1, 3], [1, 2], [0, 1, 2]]]
+            'country asc' => ['sortByCountry', 'country', 'asc'],
+            'country desc' => ['sortByCountry', 'country', 'desc'],
+            'customer_groups asc' => ['sortByCustomerGroupId', 'customer_groups', 'asc'],
+            'customer_groups desc' => ['sortByCustomerGroupId', 'customer_groups', 'desc'],
+            'post_codes asc' => ['sortByPostCode', 'post_codes', 'asc'],
+            'post_codes desc' => ['sortByPostCode', 'post_codes', 'desc'],
         ];
     }
 }
