@@ -18,6 +18,12 @@ class VinaiKopp_PostCodeFilter_Model_RuleCollection extends Varien_Data_Collecti
         parent::__construct($conn ?: null);
     }
 
+    /**
+     * @param string $field
+     * @param null|string[] $condition
+     * @return $this
+     * @throws Mage_Core_Exception
+     */
     public function addFieldToFilter($field, $condition = null)
     {
         switch (key($condition) . ' ' . $field) {
@@ -43,6 +49,11 @@ class VinaiKopp_PostCodeFilter_Model_RuleCollection extends Varien_Data_Collecti
         return $this;
     }
 
+    /**
+     * @param string $field
+     * @param string $direction
+     * @return $this
+     */
     public function setOrder($field, $direction = self::SORT_ORDER_DESC)
     {
         switch ($field) {
@@ -56,6 +67,17 @@ class VinaiKopp_PostCodeFilter_Model_RuleCollection extends Varien_Data_Collecti
                 $this->getUseCase()->sortByPostCode($direction);
                 break;
         }
+        return $this;
+    }
+
+    /**
+     * @param string $field
+     * @param string $direction
+     * @return VinaiKopp_PostCodeFilter_Model_RuleCollection
+     */
+    public function addOrder($field, $direction = self::SORT_ORDER_DESC)
+    {
+        return $this->setOrder($field, $direction);
     }
 
 
