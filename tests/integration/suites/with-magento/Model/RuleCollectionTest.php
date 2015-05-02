@@ -21,15 +21,6 @@ class RuleCollectionTest extends IntegrationTestCase
     private $mockUseCase;
 
     /**
-     * @return Rule|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getStubRule()
-    {
-        $stubRule = $this->getMock(Rule::class);
-        return $stubRule;
-    }
-
-    /**
      * @param string $iso2country
      * @return \PHPUnit_Framework_MockObject_MockObject|Rule
      */
@@ -48,17 +39,6 @@ class RuleCollectionTest extends IntegrationTestCase
     {
         $stubRule = $this->getMock(Rule::class, [], [], '', false);
         $stubRule->method('getCustomerGroupIdValues')->willReturn($customerGroupIds);
-        return $stubRule;
-    }
-
-    /**
-     * @param string[] $postCodes
-     * @return \PHPUnit_Framework_MockObject_MockObject|Rule
-     */
-    private function getMockRuleWithPostCodes(array $postCodes)
-    {
-        $stubRule = $this->getMock(Rule::class, [], [], '', false);
-        $stubRule->method('getPostCodeValues')->willReturn($postCodes);
         return $stubRule;
     }
 
@@ -102,10 +82,10 @@ class RuleCollectionTest extends IntegrationTestCase
     /**
      * @test
      */
-    public function itShouldAddAnItemsIfStorageReturnsARule()
+    public function itShouldAddAnItemForEachRuleReturnedByTheStorage()
     {
         $this->mockUseCase->expects($this->atLeastOnce())->method('fetchAllRules')->willReturn(
-            [$this->getStubRule()]
+            [$this->getMock(Rule::class)]
         );
         $this->collection->load();
         $this->assertCount(1, $this->collection);
@@ -150,65 +130,49 @@ class RuleCollectionTest extends IntegrationTestCase
 
     /**
      * @test
-     * @dataProvider countryFilterDataProvider
-     * @param string $filterValue
-     * @param string[] $expectedItemCountries
      */
-    public function itShouldReturnRulesMatchingCountryFilters($filterValue, $expectedItemCountries)
+    public function itShouldSetCountryFiltersOnTheUseCase()
     {
-        $this->mockUseCase->method('fetchAllRules')->willReturn([
-            $this->getMockRuleWithCountry('BB'),
-            $this->getMockRuleWithCountry('AA'),
-            $this->getMockRuleWithCountry('CC'),
-        ]);
+        $filterValue = 'filter value';
+        $this->mockUseCase->method('fetchAllRules')->willReturn([]);
+        $this->mockUseCase->expects($this->once())->method('setCountryFilter')->with($filterValue);
+        
         $filterBlock = new \Mage_Adminhtml_Block_Widget_Grid_Column_Filter_Text();
         $filterBlock->setData('value', $filterValue);
         $this->collection->addFieldToFilter('country', $filterBlock->getCondition());
         $this->collection->load();
-        $this->assertCollectionItemsFieldsMatch('country', $expectedItemCountries);
-    }
-
-    public function countryFilterDataProvider()
-    {
-        return [
-            'match-partial' => ['A', ['AA']],
-            'match-exact' => ['AA', ['AA']],
-            'no-match' => ['foo', []],
-            'empty-filter' => ['', ['BB', 'AA', 'CC']],
-        ];
     }
 
     /**
      * @test
-     * @dataProvider customerGroupIdsFilterDataProvider
-     * @param string $filterValue
-     * @param array[] $expectedItemGroupIds
      */
-    public function itShouldMatchIfAnItemsCustomerGroupMatchesTheFilter($filterValue, array $expectedItemGroupIds)
+    public function itShouldSetCustomerGroupIdFiltersOnTheUseCase()
     {
-        $this->mockUseCase->method('fetchAllRules')->willReturn([
-            $this->getMockRuleWithCustomerGroupIds([0, 1, 2]),
-            $this->getMockRuleWithCustomerGroupIds([0, 1]),
-            $this->getMockRuleWithCustomerGroupIds([0]),
-        ]);
+        $filterValue = '3';
+        $this->mockUseCase->method('fetchAllRules')->willReturn([]);
+        $this->mockUseCase->expects($this->once())->method('setCustomerGroupIdFilter')->with($filterValue);
+        
         $filterBlock = new \Mage_Adminhtml_Block_Widget_Grid_Column_Filter_Select();
         $filterBlock->setData('value', $filterValue);
         $this->collection->addFieldToFilter('customer_groups', $filterBlock->getCondition());
         $this->collection->load();
-        $this->assertCollectionItemsFieldsMatch('customer_groups', $expectedItemGroupIds);
     }
 
-    public function customerGroupIdsFilterDataProvider()
+    /**
+     * @test
+     */
+    public function itShouldSetPostCodeFiltersOnTheUseCase()
     {
-        return [
-            'empty-filter' => ['', [[0, 1, 2], [0, 1], [0]]],
-            'matches-all' => ['0', [[0, 1, 2], [0, 1], [0]]],
-            'matches-some' => ['1', [[0, 1, 2], [0, 1]]],
-            'matches-one' => ['2', [[0, 1, 2]]],
-            'no-match' => ['3', []],
-        ];
-    }
+        $filterValue = 'ABC';
+        $this->mockUseCase->method('fetchAllRules')->willReturn([]);
+        $this->mockUseCase->expects($this->once())->method('setPostCodeFilter')->with($filterValue);
 
+        $filterBlock = new \Mage_Adminhtml_Block_Widget_Grid_Column_Filter_Text();
+        $filterBlock->setData('value', $filterValue);
+        $this->collection->addFieldToFilter('post_codes', $filterBlock->getCondition());
+        $this->collection->load();
+    }
+    
     /**
      * @test
      * @dataProvider sortByCountryDataProvider

@@ -8,8 +8,6 @@ class VinaiKopp_PostCodeFilter_Model_RuleCollection extends Varien_Data_Collecti
     const SORT_RESULT_A_LESS_THEN_B = -1;
     const SORT_RESULT_A_MORE_THEN_B = 1;
     
-    private $filters = [];
-
     /**
      * @var AdminViewsRuleList
      */
@@ -22,7 +20,26 @@ class VinaiKopp_PostCodeFilter_Model_RuleCollection extends Varien_Data_Collecti
 
     public function addFieldToFilter($field, $condition = null)
     {
-        $this->filters[] = [$field, $condition];
+        switch (key($condition) . ' ' . $field) {
+            case 'like country':
+                $filterString = $this->convertLikeZendExprToString(current($condition));
+                $this->getUseCase()->setCountryFilter($filterString);
+                break;
+            case 'eq customer_groups':
+                $filterString = current($condition);
+                $this->getUseCase()->setCustomerGroupIdFilter($filterString);
+                break;
+            case 'like post_codes':
+                $filterString = $this->convertLikeZendExprToString(current($condition));
+                $this->getUseCase()->setPostCodeFilter($filterString);
+                break;
+            default:
+                Mage::throwException(
+                    sprintf('Unsupported filter: %s %s', key($condition), $field)
+                );
+                // @codeCoverageIgnoreStart 
+        }
+        // @codeCoverageIgnoreEnd
         return $this;
     }
 
@@ -35,10 +52,7 @@ class VinaiKopp_PostCodeFilter_Model_RuleCollection extends Varien_Data_Collecti
     public function load($printQuery = false, $logQuery = false)
     {
         $rules = $this->getAllPostCodeFilterRules();
-        $this->_items = array_filter(
-            array_map([$this, 'convertRuleToVarienObject'], $rules),
-            [$this, 'applyFilters']
-        );
+        $this->_items = array_map([$this, 'convertRuleToVarienObject'], $rules);
         if ($this->_orders) {
             uasort($this->_items, [$this, 'applySorting']);
         }
@@ -101,40 +115,13 @@ class VinaiKopp_PostCodeFilter_Model_RuleCollection extends Varien_Data_Collecti
             'post_codes' => $rule->getPostCodeValues()
         ]);
     }
-
-
-    private function applyFilters(Varien_Object $object)
-    {
-        return array_reduce($this->filters, function ($acc, array $filter) use ($object) {
-            list ($field, $condition) = $filter;
-            return $acc && $this->isMatchingFilter($object->getData($field), $condition);
-        }, true);
-    }
-
-    private function isMatchingFilter($value, array $condition)
-    {
-        $operator = key($condition);
-        if ('eq' == $operator) {
-            $filterValue = current($condition);
-            return is_array($value) ?
-                in_array($filterValue, $value) :
-                $filterValue == $value;
-        }
-        if ('like' == $operator) {
-            $pattern = $this->convertLikeZendExprToRegex(current($condition));
-            return preg_match($pattern, $value);
-        }
-        Mage::throwException(sprintf('Filter operator "%s" not implemented', $operator));
-    }
-
+    
     /**
      * @return mixed
      */
-    private function convertLikeZendExprToRegex($quotedLikeExpression)
+    private function convertLikeZendExprToString($quotedLikeExpression)
     {
-        $compareValue = trim($quotedLikeExpression, "'");
-        $pattern = str_replace(['%', '/'], ['.*', '\\/'], $compareValue);
-        return '/^' . $pattern . '$/';
+        return trim($quotedLikeExpression, "'%");
     }
 
     /**
