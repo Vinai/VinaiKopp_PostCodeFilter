@@ -8,7 +8,7 @@ use VinaiKopp\PostCodeFilter\UseCases\AdminViewsRuleList;
 /**
  * @covers \VinaiKopp_PostCodeFilter_Model_RuleCollection
  */
-class RuleCollectionTest extends IntegrationTestCase
+class RuleCollectionTest extends Mage1IntegrationTestCase
 {
     /**
      * @var \VinaiKopp_PostCodeFilter_Model_RuleCollection

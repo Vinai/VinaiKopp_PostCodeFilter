@@ -2,7 +2,7 @@
 
 namespace VinaiKopp\PostCodeFilter;
 
-class IntegrationTestCase extends \PHPUnit_Framework_TestCase
+class Mage1IntegrationTestCase extends \PHPUnit_Framework_TestCase
 {
     public static function initMagento()
     {

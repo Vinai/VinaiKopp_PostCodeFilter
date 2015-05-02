@@ -5,7 +5,7 @@ namespace VinaiKopp\PostCodeFilter;
 /**
  * @coversNothing
  */
-class DbTest extends IntegrationTestCase
+class DbTest extends Mage1IntegrationTestCase
 {
     private $tableName;
 

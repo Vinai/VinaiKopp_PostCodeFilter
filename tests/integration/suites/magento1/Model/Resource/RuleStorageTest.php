@@ -5,7 +5,7 @@ namespace VinaiKopp\PostCodeFilter;
 /**
  * @covers \VinaiKopp_PostCodeFilter_Model_Resource_RuleStorage
  */
-class RuleStorageTest extends IntegrationTestCase
+class RuleStorageTest extends Mage1IntegrationTestCase
 {
     /**
      * @var \VinaiKopp_PostCodeFilter_Model_Resource_RuleStorage

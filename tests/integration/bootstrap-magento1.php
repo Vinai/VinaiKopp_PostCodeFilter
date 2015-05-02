@@ -4,6 +4,6 @@
 require __DIR__ . '/bootstrap.php';
 
 $_SESSION = [];
-VinaiKopp\PostCodeFilter\IntegrationTestCase::initMagento();
+VinaiKopp\PostCodeFilter\Mage1IntegrationTestCase::initMagento();
 
 //@codeCoverageIgnoreEnd

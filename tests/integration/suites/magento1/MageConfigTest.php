@@ -5,7 +5,7 @@ namespace VinaiKopp\PostCodeFilter;
 /**
  * @coversNothing
  */
-class MageConfigTest extends IntegrationTestCase
+class MageConfigTest extends Mage1IntegrationTestCase
 {
     private $moduleName = 'VinaiKopp_PostCodeFilter';
 

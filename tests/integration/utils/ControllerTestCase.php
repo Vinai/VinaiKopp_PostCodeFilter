@@ -2,7 +2,7 @@
 
 namespace VinaiKopp\PostCodeFilter;
 
-abstract class ControllerTestCase extends IntegrationTestCase
+abstract class ControllerTestCase extends Mage1IntegrationTestCase
 {
     /**
      * @var  \Mage_Core_Controller_Request_Http|\PHPUnit_Framework_MockObject_MockObject

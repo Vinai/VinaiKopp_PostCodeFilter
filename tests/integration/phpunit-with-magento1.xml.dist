@@ -5,7 +5,7 @@
         backupGlobals="false"
         backupStaticAttributes="false"
         cacheTokens="false"
-        bootstrap="bootstrap-magento.php"
+        bootstrap="bootstrap-magento1.php"
         colors="true"
         convertErrorsToExceptions="true"
         convertNoticesToExceptions="true"
@@ -26,7 +26,7 @@
         beStrictAboutTestSize="false"
         verbose="false">
     <testsuite name="VinaiKopp\PostCodeFilter Magento Integration Tests">
-        <directory>suites/with-magento</directory>
+        <directory>suites/magento1</directory>
     </testsuite>
     <filter>
         <whitelist>

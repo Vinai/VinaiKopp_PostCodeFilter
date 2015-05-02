@@ -26,7 +26,7 @@
         beStrictAboutTestSize="false"
         verbose="false">
     <testsuite name="VinaiKopp\PostCodeFilter Integration Tests Without Magento">
-        <directory>suites/non-magento</directory>
+        <directory>suites/without-magento</directory>
     </testsuite>
     <filter>
         <whitelist>

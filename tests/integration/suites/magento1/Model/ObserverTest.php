@@ -8,7 +8,7 @@ use VinaiKopp\PostCodeFilter\UseCases\CustomerSpecifiesShippingAddress;
 /**
  * @covers \VinaiKopp_PostCodeFilter_Model_Observer
  */
-class ObserverTest extends IntegrationTestCase
+class ObserverTest extends Mage1IntegrationTestCase
 {
     /**
      * @var \VinaiKopp_PostCodeFilter_Model_Observer
