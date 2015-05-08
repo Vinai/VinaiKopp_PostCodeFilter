@@ -17,5 +17,13 @@
         "VinaiKopp/PostCodeFilter"
       ]
     ]
+  },
+  "autoload": {
+    "psr-4": {
+      "VinaiKopp\\PostCodeFilter\\": [
+        "src/lib/VinaiKopp/PostCodeFilter",
+        "src/mage2/"
+      ]
+    }
   }
 }
