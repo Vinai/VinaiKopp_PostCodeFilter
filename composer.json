@@ -1,14 +1,19 @@
 {
   "name": "vinaikopp/postcodefilter",
   "description": "ShippingAddress PostCodeFilter Magento Extension",
+  "authors": [
+    {
+      "name": "Vinai Kopp",
+      "email": "vinai@netzarbeiter.com"
+    }
+  ],
   "require": {
     "php": "~5.5.0|~5.6.0",
-    "magento/magento-composer-installer": "*"
+    "magento/magento-composer-installer": ">=0.0.1,<100"
   },
   "type": "magento2-module",
-  "version": "0.1.0",
   "license": [
-    "BSD-3.0"
+    "BSD-3-Clause"
   ],
   "extra": {
     "map": [
