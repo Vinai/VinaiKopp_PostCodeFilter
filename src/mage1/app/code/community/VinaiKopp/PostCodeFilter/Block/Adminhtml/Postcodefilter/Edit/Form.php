@@ -27,14 +27,14 @@ class VinaiKopp_PostCodeFilter_Block_Adminhtml_Postcodefilter_Edit_Form
     {
         $rule = $this->getRule();
         return [
-            'country' => $rule->getCountryValue(),
-            'customer_group_ids' => $rule->getCustomerGroupIdValues(),
-            'post_codes' => implode(PHP_EOL, $rule->getPostCodeValues())
+            'country' => $rule->getData('country'),
+            'customer_group_ids' => $rule->getData('customer_groups'),
+            'post_codes' => implode(PHP_EOL, $rule->getData('post_codes'))
         ];
     }
 
     /**
-     * @return Rule
+     * @return Varien_Object
      */
     private function getRule()
     {

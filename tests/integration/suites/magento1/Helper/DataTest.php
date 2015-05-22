@@ -47,17 +47,6 @@ class DataTest extends Mage1IntegrationTestCase
     /**
      * @test
      */
-    public function itShouldReturnARuleSpecByCountry()
-    {
-        $this->assertInstanceOf(
-            RuleSpecByCountryAndGroupIds::class,
-            $this->helper->createRuleSpecForGroupIdsAndCountry([11], 'DE')
-        );
-    }
-
-    /**
-     * @test
-     */
     public function itShouldReturnTheCustomerChecksPostCodeUseCase()
     {
         $this->assertInstanceOf(CustomerSpecifiesShippingAddress::class, $this->helper->createCustomerChecksPostCodeUseCase());

@@ -106,7 +106,7 @@ class VinaiKopp_PostCodeFilter_Model_RuleCollection extends Varien_Data_Collecti
             // @codeCoverageIgnoreStart
             /** @var VinaiKopp_PostCodeFilter_Helper_Data $helper */
             $helper = Mage::helper('vinaikopp_postcodefilter');
-            $this->useCase = new AdminViewsRuleList($helper->getRuleReader());
+            $this->useCase = $helper->createAdminViewsRuleListUseCase();
         }
         // @codeCoverageIgnoreEnd
         return $this->useCase;

@@ -110,19 +110,38 @@ class PostcodefilterControllerTest extends ControllerTestCase
      */
     public function itShouldInstantiateTheFormContainerBlockForTheEditAction()
     {
-        $stubRule = $this->getMock(Rule::class);
-        $stubRule->method('getCustomerGroupIdValues')->willReturn([4]);
-        $stubRule->method('getCountryValue')->willReturn('QQ');
-        $stubRule->method('getPostCodeValues')->willReturn(['A', 'B']);
+        $testGroupIds = [4];
+        $testCountry = 'QQ';
+        $testPostCodes = ['A', 'B'];
+        $stubRule = $this->createStubRule($testGroupIds, $testCountry, $testPostCodes);
         $this->mockViewSingleRuleUseCase->expects($this->once())->method('fetchRule')->willReturn($stubRule);
         
         $this->dispatch('edit');
         
-        $this->assertSame($stubRule, \Mage::registry('current_rule'));
         $this->assertBlockPresent(
             'vinaikopp_postcodefilter_form_container',
             \Mage_Adminhtml_Block_Widget_Form_Container::class
         );
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldRegisterAVarienObjectRule()
+    {
+        $testGroupIds = [4];
+        $testCountry = 'QQ';
+        $testPostCodes = ['A', 'B'];
+        $stubRule = $this->createStubRule($testGroupIds, $testCountry, $testPostCodes);
+        $this->mockViewSingleRuleUseCase->expects($this->once())->method('fetchRule')->willReturn($stubRule);
+        
+        $this->dispatch('edit');
+
+        $registryRule = \Mage::registry('current_rule');
+        $this->assertInstanceOf(\Varien_Object::class, $registryRule);
+        $this->assertSame($testGroupIds, $registryRule->getData('customer_groups'));
+        $this->assertSame($testCountry, $registryRule->getData('country'));
+        $this->assertSame($testPostCodes, $registryRule->getData('post_codes'));
     }
 
     /**
@@ -171,5 +190,20 @@ class PostcodefilterControllerTest extends ControllerTestCase
         ]);
         $this->mockDeleteUseCase->expects($this->once())->method('deleteRuleFromScalars');
         $this->dispatch('delete');
+    }
+
+    /**
+     * @param $testGroupIds
+     * @param $testCountry
+     * @param $testPostCodes
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createStubRule($testGroupIds, $testCountry, $testPostCodes)
+    {
+        $stubRule = $this->getMock(Rule::class);
+        $stubRule->method('getCustomerGroupIdValues')->willReturn($testGroupIds);
+        $stubRule->method('getCountryValue')->willReturn($testCountry);
+        $stubRule->method('getPostCodeValues')->willReturn($testPostCodes);
+        return $stubRule;
     }
 }

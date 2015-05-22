@@ -21,6 +21,7 @@ class VinaiKopp_PostCodeFilter_Model_Resource_RuleStorage implements RuleStorage
 
     /**
      * @param Varien_Db_Adapter_Interface $readConnection
+     * @param Varien_Db_Adapter_Interface $writeConnection
      */
     public function __construct($readConnection = null, $writeConnection = null)
     {

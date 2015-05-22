@@ -5,6 +5,7 @@ use VinaiKopp\PostCodeFilter\RuleComponents\Country;
 use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList;
 use VinaiKopp\PostCodeFilter\RuleRepository;
 use VinaiKopp\PostCodeFilter\RuleStorage;
+use VinaiKopp\PostCodeFilter\UseCases\AdminViewsRuleList;
 use VinaiKopp\PostCodeFilter\UseCases\CustomerSpecifiesShippingAddress;
 
 class VinaiKopp_PostCodeFilter_Helper_Data extends Mage_Core_Helper_Abstract
@@ -36,26 +37,21 @@ class VinaiKopp_PostCodeFilter_Helper_Data extends Mage_Core_Helper_Abstract
     }
 
     /**
-     * @param int[] $customerGroupIds
-     * @param string $country
-     * @return RuleSpecByCountryAndGroupIds
-     */
-    public function createRuleSpecForGroupIdsAndCountry(array $customerGroupIds, $country)
-    {
-        $this->registerPostCodeFilterAutoloader();
-        return new RuleSpecByCountryAndGroupIds(
-            Country::fromIso2Code($country),
-            CustomerGroupIdList::fromArray(array_map('intval', $customerGroupIds))
-        );
-    }
-
-    /**
      * @return CustomerSpecifiesShippingAddress
      */
     public function createCustomerChecksPostCodeUseCase()
     {
         $this->registerPostCodeFilterAutoloader();
         return new CustomerSpecifiesShippingAddress($this->getRuleReader());
+    }
+
+    /**
+     * @return AdminViewsRuleList
+     */
+    public function createAdminViewsRuleListUseCase()
+    {
+        $this->registerPostCodeFilterAutoloader();
+        return new AdminViewsRuleList($this->getRuleReader());
     }
 
     private function registerPostCodeFilterAutoloader()

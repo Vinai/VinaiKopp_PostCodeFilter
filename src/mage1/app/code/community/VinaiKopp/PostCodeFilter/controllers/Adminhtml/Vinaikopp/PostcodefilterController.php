@@ -67,7 +67,11 @@ class VinaiKopp_PostCodeFilter_Adminhtml_Vinaikopp_PostcodefilterController
             $country = $this->getCountryParam();
             $customerGroupIds = $this->getCustomerGroupIdsParam();
             $rule = $this->getViewSingleRuleUseCase()->fetchRule($country, $customerGroupIds);
-            Mage::register('current_rule', $rule);
+            Mage::register('current_rule', new Varien_Object([
+                'country' => $rule->getCountryValue(),
+                'customer_groups' => $rule->getCustomerGroupIdValues(),
+                'post_codes' => $rule->getPostCodeValues()
+            ]));
             
             $this->loadLayout();
             $this->renderLayout();
