@@ -1,8 +1,5 @@
 <?php
 
-
-use VinaiKopp\PostCodeFilter\ReadModel\Rule;
-
 class VinaiKopp_PostCodeFilter_Block_Adminhtml_Postcodefilter_Edit_Form
     extends VinaiKopp_PostCodeFilter_Block_Adminhtml_Postcodefilter_New_Form
 {
@@ -10,8 +7,8 @@ class VinaiKopp_PostCodeFilter_Block_Adminhtml_Postcodefilter_Edit_Form
     {
         $rule = $this->getRule();
         $params = [
-            'old_country' => $rule->getCountryValue(),
-            'old_customer_group_ids' => implode(',', $rule->getCustomerGroupIdValues())
+            'old_country' => $rule->getData('country'),
+            'old_customer_group_ids' => implode(',', $rule->getData('customer_group_ids'))
         ];
         return $this->getUrl('*/*/update', $params);
     }

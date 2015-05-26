@@ -2,7 +2,7 @@
 
 namespace VinaiKopp\PostCodeFilter;
 
-use VinaiKopp\PostCodeFilter\UseCases\CustomerSpecifiesShippingAddress;
+use VinaiKopp\PostCodeFilter\CustomerSpecifiesShippingAddress;
 
 /**
  * @covers \VinaiKopp_PostCodeFilter_Frontend_CheckController 

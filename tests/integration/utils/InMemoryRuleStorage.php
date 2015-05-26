@@ -2,6 +2,8 @@
 
 namespace VinaiKopp\PostCodeFilter;
 
+use VinaiKopp\PostCodeFilter\Storage\RuleStorage;
+
 class InMemoryRuleStorage implements RuleStorage
 {
     /**

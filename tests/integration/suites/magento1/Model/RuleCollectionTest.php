@@ -2,8 +2,8 @@
 
 namespace VinaiKopp\PostCodeFilter;
 
-use VinaiKopp\PostCodeFilter\ReadModel\Rule;
-use VinaiKopp\PostCodeFilter\UseCases\AdminViewsRuleList;
+use VinaiKopp\PostCodeFilter\Rule\Rule;
+use VinaiKopp\PostCodeFilter\AdminViewsRuleList;
 
 /**
  * @covers \VinaiKopp_PostCodeFilter_Model_RuleCollection
@@ -40,19 +40,6 @@ class RuleCollectionTest extends Mage1IntegrationTestCase
         $stubRule = $this->getMock(Rule::class, [], [], '', false);
         $stubRule->method('getCustomerGroupIdValues')->willReturn($customerGroupIds);
         return $stubRule;
-    }
-
-    /**
-     * @param string $fieldName
-     * @param string[] $expectedItemFieldValues
-     */
-    private function assertCollectionItemsFieldsMatch($fieldName, array $expectedItemFieldValues)
-    {
-        $zeroBasedItemArray = array_values($this->collection->getItems());
-        $valuesInCollectionItems = array_map(function (\Varien_Object $item) use ($fieldName) {
-            return $item->getData($fieldName);
-        }, $zeroBasedItemArray);
-        $this->assertEquals($expectedItemFieldValues, $valuesInCollectionItems);
     }
 
     protected function setUp()
@@ -182,6 +169,21 @@ class RuleCollectionTest extends Mage1IntegrationTestCase
         $this->mockUseCase->method('fetchRules')->willReturn([]);
         $this->mockUseCase->expects($this->once())->method($sortMethod)->with($direction);
         $this->collection->setOrder($collectionField, $direction);
+    }
+
+    /**
+     * @test
+     */
+    public function addOrderShouldDelegateToSetOrder()
+    {
+        if (! class_exists(RuleCollectionSpy::class)) {
+            require 'RuleCollectionSpy.php';
+        }
+        $collection = new RuleCollectionSpy();
+        
+        $this->assertFalse($collection->setOrderWasCalled);
+        $collection->addOrder('country');
+        $this->assertTrue($collection->setOrderWasCalled);
     }
 
     public function sortDirectionDataProvider()

@@ -3,7 +3,7 @@
 namespace VinaiKopp\PostCodeFilter;
 
 use \Varien_Event_Observer as Event;
-use VinaiKopp\PostCodeFilter\UseCases\CustomerSpecifiesShippingAddress;
+use VinaiKopp\PostCodeFilter\CustomerSpecifiesShippingAddress;
 
 /**
  * @covers \VinaiKopp_PostCodeFilter_Model_Observer
@@ -204,7 +204,7 @@ class ObserverTest extends Mage1IntegrationTestCase
     {
         $event = $this->getMockEventWithQuote();
         /** @var \Mage_Sales_Model_Quote|\PHPUnit_Framework_MockObject_MockObject $quote */
-        $quote = $event->getQuote();
+        $quote = $event->getData('quote');
         /** @var \Mage_Sales_Model_Quote_Address|\PHPUnit_Framework_MockObject_MockObject $mockShippingAddress */
         $mockShippingAddress = $quote->getShippingAddress();
         $quote->method('getAllShippingAddresses')->willReturn(
@@ -223,7 +223,7 @@ class ObserverTest extends Mage1IntegrationTestCase
     {
         $event = $this->getMockEventWithQuote();
         /** @var \Mage_Sales_Model_Quote|\PHPUnit_Framework_MockObject_MockObject $quote */
-        $quote = $event->getQuote();
+        $quote = $event->getData('quote');
         /** @var \Mage_Sales_Model_Quote_Address|\PHPUnit_Framework_MockObject_MockObject $mockShippingAddress */
         $mockShippingAddress = $quote->getShippingAddress();
         $quote->method('getAllShippingAddresses')->willReturn(

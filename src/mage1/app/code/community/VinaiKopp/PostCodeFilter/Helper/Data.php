@@ -1,12 +1,9 @@
 <?php
 
-use VinaiKopp\PostCodeFilter\ReadModel\RuleSpecByCountryAndGroupIds;
-use VinaiKopp\PostCodeFilter\RuleComponents\Country;
-use VinaiKopp\PostCodeFilter\RuleComponents\CustomerGroupIdList;
-use VinaiKopp\PostCodeFilter\RuleRepository;
-use VinaiKopp\PostCodeFilter\RuleStorage;
-use VinaiKopp\PostCodeFilter\UseCases\AdminViewsRuleList;
-use VinaiKopp\PostCodeFilter\UseCases\CustomerSpecifiesShippingAddress;
+use VinaiKopp\PostCodeFilter\Storage\RuleRepository;
+use VinaiKopp\PostCodeFilter\Storage\RuleStorage;
+use VinaiKopp\PostCodeFilter\AdminViewsRuleList;
+use VinaiKopp\PostCodeFilter\CustomerSpecifiesShippingAddress;
 
 class VinaiKopp_PostCodeFilter_Helper_Data extends Mage_Core_Helper_Abstract
 {

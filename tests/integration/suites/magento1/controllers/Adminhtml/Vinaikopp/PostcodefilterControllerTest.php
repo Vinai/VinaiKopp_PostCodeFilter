@@ -2,11 +2,11 @@
 
 namespace VinaiKopp\PostCodeFilter;
 
-use VinaiKopp\PostCodeFilter\ReadModel\Rule;
-use VinaiKopp\PostCodeFilter\UseCases\AdminAddsRule;
-use VinaiKopp\PostCodeFilter\UseCases\AdminDeletesRule;
-use VinaiKopp\PostCodeFilter\UseCases\AdminUpdatesRule;
-use VinaiKopp\PostCodeFilter\UseCases\AdminViewsSingleRule;
+use VinaiKopp\PostCodeFilter\Rule\Rule;
+use VinaiKopp\PostCodeFilter\AdminAddsRule;
+use VinaiKopp\PostCodeFilter\AdminDeletesRule;
+use VinaiKopp\PostCodeFilter\AdminUpdatesRule;
+use VinaiKopp\PostCodeFilter\AdminViewsSingleRule;
 
 /**
  * @covers \VinaiKopp_PostCodeFilter_Adminhtml_Vinaikopp_PostcodefilterController

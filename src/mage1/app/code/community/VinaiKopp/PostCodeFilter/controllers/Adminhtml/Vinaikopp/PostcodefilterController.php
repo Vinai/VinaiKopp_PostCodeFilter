@@ -1,9 +1,9 @@
 <?php
 
-use VinaiKopp\PostCodeFilter\UseCases\AdminAddsRule;
-use VinaiKopp\PostCodeFilter\UseCases\AdminDeletesRule;
-use VinaiKopp\PostCodeFilter\UseCases\AdminUpdatesRule;
-use VinaiKopp\PostCodeFilter\UseCases\AdminViewsSingleRule;
+use VinaiKopp\PostCodeFilter\AdminAddsRule;
+use VinaiKopp\PostCodeFilter\AdminDeletesRule;
+use VinaiKopp\PostCodeFilter\AdminUpdatesRule;
+use VinaiKopp\PostCodeFilter\AdminViewsSingleRule;
 
 class VinaiKopp_PostCodeFilter_Adminhtml_Vinaikopp_PostcodefilterController
     extends Mage_Adminhtml_Controller_Action

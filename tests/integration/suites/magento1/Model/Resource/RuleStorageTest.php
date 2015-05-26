@@ -2,6 +2,8 @@
 
 namespace VinaiKopp\PostCodeFilter;
 
+use VinaiKopp\PostCodeFilter\Storage\RuleStorage;
+
 /**
  * @covers \VinaiKopp_PostCodeFilter_Model_Resource_RuleStorage
  */

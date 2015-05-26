@@ -1,6 +1,6 @@
 <?php
 
-use VinaiKopp\PostCodeFilter\RuleStorage;
+use VinaiKopp\PostCodeFilter\Storage\RuleStorage;
 
 class VinaiKopp_PostCodeFilter_Model_Resource_RuleStorage implements RuleStorage 
 {

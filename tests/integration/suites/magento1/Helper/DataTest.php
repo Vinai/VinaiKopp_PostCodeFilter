@@ -2,8 +2,8 @@
 
 namespace VinaiKopp\PostCodeFilter;
 
-use VinaiKopp\PostCodeFilter\ReadModel\RuleSpecByCountryAndGroupIds;
-use VinaiKopp\PostCodeFilter\UseCases\CustomerSpecifiesShippingAddress;
+use VinaiKopp\PostCodeFilter\CustomerSpecifiesShippingAddress;
+use VinaiKopp\PostCodeFilter\Storage\RuleRepository;
 
 /**
  * @covers \VinaiKopp_PostCodeFilter_Helper_Data

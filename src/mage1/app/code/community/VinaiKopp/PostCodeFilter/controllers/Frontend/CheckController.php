@@ -1,6 +1,6 @@
 <?php
 
-use VinaiKopp\PostCodeFilter\UseCases\CustomerSpecifiesShippingAddress;
+use VinaiKopp\PostCodeFilter\CustomerSpecifiesShippingAddress;
 
 class VinaiKopp_PostCodeFilter_Frontend_CheckController extends Mage_Core_Controller_Front_Action
 {

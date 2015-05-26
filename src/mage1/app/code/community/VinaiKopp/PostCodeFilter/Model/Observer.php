@@ -1,7 +1,7 @@
 <?php
 
 use \Varien_Event_Observer as Event;
-use VinaiKopp\PostCodeFilter\UseCases\CustomerSpecifiesShippingAddress;
+use VinaiKopp\PostCodeFilter\CustomerSpecifiesShippingAddress;
 
 class VinaiKopp_PostCodeFilter_Model_Observer
 {
@@ -15,7 +15,9 @@ class VinaiKopp_PostCodeFilter_Model_Observer
         $quote = $event->getData('quote');
         if (!($this->quoteMayBeOrdered($quote, $quote->getShippingAddress()))) {
             $this->abortOrderPlacement($quote->getShippingAddress());
+            // @codeCoverageIgnoreStart
         }
+        // @codeCoverageIgnoreEnd
     }
 
     public function checkoutTypeMultishippingSetShippingItems(Event $event)
@@ -25,7 +27,9 @@ class VinaiKopp_PostCodeFilter_Model_Observer
         foreach ($quote->getAllShippingAddresses() as $address) {
             if (!$this->quoteMayBeOrdered($quote, $address)) {
                 $this->abortOrderPlacement($address);
+                // @codeCoverageIgnoreStart
             }
+            // @codeCoverageIgnoreEnd
         }
     }
 

@@ -1,7 +1,7 @@
 <?php
 
-use VinaiKopp\PostCodeFilter\ReadModel\Rule;
-use VinaiKopp\PostCodeFilter\UseCases\AdminViewsRuleList;
+use VinaiKopp\PostCodeFilter\Rule\Rule;
+use VinaiKopp\PostCodeFilter\AdminViewsRuleList;
 
 class VinaiKopp_PostCodeFilter_Model_RuleCollection extends Varien_Data_Collection_Db
 {
