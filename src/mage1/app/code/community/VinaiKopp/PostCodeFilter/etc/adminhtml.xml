@@ -4,7 +4,7 @@
         <customer>
             <children>
                 <vinaikopp_postcodefilter translate="vinaikopp_postcodefilter">
-                    <title>Post Code Filter</title>
+                    <title>PostCode Filter Rules</title>
                     <sort_order>456</sort_order>
                     <action>adminhtml/vinaikopp_postcodefilter/index</action>
                 </vinaikopp_postcodefilter>
@@ -18,7 +18,7 @@
                     <customer>
                         <children>
                             <vinaikopp_postcodefilter translate="vinaikopp_postcodefilter">
-                                <title>Post Code Filter</title>
+                                <title>PostCode Filter Rules</title>
                             </vinaikopp_postcodefilter>
                         </children>
                     </customer>
