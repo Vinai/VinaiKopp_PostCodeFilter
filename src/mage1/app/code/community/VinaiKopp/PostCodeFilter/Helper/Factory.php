@@ -6,7 +6,7 @@ use VinaiKopp\PostCodeFilter\Storage\RuleStorage;
 use VinaiKopp\PostCodeFilter\AdminViewsRuleList;
 use VinaiKopp\PostCodeFilter\CustomerSpecifiesShippingAddress;
 
-class VinaiKopp_PostCodeFilter_Helper_Data extends Mage_Core_Helper_Abstract
+class VinaiKopp_PostCodeFilter_Helper_Factory extends Mage_Core_Helper_Abstract
 {
     private $autoloaderRegistered = false;
     

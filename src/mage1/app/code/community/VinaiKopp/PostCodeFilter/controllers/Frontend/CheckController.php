@@ -21,8 +21,8 @@ class VinaiKopp_PostCodeFilter_Frontend_CheckController extends Mage_Core_Contro
     {
         if (! $this->checkPostCodeUseCase) {
             // @codeCoverageIgnoreStart
-            /** @var \VinaiKopp_PostCodeFilter_Helper_Data $helper */
-            $helper = Mage::helper('vinaikopp_postcodefilter');
+            /** @var \VinaiKopp_PostCodeFilter_Helper_Factory $helper */
+            $helper = Mage::helper('vinaikopp_postcodefilter/factory');
             $this->checkPostCodeUseCase = $helper->createCustomerChecksPostCodeUseCase();
         }
         // @codeCoverageIgnoreEnd
@@ -123,6 +123,6 @@ class VinaiKopp_PostCodeFilter_Frontend_CheckController extends Mage_Core_Contro
      */
     private function mayOrder($customerGroupId, $country, $postCode)
     {
-        return $this->getCheckPostCodeUseCase()->isAllowed($customerGroupId, $country, $postCode);
+        return $this->getCheckPostCodeUseCase()->isAllowedDestination($customerGroupId, $country, $postCode);
     }
 }

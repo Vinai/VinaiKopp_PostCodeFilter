@@ -104,8 +104,8 @@ class VinaiKopp_PostCodeFilter_Model_RuleCollection extends Varien_Data_Collecti
     {
         if (is_null($this->useCase)) {
             // @codeCoverageIgnoreStart
-            /** @var VinaiKopp_PostCodeFilter_Helper_Data $helper */
-            $helper = Mage::helper('vinaikopp_postcodefilter');
+            /** @var VinaiKopp_PostCodeFilter_Helper_Factory $helper */
+            $helper = Mage::helper('vinaikopp_postcodefilter/factory');
             $this->useCase = $helper->createAdminViewsRuleListUseCase();
         }
         // @codeCoverageIgnoreEnd

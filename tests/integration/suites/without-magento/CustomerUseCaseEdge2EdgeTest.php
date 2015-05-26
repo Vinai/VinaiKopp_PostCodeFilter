@@ -60,7 +60,7 @@ class CustomerUseCaseEdge2EdgeTest extends \PHPUnit_Framework_TestCase
      */
     public function testCustomerWithAllowedPostCodeMayOrder($groupId)
     {
-        $this->assertTrue($this->customerUseCase->isAllowed($groupId, $this->country, $this->allowedPostCode));
+        $this->assertTrue($this->customerUseCase->isAllowedDestination($groupId, $this->country, $this->allowedPostCode));
     }
     
     /**
@@ -68,7 +68,7 @@ class CustomerUseCaseEdge2EdgeTest extends \PHPUnit_Framework_TestCase
      */
     public function testCustomerWithoutAllowedPostCodeMayNotOrder()
     {
-        $isAllowed = $this->customerUseCase->isAllowed($this->generalGroupId, $this->country, $this->forbiddenPostCode);
+        $isAllowed = $this->customerUseCase->isAllowedDestination($this->generalGroupId, $this->country, $this->forbiddenPostCode);
         $this->assertFalse($isAllowed);
     }
 
@@ -77,6 +77,6 @@ class CustomerUseCaseEdge2EdgeTest extends \PHPUnit_Framework_TestCase
      */
     public function testResellerMayOrder()
     {
-        $this->assertTrue($this->customerUseCase->isAllowed($this->resellerGroupId, $this->country, 123));
+        $this->assertTrue($this->customerUseCase->isAllowedDestination($this->resellerGroupId, $this->country, 123));
     }
 }

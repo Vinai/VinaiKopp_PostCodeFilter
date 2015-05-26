@@ -57,7 +57,7 @@ class CustomerSpecifiesShippingAddressTest extends \PHPUnit_Framework_TestCase
     public function itShouldReturnFalseIfTheCustomerMayNotOrder()
     {
         $this->mockRule->expects($this->once())->method('isPostCodeAllowed')->with($this->postCode)->willReturn(false);
-        $this->assertFalse($this->useCase->isAllowed($this->customerGroupId, $this->country, $this->postCode));
+        $this->assertFalse($this->useCase->isAllowedDestination($this->customerGroupId, $this->country, $this->postCode));
     }
 
     /**
@@ -66,6 +66,6 @@ class CustomerSpecifiesShippingAddressTest extends \PHPUnit_Framework_TestCase
     public function itShouldReturnTrueIfTheCustomerMayOrder()
     {
         $this->mockRule->expects($this->once())->method('isPostCodeAllowed')->with($this->postCode)->willReturn(true);
-        $this->useCase->isAllowed($this->customerGroupId, $this->country, $this->postCode);
+        $this->useCase->isAllowedDestination($this->customerGroupId, $this->country, $this->postCode);
     }
 }

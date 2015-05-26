@@ -65,7 +65,7 @@ class VinaiKopp_PostCodeFilter_Model_Observer
      */
     private function quoteMayBeOrdered(Mage_Sales_Model_Quote $quote, Mage_Sales_Model_Quote_Address $shippingAddress)
     {
-        return $this->getCustomerChecksPostCodeUseCase()->isAllowed(
+        return $this->getCustomerChecksPostCodeUseCase()->isAllowedDestination(
             (int)$quote->getCustomerGroupId(),
             $shippingAddress->getCountry(),
             $shippingAddress->getPostcode()
@@ -103,11 +103,11 @@ class VinaiKopp_PostCodeFilter_Model_Observer
     }
 
     /**
-     * @return VinaiKopp_PostCodeFilter_Helper_Data
+     * @return VinaiKopp_PostCodeFilter_Helper_Factory
      */
     private function helper()
     {
-        return Mage::helper('vinaikopp_postcodefilter');
+        return Mage::helper('vinaikopp_postcodefilter/factory');
     }
 
     /**

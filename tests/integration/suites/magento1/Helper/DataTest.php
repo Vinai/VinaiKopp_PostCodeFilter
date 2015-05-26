@@ -7,18 +7,18 @@ use VinaiKopp\PostCodeFilter\Storage\ReadModel\RuleReader;
 use VinaiKopp\PostCodeFilter\Storage\WriteModel\RuleWriter;
 
 /**
- * @covers \VinaiKopp_PostCodeFilter_Helper_Data
+ * @covers \VinaiKopp_PostCodeFilter_Helper_Factory
  */
-class DataTest extends Mage1IntegrationTestCase
+class FactoryTest extends Mage1IntegrationTestCase
 {
     /**
-     * @var \VinaiKopp_PostCodeFilter_Helper_Data
+     * @var \VinaiKopp_PostCodeFilter_Helper_Factory
      */
     private $helper;
 
     public function setUp()
     {
-        $this->helper = new \VinaiKopp_PostCodeFilter_Helper_Data();
+        $this->helper = new \VinaiKopp_PostCodeFilter_Helper_Factory();
     }
 
     /**

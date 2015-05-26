@@ -120,7 +120,7 @@ class ObserverTest extends Mage1IntegrationTestCase
      */
     public function itShouldCheckTheUseCaseIfTheCustomerMayOrder()
     {
-        $this->mockUseCase->expects($this->once())->method('isAllowed')->willReturn(true);
+        $this->mockUseCase->expects($this->once())->method('isAllowedDestination')->willReturn(true);
         $this->observer->salesModelServiceQuoteSubmitBefore($this->getMockEventWithQuote());
     }
 
@@ -131,7 +131,7 @@ class ObserverTest extends Mage1IntegrationTestCase
      */
     public function itShouldThrowAnExceptionIfTheCustomerMayNotOrder()
     {
-        $this->mockUseCase->expects($this->once())->method('isAllowed')->willReturn(false);
+        $this->mockUseCase->expects($this->once())->method('isAllowedDestination')->willReturn(false);
         $this->observer->salesModelServiceQuoteSubmitBefore($this->getMockEventWithQuote());
     }
 
@@ -157,7 +157,7 @@ class ObserverTest extends Mage1IntegrationTestCase
         $mockResponse->expects($this->once())->method('getBody')->willReturn(
             json_encode(['goto_section' => 'shipping_method'])
         );
-        $this->mockUseCase->expects($this->once())->method('isAllowed')->willReturn(false);
+        $this->mockUseCase->expects($this->once())->method('isAllowedDestination')->willReturn(false);
         $transport = '';
         $mockResponse->expects($this->once())->method('setBody')->willReturnCallback(
             function ($responseContent) use (&$transport, $mockResponse) {
@@ -190,7 +190,7 @@ class ObserverTest extends Mage1IntegrationTestCase
         $mockResponse->expects($this->once())->method('getBody')->willReturn(
             json_encode(['goto_section' => 'shipping_method'])
         );
-        $this->mockUseCase->expects($this->once())->method('isAllowed')->willReturn(true);
+        $this->mockUseCase->expects($this->once())->method('isAllowedDestination')->willReturn(true);
 
         $mockResponse->expects($this->never())->method('setBody');
 
@@ -210,7 +210,7 @@ class ObserverTest extends Mage1IntegrationTestCase
         $quote->method('getAllShippingAddresses')->willReturn(
             [$mockShippingAddress, $mockShippingAddress]
         );
-        $this->mockUseCase->expects($this->exactly(2))->method('isAllowed')->willReturn(true);
+        $this->mockUseCase->expects($this->exactly(2))->method('isAllowedDestination')->willReturn(true);
 
         $this->observer->checkoutTypeMultishippingSetShippingItems($event);
     }
@@ -229,7 +229,7 @@ class ObserverTest extends Mage1IntegrationTestCase
         $quote->method('getAllShippingAddresses')->willReturn(
             [$mockShippingAddress, $mockShippingAddress]
         );
-        $this->mockUseCase->method('isAllowed')->willReturnOnConsecutiveCalls(true, false);
+        $this->mockUseCase->method('isAllowedDestination')->willReturnOnConsecutiveCalls(true, false);
 
         $this->observer->checkoutTypeMultishippingSetShippingItems($event);
     }

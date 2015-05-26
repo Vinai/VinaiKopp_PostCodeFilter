@@ -93,7 +93,7 @@ class CheckControllerTest extends ControllerTestCase
             ['customer_group_id', null, $customerGroupId]
         ]);
 
-        $this->mockCheckPostCodeUseCase->expects($this->once())->method('isAllowed')
+        $this->mockCheckPostCodeUseCase->expects($this->once())->method('isAllowedDestination')
             ->with($customerGroupId, $country, $postCode)
             ->willReturn($isAllowed);
         $expectedResponse = json_encode([
@@ -123,7 +123,7 @@ class CheckControllerTest extends ControllerTestCase
     public function itShouldHandleExceptionsGracefully()
     {
         $testException = new \Exception('Test Exception');
-        $this->mockCheckPostCodeUseCase->method('isAllowed')
+        $this->mockCheckPostCodeUseCase->method('isAllowedDestination')
             ->willThrowException($testException);
         $expectedResponse = json_encode([
             'error' => $testException->getMessage(),

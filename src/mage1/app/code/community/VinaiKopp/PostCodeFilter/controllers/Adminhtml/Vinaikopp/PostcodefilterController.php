@@ -29,7 +29,7 @@ class VinaiKopp_PostCodeFilter_Adminhtml_Vinaikopp_PostcodefilterController
     private $viewsRuleUseCase;
     
     /**
-     * @var VinaiKopp_PostCodeFilter_Helper_Data
+     * @var VinaiKopp_PostCodeFilter_Helper_Factory
      */
     private $helper;
 
@@ -113,12 +113,12 @@ class VinaiKopp_PostCodeFilter_Adminhtml_Vinaikopp_PostcodefilterController
     }
 
     /**
-     * @return VinaiKopp_PostCodeFilter_Helper_Data
+     * @return VinaiKopp_PostCodeFilter_Helper_Factory
      */
     private function getHelper()
     {
         if (is_null($this->helper)) {
-            $this->helper = Mage::helper('vinaikopp_postcodefilter');
+            $this->helper = Mage::helper('vinaikopp_postcodefilter/factory');
         }
         return $this->helper;
     }

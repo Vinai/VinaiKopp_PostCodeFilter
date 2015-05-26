@@ -25,7 +25,7 @@ class CustomerSpecifiesShippingAddress
      * @param string $postCode
      * @return bool
      */
-    public function isAllowed($customerGroupId, $iso2country, $postCode)
+    public function isAllowedDestination($customerGroupId, $iso2country, $postCode)
     {
         $spec = new RuleSpecByCountryAndGroupId(
             CustomerGroupId::fromInt($customerGroupId),
