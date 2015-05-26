@@ -50,7 +50,20 @@ class FactoryTest extends Mage1IntegrationTestCase
      */
     public function itShouldReturnTheCustomerChecksPostCodeUseCase()
     {
-        $this->assertInstanceOf(CustomerSpecifiesShippingAddress::class,
-            $this->helper->createCustomerChecksPostCodeUseCase());
+        $this->assertInstanceOf(
+            CustomerSpecifiesShippingAddress::class,
+            $this->helper->createCustomerChecksPostCodeUseCase()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnTheAdminViewsRuleUseCase()
+    {
+        $this->assertInstanceOf(
+            AdminViewsRuleList::class,
+            $this->helper->createAdminViewsRuleListUseCase()
+        );
     }
 }
