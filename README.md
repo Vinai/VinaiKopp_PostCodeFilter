@@ -56,7 +56,7 @@ Twitter: [@VinaiKopp](https://twitter.com/VinaiKopp)
 
 Licence
 -------
-Commercial, non-open source. Please refer to the file [LICENSE.md](./LICENSE.md) for details.
+BSD 3-Clause. Please refer to the file [LICENSE.md](./LICENSE.md) for details.
 
 Copyright
 ---------
