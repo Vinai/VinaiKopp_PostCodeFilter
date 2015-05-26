@@ -8,7 +8,7 @@ class VinaiKopp_PostCodeFilter_Block_Adminhtml_Postcodefilter_Edit_Form
         $rule = $this->getRule();
         $params = [
             'old_country' => $rule->getData('country'),
-            'old_customer_group_ids' => implode(',', $rule->getData('customer_group_ids'))
+            'old_customer_group_ids' => implode(',', $rule->getData('customer_groups'))
         ];
         return $this->getUrl('*/*/update', $params);
     }
