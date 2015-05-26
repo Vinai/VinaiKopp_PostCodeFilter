@@ -51,6 +51,6 @@ class AdminViewsSingleRule
      */
     private function convertToInt($value)
     {
-        return (int) $value;
+        return (int)$value;
     }
 }

@@ -15,7 +15,7 @@ class AdminDeletesRule
      * @var RuleWriter
      */
     private $ruleWriter;
-    
+
     /**
      * @var RuleReader
      */

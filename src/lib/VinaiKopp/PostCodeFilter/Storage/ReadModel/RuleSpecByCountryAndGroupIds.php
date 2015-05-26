@@ -11,7 +11,7 @@ class RuleSpecByCountryAndGroupIds
      * @var Country
      */
     private $country;
-    
+
     /**
      * @var CustomerGroupIdList
      */

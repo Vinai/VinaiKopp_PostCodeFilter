@@ -123,7 +123,7 @@ class RuleCollectionTest extends Mage1IntegrationTestCase
         $filterValue = 'filter value';
         $this->mockUseCase->method('fetchRules')->willReturn([]);
         $this->mockUseCase->expects($this->once())->method('setCountryFilter')->with($filterValue);
-        
+
         $filterBlock = new \Mage_Adminhtml_Block_Widget_Grid_Column_Filter_Text();
         $filterBlock->setData('value', $filterValue);
         $this->collection->addFieldToFilter('country', $filterBlock->getCondition());
@@ -138,7 +138,7 @@ class RuleCollectionTest extends Mage1IntegrationTestCase
         $filterValue = '3';
         $this->mockUseCase->method('fetchRules')->willReturn([]);
         $this->mockUseCase->expects($this->once())->method('setCustomerGroupIdFilter')->with($filterValue);
-        
+
         $filterBlock = new \Mage_Adminhtml_Block_Widget_Grid_Column_Filter_Select();
         $filterBlock->setData('value', $filterValue);
         $this->collection->addFieldToFilter('customer_groups', $filterBlock->getCondition());
@@ -159,7 +159,7 @@ class RuleCollectionTest extends Mage1IntegrationTestCase
         $this->collection->addFieldToFilter('post_codes', $filterBlock->getCondition());
         $this->collection->load();
     }
-    
+
     /**
      * @test
      * @dataProvider sortDirectionDataProvider
@@ -176,11 +176,11 @@ class RuleCollectionTest extends Mage1IntegrationTestCase
      */
     public function addOrderShouldDelegateToSetOrder()
     {
-        if (! class_exists(RuleCollectionSpy::class)) {
+        if (!class_exists(RuleCollectionSpy::class)) {
             require 'RuleCollectionSpy.php';
         }
         $collection = new RuleCollectionSpy();
-        
+
         $this->assertFalse($collection->setOrderWasCalled);
         $collection->addOrder('country');
         $this->assertTrue($collection->setOrderWasCalled);

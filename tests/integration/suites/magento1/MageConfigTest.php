@@ -23,9 +23,10 @@ class MageConfigTest extends Mage1IntegrationTestCase
         if (false === $node) {
             $this->fail(sprintf('The module "%s" is not registered', $moduleName));
         }
-        $this->assertSame('true', (string) $node->active, sprintf(
-            'The module "%s" is not active', $moduleName)
-        );
+        $this->assertSame('true', (string)$node->active, sprintf(
+            'The module "%s" is not active',
+            $moduleName
+        ));
     }
 
     /**
@@ -34,10 +35,12 @@ class MageConfigTest extends Mage1IntegrationTestCase
      */
     private function assertCodePool($moduleName, $expectedCodePool)
     {
-        $codePool = (string) \Mage::getConfig()->getNode('modules/' . $moduleName . '/codePool');
-        $this->assertEquals($expectedCodePool, $codePool, sprintf(
-            'The codePool for the module "%s" is not "%s"', $moduleName, $expectedCodePool
-        ));
+        $codePool = (string)\Mage::getConfig()->getNode('modules/' . $moduleName . '/codePool');
+        $this->assertEquals(
+            $expectedCodePool,
+            $codePool,
+            sprintf('The codePool for the module "%s" is not "%s"', $moduleName, $expectedCodePool)
+        );
     }
 
     /**
@@ -46,7 +49,10 @@ class MageConfigTest extends Mage1IntegrationTestCase
      */
     private function assertObserverConfig(array $areas, $event)
     {
-        $xpath = '*[self::' . implode(' or self::', $areas) . ']/events/' . $event . ' /observers/' . $this->classGroup;
+        $xpath = '*[self::' . implode(
+                ' or self::',
+                $areas
+            ) . ']/events/' . $event . ' /observers/' . $this->classGroup;
         $nodes = \Mage::getConfig()->getNode()->xpath($xpath);
         $message = sprintf('No observer registered for event "%s" by module "%s"', $event, $this->classGroup);
         $this->assertGreaterThanOrEqual(1, count($nodes), $message);
@@ -112,7 +118,7 @@ class MageConfigTest extends Mage1IntegrationTestCase
      */
     public function itShouldRegisterAnAdminLayoutFile()
     {
-        $value = (string) \Mage::getConfig()->getNode('adminhtml/layout/updates/' . $this->classGroup . '/file');
+        $value = (string)\Mage::getConfig()->getNode('adminhtml/layout/updates/' . $this->classGroup . '/file');
         $this->assertEquals('vinaikopp/postcodefilter.xml', $value);
         $file = \Mage::getBaseDir('design') . '/adminhtml/base/default/layout/' . $value;
         $this->assertFileExists($file);
@@ -123,7 +129,7 @@ class MageConfigTest extends Mage1IntegrationTestCase
      */
     public function itShouldRegisterFrontendLayoutFile()
     {
-        $value = (string) \Mage::getConfig()->getNode('frontend/layout/updates/' . $this->classGroup . '/file');
+        $value = (string)\Mage::getConfig()->getNode('frontend/layout/updates/' . $this->classGroup . '/file');
         $this->assertEquals('vinaikopp/postcodefilter.xml', $value);
         $file = \Mage::getBaseDir('design') . '/frontend/base/default/layout/' . $value;
         $this->assertFileExists($file);
@@ -150,8 +156,8 @@ class MageConfigTest extends Mage1IntegrationTestCase
         $config = \Mage::getConfig()->loadModulesConfiguration('adminhtml.xml');
         $node = $config->getNode('menu/customer/children/' . $this->classGroup);
         $this->assertNotFalse($node, sprintf('%s adminhtml.xml not loaded', $this->moduleName));
-        $this->assertNotEmpty((string) $node->title);
-        $this->assertEquals('adminhtml/' . $this->classGroup . '/index', (string) $node->action);
+        $this->assertNotEmpty((string)$node->title);
+        $this->assertEquals('adminhtml/' . $this->classGroup . '/index', (string)$node->action);
     }
 
     /**
@@ -162,7 +168,7 @@ class MageConfigTest extends Mage1IntegrationTestCase
         $config = \Mage::getConfig()->loadModulesConfiguration('adminhtml.xml');
         $node = $config->getNode('acl/resources/admin/children/customer/children/' . $this->classGroup);
         $this->assertNotFalse($node, sprintf('%s adminhtml.xml not loaded', $this->moduleName));
-        $this->assertNotEmpty((string) $node->title);
+        $this->assertNotEmpty((string)$node->title);
     }
 
     /**
@@ -172,7 +178,7 @@ class MageConfigTest extends Mage1IntegrationTestCase
     {
         $node = \Mage::getConfig()->getNode('global/resources/' . $this->classGroup . '_setup/setup');
         $this->assertNotFalse($node);
-        $this->assertEquals($this->moduleName, (string) $node->module);
+        $this->assertEquals($this->moduleName, (string)$node->module);
     }
 
     /**
@@ -180,7 +186,7 @@ class MageConfigTest extends Mage1IntegrationTestCase
      */
     public function itShouldHaveAVersion()
     {
-        $node = \Mage::getConfig()->getNode('modules/' . $this->moduleName. '/version');
+        $node = \Mage::getConfig()->getNode('modules/' . $this->moduleName . '/version');
         $this->assertNotFalse($node);
     }
 
@@ -201,7 +207,7 @@ class MageConfigTest extends Mage1IntegrationTestCase
         $configPath = 'global/models/' . $this->classGroup . '_resource/entities/rule/table';
         $node = \Mage::getConfig()->getNode($configPath);
         $this->assertNotFalse($node, "No table name declaration found");
-        $this->assertEquals('vinaikopp_postcodefilter_rule', (string) $node);
+        $this->assertEquals('vinaikopp_postcodefilter_rule', (string)$node);
     }
 
     /**
@@ -263,7 +269,7 @@ class MageConfigTest extends Mage1IntegrationTestCase
     public function itShouldAddAFrontendTranslationFile()
     {
         $configPath = 'frontend/translate/modules/' . $this->moduleName . '/files/default';
-        $this->assertEquals($this->moduleName . '.csv', (string) \Mage::getConfig()->getNode($configPath));
+        $this->assertEquals($this->moduleName . '.csv', (string)\Mage::getConfig()->getNode($configPath));
         $this->assertFileExists(\Mage::getBaseDir('locale') . '/de_DE/' . $this->moduleName . '.csv');
     }
 }

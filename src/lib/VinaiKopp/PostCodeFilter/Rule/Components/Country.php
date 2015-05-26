@@ -25,13 +25,13 @@ class Country
      */
     public static function fromIso2Code($code)
     {
-        if (! is_string($code)) {
+        if (!is_string($code)) {
             throw new InvalidCountryException(sprintf('The country code has to be a string'));
         }
         if (strlen($code) != 2) {
             throw new InvalidCountryException(sprintf('The country code has to be two characters long'));
         }
-        
+
         return new self(strtoupper($code));
     }
 

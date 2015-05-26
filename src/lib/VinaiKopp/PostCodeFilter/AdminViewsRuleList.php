@@ -9,7 +9,7 @@ class AdminViewsRuleList
 {
     const SORT_DESCENDING = 'DESC';
     const SORT_ASCENDING = 'ASC';
-    
+
     /**
      * @var RuleReader
      */
@@ -67,7 +67,7 @@ class AdminViewsRuleList
         $isMatchingPostCode = function ($flag, $postCode) use ($filterString) {
             return $flag || strpos($postCode, $filterString) !== false;
         };
-        $hasMatchingPostCode = function(array $postCodeList) use ($isMatchingPostCode) {
+        $hasMatchingPostCode = function (array $postCodeList) use ($isMatchingPostCode) {
             return array_reduce($postCodeList, $isMatchingPostCode, false);
         };
         $this->filters[] = function (Rule $rule) use ($filterString, $hasMatchingPostCode) {
@@ -92,7 +92,7 @@ class AdminViewsRuleList
     public function sortByCountry($ascOrDesc)
     {
         $factor = $this->getSortDirectionFactor($ascOrDesc);
-        $this->sortOrder = function(Rule $ruleA, Rule $ruleB) use ($factor) {
+        $this->sortOrder = function (Rule $ruleA, Rule $ruleB) use ($factor) {
             return strnatcasecmp($ruleA->getCountryValue(), $ruleB->getCountryValue()) * $factor;
         };
     }
@@ -103,7 +103,7 @@ class AdminViewsRuleList
     public function sortByCustomerGroupId($ascOrDesc)
     {
         $factor = $this->getSortDirectionFactor($ascOrDesc);
-        $this->sortOrder = function(Rule $ruleA, Rule $ruleB) use ($factor) {
+        $this->sortOrder = function (Rule $ruleA, Rule $ruleB) use ($factor) {
             $result = $this->compareArrays($ruleA->getCustomerGroupIdValues(), $ruleB->getCustomerGroupIdValues());
             return $result * $factor;
         };
@@ -115,7 +115,7 @@ class AdminViewsRuleList
     public function sortByPostCode($ascOrDesc)
     {
         $factor = $this->getSortDirectionFactor($ascOrDesc);
-        $this->sortOrder = function(Rule $ruleA, Rule $ruleB) use ($factor) {
+        $this->sortOrder = function (Rule $ruleA, Rule $ruleB) use ($factor) {
             $result = $this->compareArrays($ruleA->getPostCodeValues(), $ruleB->getPostCodeValues());
             return $result * $factor;
         };

@@ -3,7 +3,8 @@
 namespace VinaiKopp\PostCodeFilter;
 
 use VinaiKopp\PostCodeFilter\CustomerSpecifiesShippingAddress;
-use VinaiKopp\PostCodeFilter\Storage\RuleRepository;
+use VinaiKopp\PostCodeFilter\Storage\ReadModel\RuleReader;
+use VinaiKopp\PostCodeFilter\Storage\WriteModel\RuleWriter;
 
 /**
  * @covers \VinaiKopp_PostCodeFilter_Helper_Data
@@ -31,17 +32,17 @@ class DataTest extends Mage1IntegrationTestCase
     /**
      * @test
      */
-    public function itShouldReturnARepositoryInstanceAsWriter()
+    public function itShouldReturnARuleWriterInstance()
     {
-        $this->assertInstanceOf(RuleRepository::class, $this->helper->getRuleWriter());
+        $this->assertInstanceOf(RuleWriter::class, $this->helper->getRuleWriter());
     }
 
     /**
      * @test
      */
-    public function itShouldReturnARepositoryInstanceAsReader()
+    public function itShouldReturnARuleReaderInstance()
     {
-        $this->assertInstanceOf(RuleRepository::class, $this->helper->getRuleReader());
+        $this->assertInstanceOf(RuleReader::class, $this->helper->getRuleReader());
     }
 
     /**
@@ -49,6 +50,7 @@ class DataTest extends Mage1IntegrationTestCase
      */
     public function itShouldReturnTheCustomerChecksPostCodeUseCase()
     {
-        $this->assertInstanceOf(CustomerSpecifiesShippingAddress::class, $this->helper->createCustomerChecksPostCodeUseCase());
+        $this->assertInstanceOf(CustomerSpecifiesShippingAddress::class,
+            $this->helper->createCustomerChecksPostCodeUseCase());
     }
 }

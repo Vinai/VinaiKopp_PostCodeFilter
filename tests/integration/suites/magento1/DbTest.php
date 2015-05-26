@@ -12,7 +12,7 @@ class DbTest extends Mage1IntegrationTestCase
     protected function setUp()
     {
         $this->tableName = \Mage::getSingleton('core/resource')->getTableName('vinaikopp_postcodefilter/rule');
-        if (! $this->tableName) {
+        if (!$this->tableName) {
             $this->markTestSkipped('No table name registered');
         }
     }

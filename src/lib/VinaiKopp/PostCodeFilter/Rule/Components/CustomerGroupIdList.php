@@ -13,7 +13,7 @@ class CustomerGroupIdList
     {
         $this->customerGroupIds = $customerGroupIds;
     }
-    
+
     /**
      * @param int[]|CustomerGroupId[] $inputArray
      * @return CustomerGroupIdList

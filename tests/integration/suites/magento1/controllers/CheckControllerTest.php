@@ -5,7 +5,7 @@ namespace VinaiKopp\PostCodeFilter;
 use VinaiKopp\PostCodeFilter\CustomerSpecifiesShippingAddress;
 
 /**
- * @covers \VinaiKopp_PostCodeFilter_Frontend_CheckController 
+ * @covers \VinaiKopp_PostCodeFilter_Frontend_CheckController
  */
 class CheckControllerTest extends ControllerTestCase
 {

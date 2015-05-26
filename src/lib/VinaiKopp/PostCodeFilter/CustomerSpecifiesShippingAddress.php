@@ -18,7 +18,7 @@ class CustomerSpecifiesShippingAddress
     {
         $this->ruleReader = $ruleReader;
     }
-    
+
     /**
      * @param int $customerGroupId
      * @param string $iso2country

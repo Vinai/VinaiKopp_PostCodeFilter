@@ -14,12 +14,12 @@ class ExistingRule implements Rule
      * @var string[]
      */
     private $allowedPostCodes;
-    
+
     /**
      * @var CustomerGroupId
      */
     private $customerGroupIds;
-    
+
     /**
      * @var Country
      */
@@ -29,13 +29,12 @@ class ExistingRule implements Rule
         CustomerGroupIdList $customerGroupIds,
         Country $country,
         PostCodeList $allowedPostCodes
-    )
-    {
+    ) {
         $this->customerGroupIds = $customerGroupIds;
         $this->country = $country;
         $this->allowedPostCodes = $allowedPostCodes;
     }
-    
+
     /**
      * @param string|int|PostCode $input
      * @return bool
@@ -93,7 +92,7 @@ class ExistingRule implements Rule
     {
         return $this->allowedPostCodes->getValues();
     }
-    
+
     /**
      * @param int|string|PostCode $input
      * @return PostCode

@@ -11,7 +11,7 @@ class RuleToDelete
      * @var CustomerGroupIdList
      */
     private $customerGroupIds;
-    
+
     /**
      * @var Country
      */

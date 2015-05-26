@@ -2,7 +2,6 @@
 
 namespace VinaiKopp\PostCodeFilter\Rule;
 
-
 use VinaiKopp\PostCodeFilter\Rule\Components\Country;
 use VinaiKopp\PostCodeFilter\Rule\Components\CustomerGroupIdList;
 use VinaiKopp\PostCodeFilter\Rule\Components\PostCodeList;
@@ -18,7 +17,7 @@ class NonexistentRule implements Rule
     {
         $this->country = $country;
     }
-    
+
     /**
      * @param string $postCode
      * @return bool

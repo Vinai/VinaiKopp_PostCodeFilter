@@ -41,10 +41,10 @@ class PostcodefilterControllerTest extends ControllerTestCase
     protected function setUp()
     {
         parent::setUp();
-        
+
         $className = \VinaiKopp_PostCodeFilter_Adminhtml_Vinaikopp_PostcodefilterController::class;
         $this->controller = $this->createControllerInstance($className);
-        
+
         $this->mockAddUseCase = $this->getMock(AdminAddsRule::class, [], [], '', false);
         $this->mockDeleteUseCase = $this->getMock(AdminDeletesRule::class, [], [], '', false);
         $this->mockUpdateUseCase = $this->getMock(AdminUpdatesRule::class, [], [], '', false);
@@ -115,9 +115,9 @@ class PostcodefilterControllerTest extends ControllerTestCase
         $testPostCodes = ['A', 'B'];
         $stubRule = $this->createStubRule($testGroupIds, $testCountry, $testPostCodes);
         $this->mockViewSingleRuleUseCase->expects($this->once())->method('fetchRule')->willReturn($stubRule);
-        
+
         $this->dispatch('edit');
-        
+
         $this->assertBlockPresent(
             'vinaikopp_postcodefilter_form_container',
             \Mage_Adminhtml_Block_Widget_Form_Container::class
@@ -134,7 +134,7 @@ class PostcodefilterControllerTest extends ControllerTestCase
         $testPostCodes = ['A', 'B'];
         $stubRule = $this->createStubRule($testGroupIds, $testCountry, $testPostCodes);
         $this->mockViewSingleRuleUseCase->expects($this->once())->method('fetchRule')->willReturn($stubRule);
-        
+
         $this->dispatch('edit');
 
         $registryRule = \Mage::registry('current_rule');
@@ -174,7 +174,7 @@ class PostcodefilterControllerTest extends ControllerTestCase
             ['customer_group_ids', null, [0, 1]],
             ['post_codes', null, "1234\n5678,\n1313, 4444"]
         ]);
-        
+
         $this->mockUpdateUseCase->expects($this->once())->method('updateRuleFromScalars');
         $this->dispatch('update');
     }

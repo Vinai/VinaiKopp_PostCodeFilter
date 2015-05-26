@@ -15,7 +15,7 @@ class AdminAddsRule
      * @var RuleWriter
      */
     private $ruleWriter;
-    
+
     /**
      * @var RuleReader
      */

@@ -13,11 +13,8 @@ use VinaiKopp\PostCodeFilter\Rule\Rule;
 use VinaiKopp\PostCodeFilter\Storage\ReadModel\RuleReader;
 use VinaiKopp\PostCodeFilter\Storage\ReadModel\RuleSpecByCountryAndGroupId;
 use VinaiKopp\PostCodeFilter\Storage\ReadModel\RuleSpecByCountryAndGroupIds;
-use VinaiKopp\PostCodeFilter\Storage\WriteModel\RuleToAdd;
-use VinaiKopp\PostCodeFilter\Storage\WriteModel\RuleToDelete;
-use VinaiKopp\PostCodeFilter\Storage\WriteModel\RuleWriter;
 
-class RuleRepository implements RuleWriter, RuleReader
+class RuleRepository implements RuleReader
 {
     /**
      * @var RuleStorage
@@ -41,7 +38,11 @@ class RuleRepository implements RuleWriter, RuleReader
         if (empty($postCodes)) {
             return new NonexistentRule($ruleSpec->getCountry());
         }
-        return $this->createRuleFoundInstance([$ruleSpec->getCustomerGroupIdValue()], $ruleSpec->getCountryValue(), $postCodes);
+        return $this->createRuleFoundInstance(
+            [$ruleSpec->getCustomerGroupIdValue()],
+            $ruleSpec->getCountryValue(),
+            $postCodes
+        );
     }
 
     /**
@@ -67,24 +68,6 @@ class RuleRepository implements RuleWriter, RuleReader
         return $this->convertRecordsToRuleInstances($this->storage->findAllRules());
     }
 
-    public function createRule(RuleToAdd $ruleToAdd)
-    {
-        array_map(function($customerGroupId) use ($ruleToAdd) {
-            $this->storage->create(
-                $ruleToAdd->getCountryValue(),
-                $customerGroupId,
-                $ruleToAdd->getPostCodeValues()
-            );
-        }, $ruleToAdd->getCustomerGroupIdValues());
-    }
-
-    public function deleteRule(RuleToDelete $ruleToDelete)
-    {
-        array_map(function($customerGroupId) use ($ruleToDelete) {
-            $this->storage->delete($ruleToDelete->getCountryValue(), $customerGroupId);
-        }, $ruleToDelete->getCustomerGroupIdValues());
-    }
-
     /**
      * @param array[] $records
      * @return ExistingRule[]
@@ -93,35 +76,9 @@ class RuleRepository implements RuleWriter, RuleReader
     {
         $combinedRecords = $this->mergeMatchingCountryAndPostcodes($records);
         return array_map(function (array $record) {
-            return $this->createRuleFoundInstance($record['customer_group_ids'], $record['country'], $record['post_codes']);
+            return $this->createRuleFoundInstance($record['customer_group_ids'], $record['country'],
+                $record['post_codes']);
         }, $combinedRecords);
-    }
-
-    /**
-     * @param mixed[] $records
-     * @return mixed[]
-     */
-    private function mergeMatchingCountryAndPostcodes(array $records)
-    {
-        $aggregate = $mergeResult = [];
-        foreach ($records as $record) {
-            sort($record['post_codes']);
-            $postCodeKey = implode(',', $record['post_codes']);
-            if (! isset($aggregate[$record['country']])) {
-                $aggregate[$record['country']] = [];
-            }
-            if (array_key_exists($postCodeKey, $aggregate[$record['country']])) {
-                $aggregate[$record['country']][$postCodeKey]['customer_group_ids'][] = $record['customer_group_id'];
-            } else {
-                $aggregate[$record['country']][$postCodeKey] = [
-                    'country' => $record['country'],
-                    'customer_group_ids' => [$record['customer_group_id']],
-                    'post_codes' => $record['post_codes']
-                ];
-                $mergeResult[] =& $aggregate[$record['country']][$postCodeKey];
-            }
-        }
-        return $mergeResult;
     }
 
     /**
@@ -137,7 +94,6 @@ class RuleRepository implements RuleWriter, RuleReader
             Country::fromIso2Code($country),
             PostCodeList::fromArray($postCodes)
         );
-
     }
 
     /**
@@ -145,24 +101,29 @@ class RuleRepository implements RuleWriter, RuleReader
      * @param mixed[] $records
      * @return ExistingRule
      */
-    private function combineQueryByCountryAndGroupIdsResultRecords(RuleSpecByCountryAndGroupIds $ruleSpec, array $records)
-    {
+    private function combineQueryByCountryAndGroupIdsResultRecords(
+        RuleSpecByCountryAndGroupIds $ruleSpec,
+        array $records
+    ) {
         $customerGroupIds = [];
         $postCodes = null;
         foreach ($records as $record) {
-            $this->validateRUleSpecByCountryAndGroupIdsMatchesResultRecord($ruleSpec, $record);
+            $this->validateRuleSpecByCountryAndGroupIdsMatchesResultRecord($ruleSpec, $record);
             $customerGroupIds[] = $record['customer_group_id'];
             $postCodes = $record['post_codes'];
         }
         return $this->createRuleFoundInstance($customerGroupIds, $ruleSpec->getCountryValue(), $postCodes);
     }
 
+
     /**
      * @param RuleSpecByCountryAndGroupIds $ruleSpec
      * @param mixed[] $record
      */
-    private function validateRUleSpecByCountryAndGroupIdsMatchesResultRecord(RuleSpecByCountryAndGroupIds $ruleSpec, array $record)
-    {
+    private function validateRuleSpecByCountryAndGroupIdsMatchesResultRecord(
+        RuleSpecByCountryAndGroupIds $ruleSpec,
+        array $record
+    ) {
         $this->validateCountryMatchesSpec($record['country'], $ruleSpec);
         $this->validateCustomerGroupIdMatchesSpec($record['customer_group_id'], $ruleSpec);
     }
@@ -176,7 +137,8 @@ class RuleRepository implements RuleWriter, RuleReader
     {
         if ($country != $ruleSpec->getCountryValue()) {
             throw new NonMatchingRecordInResultException(sprintf(
-                'The country "%s" does not match the query country value "%s"', $country, $ruleSpec->getCountryValue()
+                'The country "%s" does not match the query country value "%s"',
+                $country, $ruleSpec->getCountryValue()
             ));
         }
     }
@@ -196,19 +158,31 @@ class RuleRepository implements RuleWriter, RuleReader
             ));
         }
     }
-
-    public function beginTransaction()
+    
+    /**
+     * @param mixed[] $records
+     * @return mixed[]
+     */
+    private function mergeMatchingCountryAndPostcodes(array $records)
     {
-        $this->storage->beginTransaction();
-    }
-
-    public function commitTransaction()
-    {
-        $this->storage->commitTransaction();
-    }
-
-    public function rollbackTransaction()
-    {
-        $this->storage->rollbackTransaction();
+        $aggregate = $mergeResult = [];
+        foreach ($records as $record) {
+            sort($record['post_codes']);
+            $postCodeKey = implode(',', $record['post_codes']);
+            if (!isset($aggregate[$record['country']])) {
+                $aggregate[$record['country']] = [];
+            }
+            if (array_key_exists($postCodeKey, $aggregate[$record['country']])) {
+                $aggregate[$record['country']][$postCodeKey]['customer_group_ids'][] = $record['customer_group_id'];
+            } else {
+                $aggregate[$record['country']][$postCodeKey] = [
+                    'country' => $record['country'],
+                    'customer_group_ids' => [$record['customer_group_id']],
+                    'post_codes' => $record['post_codes']
+                ];
+                $mergeResult[] =& $aggregate[$record['country']][$postCodeKey];
+            }
+        }
+        return $mergeResult;
     }
 }
