@@ -11,7 +11,7 @@ use VinaiKopp\PostCodeFilter\Storage\ReadModel\RuleSpecByCountryAndGroupId;
 use VinaiKopp\PostCodeFilter\Storage\ReadModel\RuleSpecByCountryAndGroupIds;
 
 /**
- * @covers \VinaiKopp\PostCodeFilter\Storage\RuleRepository
+ * @covers \VinaiKopp\PostCodeFilter\Storage\RuleRepositoryReader
  * @uses   \VinaiKopp\PostCodeFilter\Rule\NonexistentRule
  * @uses   \VinaiKopp\PostCodeFilter\Rule\ExistingRule
  * @uses   \VinaiKopp\PostCodeFilter\Rule\Components\CustomerGroupId
@@ -20,10 +20,10 @@ use VinaiKopp\PostCodeFilter\Storage\ReadModel\RuleSpecByCountryAndGroupIds;
  * @uses   \VinaiKopp\PostCodeFilter\Rule\Components\PostCodeList
  * @uses   \VinaiKopp\PostCodeFilter\Rule\Components\PostCode
  */
-class RuleRepositoryTest extends \PHPUnit_Framework_TestCase
+class RuleRepositoryReaderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var RuleRepository
+     * @var RuleRepositoryReader
      */
     private $repository;
 
@@ -84,7 +84,7 @@ class RuleRepositoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->mockStorage = $this->getMock(RuleStorage::class);
-        $this->repository = new RuleRepository($this->mockStorage);
+        $this->repository = new RuleRepositoryReader($this->mockStorage);
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 
-use VinaiKopp\PostCodeFilter\Storage\RuleRepository;
+use VinaiKopp\PostCodeFilter\Storage\RuleRepositoryReader;
 use VinaiKopp\PostCodeFilter\Storage\RuleRepositoryWriter;
 use VinaiKopp\PostCodeFilter\Storage\RuleStorage;
 use VinaiKopp\PostCodeFilter\AdminViewsRuleList;
@@ -31,7 +31,7 @@ class VinaiKopp_PostCodeFilter_Helper_Data extends Mage_Core_Helper_Abstract
 
     public function getRuleReader()
     {
-        return new RuleRepository($this->storage);
+        return new RuleRepositoryReader($this->storage);
     }
 
     /**

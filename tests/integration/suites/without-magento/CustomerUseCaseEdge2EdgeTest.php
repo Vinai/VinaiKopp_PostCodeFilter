@@ -5,7 +5,7 @@ namespace VinaiKopp\PostCodeFilter;
 use VinaiKopp\PostCodeFilter\Rule\Components\Country;
 use VinaiKopp\PostCodeFilter\Rule\Components\CustomerGroupIdList;
 use VinaiKopp\PostCodeFilter\Rule\Components\PostCodeList;
-use VinaiKopp\PostCodeFilter\Storage\RuleRepository;
+use VinaiKopp\PostCodeFilter\Storage\RuleRepositoryReader;
 use VinaiKopp\PostCodeFilter\Storage\RuleRepositoryWriter;
 use VinaiKopp\PostCodeFilter\Storage\WriteModel\RuleToAdd;
 
@@ -35,7 +35,7 @@ class CustomerUseCaseEdge2EdgeTest extends \PHPUnit_Framework_TestCase
     {
         $storage = new InMemoryRuleStorage();
         $repositoryWriter = new RuleRepositoryWriter($storage);
-        $repositoryReader = new RuleRepository($storage);
+        $repositoryReader = new RuleRepositoryReader($storage);
 
         $repositoryWriter->createRule(new RuleToAdd(
             CustomerGroupIdList::fromArray([$this->generalGroupId, $this->guestGroupId]),

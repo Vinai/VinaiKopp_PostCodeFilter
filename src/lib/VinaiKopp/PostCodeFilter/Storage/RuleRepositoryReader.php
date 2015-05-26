@@ -14,7 +14,7 @@ use VinaiKopp\PostCodeFilter\Storage\ReadModel\RuleReader;
 use VinaiKopp\PostCodeFilter\Storage\ReadModel\RuleSpecByCountryAndGroupId;
 use VinaiKopp\PostCodeFilter\Storage\ReadModel\RuleSpecByCountryAndGroupIds;
 
-class RuleRepository implements RuleReader
+class RuleRepositoryReader implements RuleReader
 {
     /**
      * @var RuleStorage

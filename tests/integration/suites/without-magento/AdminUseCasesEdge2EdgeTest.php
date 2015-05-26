@@ -8,7 +8,7 @@ use VinaiKopp\PostCodeFilter\Rule\Components\PostCodeList;
 use VinaiKopp\PostCodeFilter\Rule\ExistingRule;
 use VinaiKopp\PostCodeFilter\Rule\NonexistentRule;
 use VinaiKopp\PostCodeFilter\Storage\ReadModel\RuleSpecByCountryAndGroupIds;
-use VinaiKopp\PostCodeFilter\Storage\RuleRepository;
+use VinaiKopp\PostCodeFilter\Storage\RuleRepositoryReader;
 use VinaiKopp\PostCodeFilter\Storage\RuleRepositoryWriter;
 use VinaiKopp\PostCodeFilter\Storage\RuleStorage;
 use VinaiKopp\PostCodeFilter\Storage\WriteModel\RuleToAdd;
@@ -67,7 +67,7 @@ class AdminUseCasesEdge2EdgeTest extends \PHPUnit_Framework_TestCase
     public function itShouldAddARule()
     {
         $storage = new InMemoryRuleStorage();
-        $ruleRepositoryReader = new RuleRepository($storage);
+        $ruleRepositoryReader = new RuleRepositoryReader($storage);
         $ruleRepositoryWriter = new RuleRepositoryWriter($storage);
         $addRuleUseCase = new AdminAddsRule($ruleRepositoryWriter, $ruleRepositoryReader);
 
@@ -91,7 +91,7 @@ class AdminUseCasesEdge2EdgeTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldUpdateARule(RuleStorage $storage)
     {
-        $ruleRepositoryReader = new RuleRepository($storage);
+        $ruleRepositoryReader = new RuleRepositoryReader($storage);
         $ruleRepositoryWriter = new RuleRepositoryWriter($storage);
         $updateRuleUseCase = new AdminUpdatesRule($ruleRepositoryWriter, $ruleRepositoryReader);
 
@@ -115,7 +115,7 @@ class AdminUseCasesEdge2EdgeTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldDeleteARule(RuleStorage $storage)
     {
-        $ruleRepositoryReader = new RuleRepository($storage);
+        $ruleRepositoryReader = new RuleRepositoryReader($storage);
         $ruleRepositoryWriter = new RuleRepositoryWriter($storage);
         $deleteRuleUseCase = new AdminDeletesRule($ruleRepositoryWriter, $ruleRepositoryReader);
         $ruleToDelete = new RuleToDelete($this->newCustomerGroupIds, $this->newCountry);
@@ -140,7 +140,7 @@ class AdminUseCasesEdge2EdgeTest extends \PHPUnit_Framework_TestCase
         array $postCodes
     ) {
         $ruleSpec = new RuleSpecByCountryAndGroupIds($country, $groupIds);
-        $ruleFound = (new RuleRepository($storage))->findByCountryAndGroupIds($ruleSpec);
+        $ruleFound = (new RuleRepositoryReader($storage))->findByCountryAndGroupIds($ruleSpec);
         foreach ($postCodes as $code) {
             $this->assertTrue($ruleFound->isPostCodeAllowed($code));
         }
@@ -152,7 +152,7 @@ class AdminUseCasesEdge2EdgeTest extends \PHPUnit_Framework_TestCase
         Country $country
     ) {
         $ruleSpec = new RuleSpecByCountryAndGroupIds($country, $groupIds);
-        $rule = (new RuleRepository($storage))->findByCountryAndGroupIds($ruleSpec);
+        $rule = (new RuleRepositoryReader($storage))->findByCountryAndGroupIds($ruleSpec);
         $this->assertInstanceOf(ExistingRule::class, $rule);
     }
 
@@ -162,7 +162,7 @@ class AdminUseCasesEdge2EdgeTest extends \PHPUnit_Framework_TestCase
         Country $country
     ) {
         $ruleSpec = new RuleSpecByCountryAndGroupIds($country, $groupId);
-        $rule = (new RuleRepository($storage))->findByCountryAndGroupIds($ruleSpec);
+        $rule = (new RuleRepositoryReader($storage))->findByCountryAndGroupIds($ruleSpec);
         $this->assertInstanceOf(NonexistentRule::class, $rule);
     }
 }
