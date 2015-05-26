@@ -165,17 +165,20 @@ class PostcodefilterControllerTest extends ControllerTestCase
     public function itShouldUpdateThePostedRules()
     {
         $this->getMockRequest()->method('getMethod')->willReturn('POST');
+        $testIso2country = 'DE';
         $this->getMockRequest()->method('getParam')->willReturnMap([
-            ['old_country', null, 'DE'],
+            ['old_country', null, $testIso2country],
             ['old_customer_group_ids', null, '0,1']
         ]);
         $this->getMockRequest()->method('getPost')->willReturnMap([
-            ['country', null, 'DE'],
+            ['country', null, $testIso2country],
             ['customer_group_ids', null, [0, 1]],
             ['post_codes', null, "1234\n5678,\n1313, 4444"]
         ]);
-
-        $this->mockUpdateUseCase->expects($this->once())->method('updateRuleFromScalars');
+        
+        $this->mockUpdateUseCase->expects($this->once())->method('updateRuleFromScalars')->with(
+            $testIso2country, [0, 1], $testIso2country, [0, 1], ['1234', '5678', '1313', '4444'] 
+        );
         $this->dispatch('update');
     }
 

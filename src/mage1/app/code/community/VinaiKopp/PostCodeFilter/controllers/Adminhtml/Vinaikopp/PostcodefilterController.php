@@ -286,6 +286,6 @@ class VinaiKopp_PostCodeFilter_Adminhtml_Vinaikopp_PostcodefilterController
      */
     private function splitParam($paramString)
     {
-        return preg_split('/,/', $paramString, null, PREG_SPLIT_NO_EMPTY);
+        return preg_split("/\s*(?:,|\n)\s*/", $paramString, null, PREG_SPLIT_NO_EMPTY);
     }
 }
