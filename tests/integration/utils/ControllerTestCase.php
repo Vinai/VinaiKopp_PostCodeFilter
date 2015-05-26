@@ -51,7 +51,7 @@ abstract class ControllerTestCase extends Mage1IntegrationTestCase
      */
     protected function getMockRequest()
     {
-        if (! $this->mockRequest) {
+        if (!$this->mockRequest) {
             $this->mockRequest = $this->createMockRequest();
         }
         return $this->mockRequest;
@@ -62,7 +62,7 @@ abstract class ControllerTestCase extends Mage1IntegrationTestCase
      */
     protected function getMockResponse()
     {
-        if (! $this->mockResponse) {
+        if (!$this->mockResponse) {
             $this->mockResponse = $this->createMockResponse();
         }
         return $this->mockResponse;
@@ -86,7 +86,7 @@ abstract class ControllerTestCase extends Mage1IntegrationTestCase
      */
     protected function createControllerInstance($className)
     {
-        if (! class_exists($className, false)) {
+        if (!class_exists($className, false)) {
             require $this->getControllerFile($className);
         }
 
@@ -94,14 +94,14 @@ abstract class ControllerTestCase extends Mage1IntegrationTestCase
     }
 
     /**
-     * @param string $frontname
+     * @param string $frontName
      * @param string $controller
      * @param string $action
      */
-    protected function dispatchRoute($frontname, $controller, $action)
+    protected function dispatchRoute($frontName, $controller, $action)
     {
         $this->getMockRequest()->method('getRequestedRouteName')
-            ->willReturn($frontname);
+            ->willReturn($frontName);
         $this->getMockRequest()->method('getRequestedControllerName')
             ->willReturn($controller);
         $this->getMockRequest()->method('getRequestedActionName')

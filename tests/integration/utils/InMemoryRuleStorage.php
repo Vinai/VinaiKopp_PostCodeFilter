@@ -19,7 +19,7 @@ class InMemoryRuleStorage implements RuleStorage
     /**
      * @param string $country
      * @param int $customerGroupId
-     * @return \string[]
+     * @return string[]
      */
     public function findPostCodesByCountryAndGroupId($country, $customerGroupId)
     {
