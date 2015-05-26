@@ -1,7 +1,11 @@
-src/mage1/app/etc/modules/VinaiKopp_PostCodeFilter.xml    app/etc/modules/VinaiKopp_PostCodeFilter.xml
+#
+# Magento 1 modman mappings
+#
+
+src/mage1/app/etc/modules/VinaiKopp_PostCodeFilter.xml app/etc/modules/VinaiKopp_PostCodeFilter.xml
 src/mage1/app/code/community/VinaiKopp/PostCodeFilter app/code/community/VinaiKopp/PostCodeFilter
 src/mage1/app/design/adminhtml/base/default/layout/vinaikopp/postcodefilter.xml app/design/adminhtml/base/default/layout/vinaikopp/postcodefilter.xml
 src/mage1/app/design/frontend/base/default/layout/vinaikopp/postcodefilter.xml app/design/frontend/base/default/layout/vinaikopp/postcodefilter.xml
 src/mage1/skin/frontend/base/default/js/vinaikopp/postcodefilter.js skin/frontend/base/default/js/vinaikopp/postcodefilter.js
 src/mage1/app/locale/de_DE/VinaiKopp_PostCodeFilter.csv app/locale/de_DE/VinaiKopp_PostCodeFilter.csv
-src/lib/VinaiKopp/PostCodeFilter    lib/VinaiKopp/PostCodeFilter
+src/lib/VinaiKopp/PostCodeFilter lib/VinaiKopp/PostCodeFilter
