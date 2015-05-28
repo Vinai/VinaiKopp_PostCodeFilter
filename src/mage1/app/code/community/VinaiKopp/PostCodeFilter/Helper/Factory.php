@@ -39,7 +39,6 @@ class VinaiKopp_PostCodeFilter_Helper_Factory extends Mage_Core_Helper_Abstract
      */
     public function createCustomerChecksPostCodeUseCase()
     {
-        $this->registerPostCodeFilterAutoloader();
         return new CustomerSpecifiesShippingAddress($this->getRuleReader());
     }
 
@@ -48,7 +47,6 @@ class VinaiKopp_PostCodeFilter_Helper_Factory extends Mage_Core_Helper_Abstract
      */
     public function createAdminViewsRuleListUseCase()
     {
-        $this->registerPostCodeFilterAutoloader();
         return new AdminViewsRuleList($this->getRuleReader());
     }
 

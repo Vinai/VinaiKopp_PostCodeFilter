@@ -13,11 +13,6 @@ class VinaiKopp_PostCodeFilter_Model_RuleCollection extends Varien_Data_Collecti
      */
     private $useCase;
 
-    public function __construct($conn = null)
-    {
-        parent::__construct($conn ?: null);
-    }
-
     /**
      * @param string $field
      * @param null|string[] $condition
