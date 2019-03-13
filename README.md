@@ -1,3 +1,7 @@
+# This Magento 1 extension is orphaned, unsupported and no longer maintained.
+
+If you use it, you are effectively adopting the code for your own project.
+
 Magento Post Code Filter Extension
 ===================================
 Only allow customer groups with a shipping address within a specific postcode list to place orders.
